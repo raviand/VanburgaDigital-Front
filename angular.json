@@ -24,9 +24,16 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "src/styles.css",
+              "src/assets/b4/css/bootstrap.min.css",
+              "src/assets/fontawesome/css/fontawesome.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "src/assets/jquery/jquery.slim.min.js",
+              "src/assets/tether/tether.min.js",
+              "src/assets/b4/js/bootstrap.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -88,6 +95,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -119,6 +127,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "vanburga-digital"
+    }
+  },
+  "defaultProject": "vanburga-digital",
+  "cli": {
+    "analytics": "14e9f473-429c-4282-bf19-3a714632c4bd"
+  }
 }
