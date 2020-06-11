@@ -1,7 +1,5 @@
 .background{
-  background-image: url('https://arc-anglerfish-arc2-prod-infobae.s3.amazonaws.com/public/FJKXKQKMMJBV7KQ7XQ3YNFO7LU.jpg');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: auto;
-  opacity: 0.6;
+  background-color: #212121;
+  color: #fafafa;
 }
+

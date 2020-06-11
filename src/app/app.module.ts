@@ -9,6 +9,8 @@ import { PageMenuComponent } from './component/page-menu/page-menu.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
+import { ClientComponent } from './component/client/client.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -17,13 +19,16 @@ import { MaterialModule } from './material.module';
     HomeComponent,
     MenuComponent,
     PageMenuComponent,
-    FooterComponent
+    FooterComponent,
+    ClientComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
