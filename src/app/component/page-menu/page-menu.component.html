@@ -1,7 +1,28 @@
-<div class="background jumbotron clearfix">
-    <button class="btn btn-outline-success btn-lg pull-right" [routerLink]="['/menu']" routerLinkActive="router-link-active" >Menu</button>
-    <div>
-        <h2 [routerLink]="['']" routerLinkActive="router-link-active" style="font-family: bebasNeue-bold;" >Hamburgruesas!!</h2>
-    </div>
-
+<div class="header bg-dark">
+  <a href="/">
+    <img
+      class="header__img"
+      src="assets\img\logo.png"
+      alt="Vanburga"
+      id="logo"
+    />
+  </a>
+  <div class="header-right">
+    <button
+      type="button"
+      class="btn btn-outline-light btn-lg pull-right ml-auto-p2"
+      [routerLink]="['/menu']"
+      routerLinkActive="router-link-active"
+    >
+      Hacé tu pedido!
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-light btn-lg pull-right ml-auto-p2"
+      [routerLink]="['/menu']"
+      routerLinkActive="router-link-active"
+    >
+      Contactanos
+    </button>
+  </div>
 </div>

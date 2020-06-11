@@ -1,1 +1,67 @@
-<p [ngStyle]="{'text-align': 'center'}">&copy; 2020 - Nosotros</p>
+<!-- Footer -->
+<footer>
+  <div class="site-footer">
+    <div class="container bg-dark">
+      <div class="row">
+        <!-- Contact -->
+        <div class="col-lg-7 col-md-12">
+          <h6>Contacto</h6>
+          <ul class="footer-links">
+            <li>
+              <i class="fas fa-envelope-square"></i
+              ><a href="">info@vanburga.com</a>
+            </li>
+            <li>
+              <i class="fab fa-whatsapp"></i><a href="">+54 11 2391-5925</a>
+            </li>
+            <li>
+              <i class="fas fa-map-marked-alt"></i
+              ><a href=""
+                >Boulogne Sur Mer 443, B1617 Gral. Pacheco, Provincia de Buenos
+                Aires</a
+              >
+            </li>
+          </ul>
+        </div>
+        <!-- Contact -->
+
+        <!-- Location -->
+        <div class="col-lg-7 col-md-6">
+          <h6>Ubicación</h6>
+          <div id="map-container" class="map-container z-depth-1-half"></div>
+        </div>
+        <!-- Location -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Networks -->
+  <div [ngStyle]="{ 'text-align': 'center' }" class="bg-dark">
+    <ul class="social-icons">
+      <li>
+        <a class="facebook" href="#"
+          ><i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i
+        ></a>
+      </li>
+      <li>
+        <a class="twitter" href="#"
+          ><i class="fab fa-twitter-f fa-stack-1x fa-inverse"></i
+        ></a>
+      </li>
+      <li>
+        <a class="instagram" href="#"
+          ><i class="fab fa-instagram fa-stack-1x fa-inverse"></i
+        ></a>
+      </li>
+    </ul>
+  </div>
+  <!-- Social Networks -->
+
+  <!-- Copyright -->
+  <div [ngStyle]="{ 'text-align': 'center' }" class="bg-dark">
+    &copy; 2020 Copyright:
+    <a href="">Nosotros</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
