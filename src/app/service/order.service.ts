@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Product, Extra, State } from './menu.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { API_URI } from '../app.constant';
 
 @Injectable({
@@ -16,6 +16,17 @@ export class OrderService {
       "Content-Type" : "application/json"
     })  
     return this.httpClient.post(`${API_URI}order`, orderRequest, {headers})
+  }
+
+  searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
+    
+
+    let params = new HttpParams( );
+    params.append("status", status)
+    params.append("dateFrom", dateFrom)
+    params.append("dateTo", dateTo)
+    params.append("clientId", clientId)
+    return this.httpClient.get(`${API_URI}order/search`)
   }
 
 }

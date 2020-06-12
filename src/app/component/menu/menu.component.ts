@@ -14,7 +14,6 @@ export class MenuComponent implements OnInit {
   productData : ProductData
 
   selectedProduct : boolean;
-  events: string[] = [];
   opened = true;
   constructor(private menuService : MenuService) { }
 

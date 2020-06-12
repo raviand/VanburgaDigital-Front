@@ -1,3 +1,19 @@
+<div id="mySidenav" class="sidenav">
+    
+    <a href="#">About</a>
+    <a href="#">Services</a>
+    <a href="#">Clients</a>
+    <a href="#">Contact</a>
+  </div>
+<div class="mt-4">
+    <div *ngIf="opened;else elseBlock">
+      <span style="font-size:30px;cursor:pointer" (click)="opened = !opened" onclick="openNav()">&#9776; Open</span>
+    </div>
+    <ng-template #elseBlock >
+      <span style="font-size:30px;cursor:pointer" href="javascript:void(0)" (click)="opened = !opened" onclick="closeNav()">&times; Close</span>
+    </ng-template>
+</div>
+  
 <div *ngFor="let category of categories">
     <mat-card (click)="categorySelected(category.id)" class="mt-3" style="background-color: #fafafa;"> 
         <mat-card-title>
@@ -6,7 +22,6 @@
         {{ category.description }}
     </mat-card>
 </div>
-
 
     <mat-grid-list cols="2" rowHeight="1:1" gutterSize="4px" [style.height]="'100%'">
     
@@ -42,3 +57,4 @@
         </mat-card>
     </div>
 </mat-grid-list>
+
