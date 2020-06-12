@@ -39,13 +39,6 @@ export class MenuService {
 }
 
 
-
-// To parse this data:
-//
-//   import { Convert, Category } from "./file";
-//
-//   const category = Convert.toCategory(json);
-
 export interface Category {
   id?:          number;
   name?:        string;
