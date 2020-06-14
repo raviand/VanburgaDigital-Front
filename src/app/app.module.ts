@@ -13,6 +13,8 @@ import { FormsModule } from '@angular/forms';
 import { CarouselComponent } from './carousel/carousel.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
+import { MomentModule } from 'ngx-moment';
+import { DialogExtraComponent } from './component/dialog-extra/dialog-extra.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { HttpClientModule } from '@angular/common/http';
     PageMenuComponent,
     FooterComponent,
     ClientComponent,
-    CarouselComponent
+    CarouselComponent,
+    DialogExtraComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +34,8 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     HttpClientModule,
     FormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MomentModule
   ],
   providers: [],
   bootstrap: [AppComponent],

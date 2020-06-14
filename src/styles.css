@@ -5,6 +5,16 @@ html,
 body {
   height: 100%;
 }
+
+.btn {
+  font-family: bebasNeue-bold;
+}
+
+.vurga-titles{
+  font-family: bebasNeue-bold;
+  font-size: 40px;
+}
+
 body {
   margin: 0;
   font-family: bebasNeue-bold;
@@ -18,4 +28,11 @@ body {
 .buttonsColor{
   background-color: #c7c7c7 !important; 
   color: #000000 !important;
+}
+
+.cart-items{
+  color: #fafafa; 
+  border: 1px #fafafa solid;
+  border-radius: 25px;
+  padding: 10px;
 }

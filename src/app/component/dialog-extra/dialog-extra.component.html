@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>Extras</h2>
+
+<div *ngFor="let pd of cart" class="m-1" style="color: #fafafa;"> 
+    <h3>{{pd.name}}</h3>
+    <p>Precio: {{pd.price | currency : 'ARS' : 'symbol-narrow'}}</p>
+    <ul>
+        <li *ngFor="let ex of pd.extras">
+            <p>{{ ex.name }} - {{ex.price | currency : 'ARS' : 'symbol-narrow'}} <button>eliminar</button> </p>
+        </li>
+    </ul>
+</div>
+<div class="mt-4 mb-5">
+    <button mat-button color="primary" [mat-dialog-close]="cart" cdkFocusInitial>Cerrar</button>
+</div>
