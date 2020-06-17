@@ -7,8 +7,9 @@ import { ClientComponent } from './component/client/client.component';
 
 const routes: Routes = [
   {path:'', component: HomeComponent},
-  {path:'menu', component: MenuComponent},
-  {path:'client', component: ClientComponent},
+  {    path:'menu', component: MenuComponent  },
+  {path:'order', component:ClientComponent},
+  
 ];
 
 @NgModule({

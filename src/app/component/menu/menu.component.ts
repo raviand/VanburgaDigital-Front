@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MenuService, Category, Extra, Product } from 'src/app/service/menu.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogExtraComponent } from '../dialog-extra/dialog-extra.component';
-import { Router } from '@angular/router';
-import { ITS_JUST_ANGULAR } from '@angular/core/src/r3_symbols';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { OrderService } from 'src/app/service/order.service';
 
 @Component({
   selector: 'app-menu',
+  
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
@@ -24,9 +25,17 @@ export class MenuComponent implements OnInit {
   selectedProduct : boolean;
   opened = true;
   constructor(private menuService : MenuService, private router : Router,
-    private dialog : MatDialog, private snackBar:MatSnackBar) { }
-
+    private dialog : MatDialog, private snackBar:MatSnackBar, private orderService : OrderService) { }
+/**
+ * Metodo que se dispara antes de mostrar la pagina
+ */
   ngOnInit(): void {
+
+    if(this.orderService.loadClientCart() != null){
+      this.cart = this.orderService.loadClientCart();
+      this.getTotalAmount()
+    }
+
     this.menuService.getAllCategories().subscribe(
       (data:any) => {
         console.log(data.categories)
@@ -50,6 +59,11 @@ export class MenuComponent implements OnInit {
     this.extraIndexSelected = i;
   }
 
+  /**
+   * selecciona un extra y lo agrega al producto del carro
+   * @param product 
+   * @param idExtra 
+   */
   selectExtra(product:Product,idExtra:number){ 
     product.extras.forEach(ex => {
       if(ex.id == idExtra){
@@ -77,9 +91,6 @@ export class MenuComponent implements OnInit {
     product.extras?.forEach( e => {
           if(!e.selected){
             extras.push(e)
-          }else{
-            e.selected = false
-            productTotal += e.price
           }
         }
       )
@@ -96,10 +107,15 @@ export class MenuComponent implements OnInit {
     console.log(product)
     this.cart.push(cartProduct)
     console.log(this.cart)
-    this.cartTotalAmount += productTotal;
+    this.getTotalAmount()
     this.snackBar.open('Agregaste un ' + product.name + ' al pedido!', 'Cerrar', {duration : 2000})
   }
 
+  /**
+   * Elimina el 
+   * @param extra 
+   * @param product 
+   */
   removeExtra(extra : Extra, product : Product){
     let indexProduct = this.cart.indexOf(product)
     let i = this.cart[indexProduct].extras.indexOf(extra, 0)
@@ -107,6 +123,10 @@ export class MenuComponent implements OnInit {
     this.cartTotalAmount -= extra.price;
   }
 
+  /**
+   * Elimina el producto del canasto
+   * @param product 
+   */
   removeProduct(product : Product){
     //Descuento todos los extras del total
     product.extras?.forEach(e => this.cartTotalAmount -= e.price)
@@ -130,6 +150,10 @@ export class MenuComponent implements OnInit {
     });
   }
 
+  /**
+   * Busca en el servicio los productos que pertenecen a la categoria
+   * @param id id de la categoria
+   */
   categorySelected(id){
     this.cartProduct = new Product();
     this.menuService.getProductByCategory(id).subscribe(
@@ -140,9 +164,21 @@ export class MenuComponent implements OnInit {
     )
   }
 
- 
+  confirm(){
+    if(this.cart.length > 0){
 
+      this.orderService.saveClientCart(this.cart);
+      this.router.navigate(['/order'])
 
-  
+    }
+  }
 
+  getTotalAmount(){
+    this.cart.forEach(
+      prod => {
+        this.cartTotalAmount += prod.price
+        prod.extras?.forEach( ex => this.cartTotalAmount += ex.price )
+      }
+    )
+  }
 }

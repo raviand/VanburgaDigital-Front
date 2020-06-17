@@ -9,7 +9,7 @@ import { FooterComponent } from './component/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { ClientComponent } from './component/client/client.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 import { CarouselComponent } from './carousel/carousel.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
@@ -35,7 +35,8 @@ import { DialogExtraComponent } from './component/dialog-extra/dialog-extra.comp
     HttpClientModule,
     FormsModule,
     FlexLayoutModule,
-    MomentModule
+    MomentModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent],

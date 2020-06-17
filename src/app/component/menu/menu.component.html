@@ -16,7 +16,7 @@
         </ul>
     </div>
     <div *ngIf="cart.length > 0" >
-        <button class="buttonsColor btn btn-lg btn-block" style="margin-bottom: 90px;">Confirmar Pedido {{cartTotalAmount | currency : 'ARS' : 'symbol-narrow'}}</button>
+        <button class="buttonsColor btn btn-lg btn-block" style="margin-bottom: 90px;" (click)="confirm()">Confirmar Pedido {{cartTotalAmount | currency : 'ARS' : 'symbol-narrow'}}</button>
     </div>
 </div>
 <div class="mt-4">

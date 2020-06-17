@@ -11,6 +11,9 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatChipsModule} from '@angular/material/chips';
+import {MatTableModule} from '@angular/material/table';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
  @NgModule({
@@ -26,7 +29,10 @@ import {MatChipsModule} from '@angular/material/chips';
      MatDialogModule,
      MatCheckboxModule,
      MatSnackBarModule,
-     MatChipsModule
+     MatChipsModule,
+     MatTableModule,
+     MatSelectModule,
+     MatFormFieldModule
     ],
    exports:[
      MatCardModule, 
@@ -40,7 +46,10 @@ import {MatChipsModule} from '@angular/material/chips';
      MatDialogModule,
      MatCheckboxModule,
      MatSnackBarModule,
-     MatChipsModule
+     MatChipsModule,
+     MatTableModule,
+     MatSelectModule,
+     MatFormFieldModule
     ]
  })
  export class MaterialModule { }

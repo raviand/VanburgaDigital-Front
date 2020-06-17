@@ -1,11 +1,95 @@
-<mat-card>
-    <mat-card-title>
-        Hola
-    </mat-card-title>
 
-    <mat-form-field class="example-full-width">
-        <mat-label>Nombre</mat-label>
-        <input matInput placeholder="Su Nombre" >
-      </mat-form-field>
+<mat-card [style.width]="'100%'" [style.height]="'80%'">
+
+    <mat-card-header>
+        <div class="vurga-titles m-3 text-center" style="font-size: 50px;width: 100%;line-height: 28pt;">
+            Continua Tu pedido
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div  *ngFor="let pd of cart">
+            <ul class="list-group" >
+                <li class="list-group-item list-group-item-dark">
+                    {{ pd.name }} - {{ pd.price | currency : 'ARS' : 'symbol-narrow' }}
+                </li>
+                <li  class="list-group-item list-group-item-secondary" *ngFor="let ex of pd.extras">
+                    * {{ ex.name }} - {{ ex.price | currency : 'ARS' : 'symbol-narrow' }}
+                </li>     
+            </ul>
+        </div>
+        <div>
+            <form (ngSubmit)="onSubmit()" class="example-form" style="display: inline;" [formGroup]="deliverForm">
+                <h2 class="m-3 text-center" style="width: 100%; font-family: bebasNeue-bold; font-size: 40px;">
+                    Tus Datos
+                </h2>
+
+                <div class="row justify-content-around">
+                    <div class="col-4">
+                        <mat-form-field class="example-half-width ">
+                            <mat-label>Nombre</mat-label>
+                            <input matInput formControlName="name" [(ngModel)]="client.name" required>
+                        </mat-form-field>
+                        <mat-form-field class="example-half-width ">
+                            <mat-label >Telefono</mat-label>
+                            <input matInput formControlName="cellphone" [(ngModel)]="client.cellphone">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-4">
+                        <mat-form-field class="example-half-width ">
+                            <mat-label>Apellido</mat-label>
+                            <input matInput formControlName="lastName" [(ngModel)]="client.lastName">
+                        </mat-form-field>
+                        <mat-form-field class="example-half-width ">
+                            <mat-label >Correo</mat-label>
+                            <input matInput formControlName="mail" [(ngModel)]="client.mail">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <h2 class="m-3 text-center" style="width: 100%; font-family: bebasNeue-bold; font-size: 30px;">
+                    Direccion de entrega
+                </h2>
+                <div class="row justify-content-around" >
+                    <div class="col-4" >
+                        <mat-form-field class="example-half-width ">
+                            <mat-label>Localidad</mat-label>
+                            <mat-select  required [(ngModel)]="selectedState" formControlName="state">
+                                <mat-option>--Seleccione una loclidad--</mat-option>
+                                <mat-option *ngFor="let state of states" [value]="state">{{state.state}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="example-half-width " >
+                            <mat-label>Calle</mat-label>
+                            <input matInput required formControlName="street" [(ngModel)]="client.address.street" >
+                        </mat-form-field>
+                        <mat-form-field class="example-half-width " >
+                            <mat-label>Piso</mat-label>
+                            <input matInput formControlName="floor" [(ngModel)]="client.address.floor">
+                        </mat-form-field>                        
+                    </div>
+                    <div class="col-4" >
+                        <mat-form-field class="example-half-width ">
+                            <mat-label>Codigo Postal</mat-label>
+                            <input matInput formControlName="zipCode" [(ngModel)]="client.address.zipCode">
+                        </mat-form-field>
+                        <mat-form-field class="example-half-width ">
+                            <mat-label>Numero</mat-label>
+                            <input matInput formControlName="doorNumber" [(ngModel)]="client.address.doorNumber">
+                        </mat-form-field>
+                        <mat-form-field class="example-half-width ">
+                            <mat-label>Departamento</mat-label>
+                            <input matInput formControlName="door" [(ngModel)]="client.address.door">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <mat-form-field class="example-full-width" style="width: 100%;">
+                    <mat-label>Comentario adicional</mat-label>
+                    <textarea matInput formControlName="comments" [(ngModel)]="comment"></textarea>
+                  </mat-form-field>
+                <button class="btn buttonsColor" style="width: 100%; font-size: 25px;" [disabled]="!deliverForm.valid">Confirmar pedido</button>
+            </form>
+        </div>
+
+    </mat-card-content>
 </mat-card>
 
+         

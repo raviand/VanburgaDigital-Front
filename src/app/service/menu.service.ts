@@ -8,6 +8,8 @@ import { API_URI } from '../app.constant';
 })
 export class MenuService {
 
+  
+
   constructor(private httpClient : HttpClient) { }
 
   getAllCategories() {
@@ -55,8 +57,8 @@ export class ConvertCategory {
   }
 }
 
-export interface State {
-  id?:          number;
+export class State {
+  id?:          string;
   state?:        string;
 }
 
