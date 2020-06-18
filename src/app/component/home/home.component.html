@@ -17,39 +17,42 @@
 
 <section
   class="info"
-  class="bienvenida"
   fxlayout="row"
   fxlayout.xs="column"
-  fxLayoutGap="0.5%"
+  fxLayoutGap="3%"
   fxlayoutWrap
   FxLayoutAlign="center"
 >
-  <div class="container bg-dark" fxFlex="100%">
-    <mat-card class="info-sub-card bg-light" fxFlex="50%">
-      <mat-card-header>
-        <div mat-card-avatar class="header-image1"></div>
-        <mat-card-title class="card-title">Días y Horarios</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <ul>
-          <li>Jueves a Domingo: 19:30 a 23:30</li>
-          <li>Feriados y Pre-Feriados: 19:30 a 23:30</li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+  <div class="container bg-dark" fxFill fxFlex="100%">
+    <div class="row">
+      <!-- Horarios -->
+      <mat-card class="info-sub-card bg-dark" fxFlex="50%">
+        <mat-card-header>
+          <mat-card-title class="card-title">Horarios</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ul>
+            <li>Jueves a Domingo: 19:30 a 23:30</li>
+            <li>Feriados y Pre-Feriados: 19:30 a 23:30</li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+      <!-- Horarios -->
 
-    <mat-card class="info-sub-card bg-light" fxFlex="50%">
-      <mat-card-header>
-        <div mat-card-avatar class="header-image2"></div>
-        <mat-card-title class="card-title">Delivery</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <ul>
-          <li>General Pacheco</li>
-          <li>Los Troncos</li>
-          <li>El talar</li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+      <!-- Delivery -->
+      <mat-card class="info-sub-card bg-dark" fxFlex="50%">
+        <mat-card-header>
+          <mat-card-title class="card-title">Delivery</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <ul>
+            <li>General Pacheco</li>
+            <li>Los Troncos</li>
+            <li>El talar</li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+      <!-- Delivery -->
+    </div>
   </div>
 </section>

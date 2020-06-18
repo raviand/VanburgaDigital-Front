@@ -22,7 +22,7 @@ import { HttpClientModule } from '@angular/common/http';
     PageMenuComponent,
     FooterComponent,
     ClientComponent,
-    CarouselComponent
+    CarouselComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,7 +31,7 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     HttpClientModule,
     FormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

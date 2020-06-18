@@ -1,5 +1,4 @@
-
-.background{
+.background {
   background-color: #212121;
   color: #fafafa;
 }
@@ -20,10 +19,14 @@ a,
 button {
   cursor: pointer;
 }
+a:hover {
+  background-color: #666;
+}
 
 #logo {
-  margin-left: 25px;
-  margin-right: 25px;
+  margin-left: 5px;
+  margin-right: 5px;
+  width: 180px;
 }
 
 .btn {
@@ -33,11 +36,21 @@ button {
 @media screen and (max-width: 500px) {
   .header a {
     float: none;
-    display: block;
+    display: inline-block;
     text-align: left;
+  }
+  #logo {
+    width: 90px;
   }
   .header-right {
     float: none;
   }
 }
 
+@media (max-width: 374px) {
+  #logo {
+    margin-left: none;
+    margin-right: none;
+    width: 60px;
+  }
+}

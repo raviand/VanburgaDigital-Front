@@ -3,6 +3,7 @@
 
 html,
 body {
+  background-color: #121212;
   height: 100%;
 }
 body {
@@ -11,11 +12,11 @@ body {
   src: url(assets/Fonts/BebasNeue/BebasNeue-Bold.otf) format("opentype");
 }
 @font-face {
-    font-family: bebasNeue-bold;
-    src: url(assets/Fonts/BebasNeue/BebasNeue-Bold.otf) format("opentype");
-  }
+  font-family: bebasNeue-bold;
+  src: url(assets/Fonts/BebasNeue/BebasNeue-Bold.otf) format("opentype");
+}
 
-.buttonsColor{
-  background-color: #c7c7c7 !important; 
+.buttonsColor {
+  background-color: #c7c7c7 !important;
   color: #000000 !important;
 }

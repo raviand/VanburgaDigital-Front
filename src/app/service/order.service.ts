@@ -4,31 +4,29 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { API_URI } from '../app.constant';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
+  constructor(private httpClient: HttpClient) {}
 
-  
-  constructor(private httpClient : HttpClient) { }
-
-  createOrder(orderRequest : OrderRequest){
+  createOrder(orderRequest: OrderRequest) {
     let headers = new HttpHeaders({
-      "Content-Type" : "application/json"
-    })  
-    return this.httpClient.post(`${API_URI}order`, orderRequest, {headers})
+      'Content-Type': 'application/json',
+    });
+    return this.httpClient.post(`${API_URI}order`, orderRequest, { headers });
   }
 
-  searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
-    
-
-    let params = new HttpParams( );
-    params.append("status", status)
-    params.append("dateFrom", dateFrom)
-    params.append("dateTo", dateTo)
-    params.append("clientId", clientId)
-    return this.httpClient.get(`${API_URI}order/search`)
+  searchOrderList(
+    status: string,
+    dateFrom: Date,
+    dateTo: Date,
+    clientId: string
+  ) {
+    let params = new HttpParams();
+    params.append('status', status);
+    params.append('clientId', clientId);
+    return this.httpClient.get(`${API_URI}order/search`);
   }
-
 }
 
 //////////////////////////////////////////////////////////////
@@ -36,23 +34,23 @@ export class OrderService {
 //////////////////////////////////////////////////////////////
 export interface OrderList {
   message?: string;
-  code?:    number;
-  status?:  number;
-  orders?:  Order[];
+  code?: number;
+  status?: number;
+  orders?: Order[];
 }
 
 export interface OrderResponse {
-  message?:     string;
-  code?:        number;
-  status?:      number;
-  address?:     Address;
-  order?:       Order;
+  message?: string;
+  code?: number;
+  status?: number;
+  address?: Address;
+  order?: Order;
   orderDetail?: ProductData[];
 }
 
 export interface OrderRequest {
-  client?:   Client;
-  comment?:  string;
+  client?: Client;
+  comment?: string;
   products?: ProductData[];
 }
 
@@ -61,34 +59,34 @@ export interface OrderRequest {
 //////////////////////////////////////////////////////////////
 
 export interface Order {
-  id?:         number;
-  client?:     Client;
-  comments?:   string;
-  status?:     string;
+  id?: number;
+  client?: Client;
+  comments?: string;
+  status?: string;
   createDate?: Date;
-  amount?:     number;
+  amount?: number;
 }
 
 export interface Client {
-  name?:      string;
+  name?: string;
   cellphone?: string;
-  lastName?:  string;
-  mail?:      string;
-  address?:   Address;
+  lastName?: string;
+  mail?: string;
+  address?: Address;
 }
 
 export interface Address {
-  street?:     string;
+  street?: string;
   doorNumber?: string;
-  zipCode?:    string;
-  state?:      State;
-  floor?:     string;
-  door?:      string;
+  zipCode?: string;
+  state?: State;
+  floor?: string;
+  door?: string;
 }
 
 export interface ProductData {
   product?: Product;
-  extras?:  Extra[];
+  extras?: Extra[];
 }
 
 //////////////////////////////////////////////////////////////
@@ -98,33 +96,32 @@ export interface ProductData {
 // Converts JSON strings to/from your types
 export class ConvertOrderList {
   public static toOrderList(json: string): OrderList {
-      return JSON.parse(json);
+    return JSON.parse(json);
   }
 
   public static orderListToJson(value: OrderList): string {
-      return JSON.stringify(value);
+    return JSON.stringify(value);
   }
 }
 
 // Converts JSON strings to/from your types
 export class ConvertOrderResponse {
   public static toOrderRequest(json: string): OrderResponse {
-      return JSON.parse(json);
+    return JSON.parse(json);
   }
 
   public static orderResponseToJson(value: OrderResponse): string {
-      return JSON.stringify(value);
+    return JSON.stringify(value);
   }
 }
 
 // Converts JSON strings to/from your types
 export class ConvertOrderRequest {
   public static toOrderRequest(json: string): OrderRequest {
-      return JSON.parse(json);
+    return JSON.parse(json);
   }
 
   public static orderRequestToJson(value: OrderRequest): string {
-      return JSON.stringify(value);
+    return JSON.stringify(value);
   }
 }
-
