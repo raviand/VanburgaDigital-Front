@@ -101,6 +101,7 @@ export interface Extra {
   price?:     number;
   available?: boolean;
   selected?:  boolean;
+  quantity?:  number;
 }
 
 // Converts JSON strings to/from your types

@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class PageMenuComponent implements OnInit {
 
   constructor() { }
-
+  opened = false
   ngOnInit(): void {
   }
 
