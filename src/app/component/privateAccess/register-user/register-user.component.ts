@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Client } from 'src/app/service/order.service';
-import { Socialusers } from 'src/app/service/login.service';
+import { Socialusers, LoginService } from 'src/app/service/login.service';
 import { State, MenuService } from 'src/app/service/menu.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-user',
@@ -11,7 +12,8 @@ import { State, MenuService } from 'src/app/service/menu.service';
 })
 export class RegisterUserComponent implements OnInit {
 
-  constructor(private menuService : MenuService, private formBuilder: FormBuilder) { }
+  constructor(private menuService : MenuService, private formBuilder: FormBuilder, private loginService : LoginService,
+    private router : Router) { }
 
   deliverForm = this.formBuilder.group({
     name : ['', [Validators.minLength(3), Validators.maxLength(20),Validators.required]],
@@ -30,17 +32,13 @@ export class RegisterUserComponent implements OnInit {
   states : State[];
   hide = true;
   confirmHide = true;
-  
+
   get f() {         return this.deliverForm.controls; }
   get name(){       return this.deliverForm.get('name')}
   get lastName(){   return this.deliverForm.get('lastName')}
   get cellphone(){  return this.deliverForm.get('cellphone')}
   get mail(){       return this.deliverForm.get('mail')}
-  get street(){     return this.deliverForm.get('street')}
-  get doorNumber(){ return this.deliverForm.get('doorNumber')}
-  get zipCode(){    return this.deliverForm.get('zipCode')}
-  get floor(){      return this.deliverForm.get('floor')}
-  get door(){       return this.deliverForm.get('door')}
+  get password(){     return this.deliverForm.get('password')}
 
   ngOnInit(): void {
     this.menuService.getStates().subscribe(
@@ -56,7 +54,20 @@ export class RegisterUserComponent implements OnInit {
       return;
     }
     console.log(this.deliverForm.value)
-       
+    this.user = new Socialusers;
+    this.user.name = this.deliverForm.value.name
+    this.user.email = this.deliverForm.value.mail
+    this.user.password = btoa(this.deliverForm.value.password)
+    this.user.phone = this.deliverForm.value.cellphone
+    console.log(this.user)
+    this.loginService.Savesresponse(this.user).subscribe(
+      res => {
+        console.log(res)
+        localStorage.setItem('socialusers', JSON.stringify( this.user));  
+        console.log(localStorage.setItem('socialusers', JSON.stringify(this.user)));  
+        this.router.navigate([`/menu`]);  
+      }
+    )
   }
 
 }

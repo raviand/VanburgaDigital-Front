@@ -30,5 +30,8 @@ export class Socialusers {
   name: string;  
   image: string;  
   token?: string;  
-  idToken?: string;  
+  idToken?: string;
+  password?: string;  
+  phone?: string;  
+
 }
