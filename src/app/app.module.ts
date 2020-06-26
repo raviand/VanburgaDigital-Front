@@ -14,9 +14,22 @@ import { CarouselComponent } from './carousel/carousel.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
 import { MomentModule } from 'ngx-moment';
+import { NgxSocialButtonModule, SocialServiceConfig } from "ngx-social-button";
 import { OrderSendedComponent } from './component/publicAccess/order-sended/order-sended.component';
 import { OrderErrorComponent } from './component/publicAccess/order-error/order-error.component';
 import { PageErrorComponent } from './component/publicAccess/page-error/page-error.component';
+import { OrderProcessComponent } from './component/privateAccess/order-process/order-process.component';
+import { LoginComponent } from './component/privateAccess/login/login.component';
+import { RegisterUserComponent } from './component/privateAccess/register-user/register-user.component';
+
+// Configs
+export function getAuthServiceConfigs() {
+  let config = new SocialServiceConfig()
+      .addFacebook("762676337832580")
+      .addGoogle("878640223831-n7q9a9ssp1qbdb8rtr30c7s7gvv3o97q.apps.googleusercontent.com")
+      .addLinkedIn("Your-LinkedIn-Client-Id");
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -29,8 +42,11 @@ import { PageErrorComponent } from './component/publicAccess/page-error/page-err
     CarouselComponent,
     OrderSendedComponent,
     OrderErrorComponent,
-    PageErrorComponent
-  ],
+    PageErrorComponent,
+    OrderProcessComponent,
+    LoginComponent,
+    RegisterUserComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -40,9 +56,13 @@ import { PageErrorComponent } from './component/publicAccess/page-error/page-err
     FormsModule,
     FlexLayoutModule,
     MomentModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxSocialButtonModule
   ],
-  providers: [],
+  providers: [{
+    provide: SocialServiceConfig,
+    useFactory: getAuthServiceConfigs
+}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
