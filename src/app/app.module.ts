@@ -47,6 +47,7 @@ export function getAuthServiceConfigs() {
     LoginComponent,
     RegisterUserComponent
     ],
+    CarouselComponent,
   imports: [
     BrowserModule,
     AppRoutingModule,

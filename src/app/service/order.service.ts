@@ -5,9 +5,10 @@ import { API_URI , DATE_FORMAT, CLIENT_CART} from '../app.constant';
 import { DatePipe } from '@angular/common';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class OrderService {
+  constructor(private httpClient: HttpClient) {}
 
   clientCart : Product[];
   
@@ -15,9 +16,9 @@ export class OrderService {
 
   createOrder(orderRequest : OrderRequest){
     let headers = new HttpHeaders({
-      "Content-Type" : "application/json"
-    })  
-    return this.httpClient.post(`${API_URI}order`, orderRequest, {headers})
+      'Content-Type': 'application/json',
+    });
+    return this.httpClient.post(`${API_URI}order`, orderRequest, { headers });
   }
 
   searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
@@ -53,9 +54,9 @@ export class OrderService {
 //////////////////////////////////////////////////////////////
 export interface OrderList {
   message?: string;
-  code?:    number;
-  status?:  number;
-  orders?:  Order[];
+  code?: number;
+  status?: number;
+  orders?: Order[];
 }
 
 export interface OrderResponse {
@@ -78,20 +79,20 @@ export class OrderRequest {
 //////////////////////////////////////////////////////////////
 
 export interface Order {
-  id?:         number;
-  client?:     Client;
-  comments?:   string;
-  status?:     string;
+  id?: number;
+  client?: Client;
+  comments?: string;
+  status?: string;
   createDate?: Date;
-  amount?:     number;
+  amount?: number;
 }
 
 export class Client {
   name?:      string;
   cellphone?: string;
-  lastName?:  string;
-  mail?:      string;
-  address?:   Address;
+  lastName?: string;
+  mail?: string;
+  address?: Address;
 }
 
 export class Address {
@@ -111,33 +112,32 @@ export class Address {
 // Converts JSON strings to/from your types
 export class ConvertOrderList {
   public static toOrderList(json: string): OrderList {
-      return JSON.parse(json);
+    return JSON.parse(json);
   }
 
   public static orderListToJson(value: OrderList): string {
-      return JSON.stringify(value);
+    return JSON.stringify(value);
   }
 }
 
 // Converts JSON strings to/from your types
 export class ConvertOrderResponse {
   public static toOrderRequest(json: string): OrderResponse {
-      return JSON.parse(json);
+    return JSON.parse(json);
   }
 
   public static orderResponseToJson(value: OrderResponse): string {
-      return JSON.stringify(value);
+    return JSON.stringify(value);
   }
 }
 
 // Converts JSON strings to/from your types
 export class ConvertOrderRequest {
   public static toOrderRequest(json: string): OrderRequest {
-      return JSON.parse(json);
+    return JSON.parse(json);
   }
 
   public static orderRequestToJson(value: OrderRequest): string {
-      return JSON.stringify(value);
+    return JSON.stringify(value);
   }
 }
-
