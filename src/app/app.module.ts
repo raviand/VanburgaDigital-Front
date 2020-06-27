@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './component/home/home.component';
@@ -11,8 +10,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { ClientComponent } from './component/client/client.component';
 import { FormsModule } from '@angular/forms';
+import { CarouselComponent } from './carousel/carousel.component';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
-
 
 @NgModule({
   declarations: [
@@ -21,7 +21,8 @@ import { HttpClientModule } from '@angular/common/http';
     MenuComponent,
     PageMenuComponent,
     FooterComponent,
-    ClientComponent
+    ClientComponent,
+    CarouselComponent
   ],
   imports: [
     BrowserModule,
@@ -29,9 +30,10 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    FlexLayoutModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
