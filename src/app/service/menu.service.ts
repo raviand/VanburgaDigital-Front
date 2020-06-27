@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URI } from '../app.constant';
-import { ProductData } from './order.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MenuService {
+
+  
 
   constructor(private httpClient : HttpClient) { }
 
@@ -19,14 +20,14 @@ export class MenuService {
     let headers = new HttpHeaders({
       "Content-Type" : "application/json"
     })
-    return this.httpClient.get<ProductData[]>(`${API_URI}product/search?categoryId=${id}`, {headers})
+    return this.httpClient.get<Product[]>(`${API_URI}product/search?categoryId=${id}`, {headers})
   }
 
   getProduct(id) {
     let headers = new HttpHeaders({
       "Content-Type" : "application/json"
     })
-    return this.httpClient.get<ProductData[]>(`${API_URI}product?productId=${id}`, {headers})
+    return this.httpClient.get<Product[]>(`${API_URI}product?productId=${id}`, {headers})
   }
 
   getStates() {
@@ -56,8 +57,8 @@ export class ConvertCategory {
   }
 }
 
-export interface State {
-  id?:          number;
+export class State {
+  id?:          string;
   state?:        string;
 }
 
@@ -72,13 +73,14 @@ export class ConvertState {
   }
 }
 
-export interface Product {
+export class Product {
   id?:          number;
   name?:        string;
   category?:    Category;
   price?:       number;
   description?: string;
   available?:   boolean;
+  extras?:      Extra[];
 }
 
 
@@ -98,6 +100,8 @@ export interface Extra {
   name?:      string;
   price?:     number;
   available?: boolean;
+  selected?:  boolean;
+  quantity?:  number;
 }
 
 // Converts JSON strings to/from your types

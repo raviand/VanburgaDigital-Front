@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Product, Extra, State } from './menu.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { API_URI } from '../app.constant';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { API_URI , DATE_FORMAT, CLIENT_CART} from '../app.constant';
+import { DatePipe } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
+  clientCart : Product[];
   
   constructor(private httpClient : HttpClient) { }
 
@@ -16,6 +18,32 @@ export class OrderService {
       "Content-Type" : "application/json"
     })  
     return this.httpClient.post(`${API_URI}order`, orderRequest, {headers})
+  }
+
+  searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
+    let from// = this.datePipe.transform(dateFrom, DATE_FORMAT)
+    let to //= this.datePipe.transform(dateTo, DATE_FORMAT)
+
+    let params = new HttpParams( );
+    params.append("status", status)
+    params.append("dateFrom", from)
+    params.append("dateTo", to)
+    params.append("clientId", clientId)
+    return this.httpClient.get(`${API_URI}order/search`)
+  }
+
+  getStates(){
+    return this.httpClient.get(`${API_URI}state`)
+  }
+
+  saveClientCart(cart : Product[]){
+    localStorage.setItem(CLIENT_CART, JSON.stringify(cart))
+  }
+  
+  loadClientCart() : Product[]{
+    if(localStorage.getItem(CLIENT_CART) != null){
+      return JSON.parse(localStorage.getItem(CLIENT_CART))
+    }
   }
 
 }
@@ -36,13 +64,13 @@ export interface OrderResponse {
   status?:      number;
   address?:     Address;
   order?:       Order;
-  orderDetail?: ProductData[];
+  orderDetail?: Product[];
 }
 
-export interface OrderRequest {
+export class OrderRequest {
   client?:   Client;
   comment?:  string;
-  products?: ProductData[];
+  products?: Product[];
 }
 
 //////////////////////////////////////////////////////////////
@@ -58,7 +86,7 @@ export interface Order {
   amount?:     number;
 }
 
-export interface Client {
+export class Client {
   name?:      string;
   cellphone?: string;
   lastName?:  string;
@@ -66,19 +94,15 @@ export interface Client {
   address?:   Address;
 }
 
-export interface Address {
+export class Address {
   street?:     string;
   doorNumber?: string;
   zipCode?:    string;
-  state?:      State;
+  state?:      string;
   floor?:     string;
   door?:      string;
 }
 
-export interface ProductData {
-  product?: Product;
-  extras?:  Extra[];
-}
 
 //////////////////////////////////////////////////////////////
 //    CONVERSORES

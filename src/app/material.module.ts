@@ -7,6 +7,13 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatDialogModule} from '@angular/material/dialog';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatTableModule} from '@angular/material/table';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
 
 
  @NgModule({
@@ -18,7 +25,14 @@ import {MatSidenavModule} from '@angular/material/sidenav';
      MatExpansionModule,
      MatButtonModule,
      MatIconModule,
-     MatSidenavModule
+     MatSidenavModule,
+     MatDialogModule,
+     MatCheckboxModule,
+     MatSnackBarModule,
+     MatChipsModule,
+     MatTableModule,
+     MatSelectModule,
+     MatFormFieldModule
     ],
    exports:[
      MatCardModule, 
@@ -28,7 +42,14 @@ import {MatSidenavModule} from '@angular/material/sidenav';
      MatExpansionModule,
      MatButtonModule,
      MatIconModule,
-     MatSidenavModule
+     MatSidenavModule,
+     MatDialogModule,
+     MatCheckboxModule,
+     MatSnackBarModule,
+     MatChipsModule,
+     MatTableModule,
+     MatSelectModule,
+     MatFormFieldModule
     ]
  })
  export class MaterialModule { }

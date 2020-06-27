@@ -2,17 +2,34 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './component/home/home.component';
-import { MenuComponent } from './component/menu/menu.component';
-import { PageMenuComponent } from './component/page-menu/page-menu.component';
-import { FooterComponent } from './component/footer/footer.component';
+import { HomeComponent } from './component/publicAccess/home/home.component';
+import { MenuComponent } from './component/publicAccess/menu/menu.component';
+import { PageMenuComponent } from './component/publicAccess/page-menu/page-menu.component';
+import { FooterComponent } from './component/publicAccess/footer/footer.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
-import { ClientComponent } from './component/client/client.component';
-import { FormsModule } from '@angular/forms';
+import { ClientComponent } from './component/publicAccess/client/client.component';
+import { FormsModule,ReactiveFormsModule  } from '@angular/forms';
 import { CarouselComponent } from './carousel/carousel.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HttpClientModule } from '@angular/common/http';
+import { MomentModule } from 'ngx-moment';
+import { NgxSocialButtonModule, SocialServiceConfig } from "ngx-social-button";
+import { OrderSendedComponent } from './component/publicAccess/order-sended/order-sended.component';
+import { OrderErrorComponent } from './component/publicAccess/order-error/order-error.component';
+import { PageErrorComponent } from './component/publicAccess/page-error/page-error.component';
+import { OrderProcessComponent } from './component/privateAccess/order-process/order-process.component';
+import { LoginComponent } from './component/privateAccess/login/login.component';
+import { RegisterUserComponent } from './component/privateAccess/register-user/register-user.component';
+
+// Configs
+export function getAuthServiceConfigs() {
+  let config = new SocialServiceConfig()
+      .addFacebook("762676337832580")
+      .addGoogle("878640223831-n7q9a9ssp1qbdb8rtr30c7s7gvv3o97q.apps.googleusercontent.com")
+      .addLinkedIn("Your-LinkedIn-Client-Id");
+  return config;
+}
 
 @NgModule({
   declarations: [
@@ -22,8 +39,14 @@ import { HttpClientModule } from '@angular/common/http';
     PageMenuComponent,
     FooterComponent,
     ClientComponent,
-    CarouselComponent
-  ],
+    CarouselComponent,
+    OrderSendedComponent,
+    OrderErrorComponent,
+    PageErrorComponent,
+    OrderProcessComponent,
+    LoginComponent,
+    RegisterUserComponent
+    ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -31,9 +54,15 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     HttpClientModule,
     FormsModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MomentModule,
+    ReactiveFormsModule,
+    NgxSocialButtonModule
   ],
-  providers: [],
+  providers: [{
+    provide: SocialServiceConfig,
+    useFactory: getAuthServiceConfigs
+}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
