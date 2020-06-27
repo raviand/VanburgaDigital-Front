@@ -94,7 +94,7 @@ export class ClientComponent implements OnInit {
       },
       err => {
         this.sended = -1;
-        console.log("there was an error " + err)
+        console.log(err)
       }
     )
   }

@@ -17,11 +17,7 @@ export class PageMenuComponent implements OnInit {
   }
 
   signOut(){
-    if(this.socialAuthService.isSocialLoggedIn()){
-        this.socialAuthService.signOut().catch((err)=>{
-          console.log(err)
-        });
-    }
+    this.loginService.logOut();
   }
   isLoggedIn(){
     return this.socialAuthService.isSocialLoggedIn()

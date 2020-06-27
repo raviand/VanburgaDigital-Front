@@ -1,6 +1,7 @@
 import { Injectable, Inject, forwardRef } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { API_URI } from 'src/app/app.constant'
+import { SocialService } from 'ngx-social-button';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { API_URI } from 'src/app/app.constant'
 export class LoginService {
 
   
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,private socialAuthService : SocialService) { }
   logedIn = false;
   Savesresponse(user){
     this.logedIn = true;
@@ -17,8 +18,17 @@ export class LoginService {
   }
 
   userlogged(){
-    return this.logedIn
+    return localStorage.getItem('socialusers') != null
   }
+
+  logOut(){
+    if(this.socialAuthService.isSocialLoggedIn()){
+      this.socialAuthService.signOut().catch((err)=>{
+        console.log(err)
+      });
+    localStorage.setItem('socialusers', null)
+  }
+}
 
 }
 

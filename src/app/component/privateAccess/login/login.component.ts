@@ -20,23 +20,27 @@ export class LoginComponent implements OnInit {
     href: "FACEBOOK-SHARE-LINK",
     hashtag:"#FACEBOOK-SHARE-HASGTAG"
   };
-
+  
   registerForm = this.formBuilder.group({
     mail :        ['', [Validators.required]],
     password:     ['', [Validators.required]],
   })
-
+  
+    constructor(    
+      private SocialloginService: LoginService,  
+      private router: Router, private formBuilder: FormBuilder
+    ) { }  
+  
   get f() {         return this.registerForm.controls; }
   get mail(){       return this.registerForm.get('mail')}
   get password(){     return this.registerForm.get('password')}
 
-  constructor(  
-    private socialAuthService: SocialService,  
-    private SocialloginService: LoginService,  
-    private router: Router, private formBuilder: FormBuilder
-  ) { }  
-
   ngOnInit() {  
+    if(!this.SocialloginService.userlogged()){
+      console.log('User logged in')
+      this.router.navigate(['menu'])
+    }
+    console.log('user logged ' + this.SocialloginService.userlogged())
   }  
 
   login(){
@@ -55,17 +59,13 @@ export class LoginComponent implements OnInit {
   }
 
   signOut(){
-    if(this.socialAuthService.isSocialLoggedIn()){
-        this.socialAuthService.signOut().catch((err)=>{
-          console.log(err)
-        });
-    }
+    this.SocialloginService.logOut();
   }
 
   Savesresponse(socialusers: Socialusers) {  
     this.SocialloginService.Savesresponse(socialusers).subscribe((res: any) => {  
       console.log(res);  
-      this.socialusers=res;  
+      this.socialusers=res.user;  
       this.response = res.userDetail;  
       localStorage.setItem('socialusers', JSON.stringify( this.socialusers));  
       console.log(localStorage.setItem('socialusers', JSON.stringify(this.socialusers)));  
