@@ -11,13 +11,14 @@ export class OrderService {
   constructor(private httpClient: HttpClient) {}
 
   clientCart : Product[];
-  datePipe: DatePipe = new DatePipe("es-ES");
+  datePipe: DatePipe = new DatePipe("en-ES");
+  headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+  });
 
   createOrder(orderRequest : OrderRequest){
-    let headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-    return this.httpClient.post(`${API_URI}order`, orderRequest, { headers });
+    
+    return this.httpClient.post(`${API_URI}order`, orderRequest, { headers: this.headers });
   }
 
   searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
@@ -29,7 +30,8 @@ export class OrderService {
     params.append("dateFrom", from)
     params.append("dateTo", to)
     params.append("clientId", clientId)
-    return this.httpClient.get(`${API_URI}order/search`)
+   
+    return this.httpClient.get(`${API_URI}order/search?dateFrom=${from}`, { headers: this.headers })
   }
 
   getStates(){
@@ -72,6 +74,7 @@ export class OrderRequest {
   client?:   Client;
   comment?:  string;
   products?: Product[];
+  delivery?: boolean;
 }
 
 //////////////////////////////////////////////////////////////

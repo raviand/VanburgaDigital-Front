@@ -23,7 +23,7 @@ export class ClientComponent implements OnInit {
   selectedState : State; 
   comment : string;
   sended : number = 0;
-  delivery :boolean;
+  delivery :boolean = false;
 
 
   deliverForm = new FormGroup({
@@ -82,7 +82,9 @@ export class ClientComponent implements OnInit {
     orderRequest = new OrderRequest();
     orderRequest.client = this.client;
     orderRequest.comment = this.comment;
-    orderRequest.products = this.cart;
+    orderRequest.products = this.cart;//delivery
+    console.log(this.delivery)
+    orderRequest.delivery = this.delivery
     console.log(orderRequest)
     this.orderService.createOrder(orderRequest).subscribe(
       res => {

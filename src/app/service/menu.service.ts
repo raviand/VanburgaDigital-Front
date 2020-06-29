@@ -8,7 +8,9 @@ import { API_URI } from '../app.constant';
 })
 export class MenuService {
 
-  
+  headers = new HttpHeaders({
+    "Content-Type" : "application/json"
+  })
 
   constructor(private httpClient : HttpClient) { }
 
@@ -17,24 +19,18 @@ export class MenuService {
   }
 
   getProductByCategory(id) {
-    let headers = new HttpHeaders({
-      "Content-Type" : "application/json"
-    })
-    return this.httpClient.get<Product[]>(`${API_URI}product/search?categoryId=${id}`, {headers})
+    
+    return this.httpClient.get<Product[]>(`${API_URI}product/search?categoryId=${id}`, {headers: this.headers})
   }
 
   getProduct(id) {
-    let headers = new HttpHeaders({
-      "Content-Type" : "application/json"
-    })
-    return this.httpClient.get<Product[]>(`${API_URI}product?productId=${id}`, {headers})
+
+    return this.httpClient.get<Product[]>(`${API_URI}product?productId=${id}`, {headers: this.headers})
   }
 
   getStates() {
-    let headers = new HttpHeaders({
-      "Content-Type" : "application/json"
-    })
-    return this.httpClient.get<State[]>(`${API_URI}state`, {headers})
+
+    return this.httpClient.get<State[]>(`${API_URI}state`, {headers: this.headers})
   }
 
 }

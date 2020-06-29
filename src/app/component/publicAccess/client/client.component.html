@@ -1,5 +1,5 @@
 <app-order-sended *ngIf="sended > 0" [cartSended]="cartSended"></app-order-sended>
-<app-order-error *ngIf="sended == 0" [client]="client"></app-order-error>
+<app-order-error *ngIf="sended < 0" [client]="client"></app-order-error>
 <mat-card [style.width]="'100%'" [style.height]="'80%'">
 
     <mat-card-header>
@@ -57,8 +57,16 @@
                             </mat-error>
                         </mat-form-field>
                     </div>
+                    
                 </div>
-                <mat-checkbox (click)="delivery = !delivery">Delivery?</mat-checkbox>
+                <div class="form-check text-center">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" [checked]="delivery" (change)="delivery = !delivery">
+                    <label class="form-check-label vurga-titles" for="flexCheckDefault">
+                        Te lo llevamos?
+                    </label>
+                </div>
+                <hr style="border-top: 2px dashed #a0a0a0;">
+
                 <div *ngIf="delivery">
                     <h2 class="m-3 text-center" style="width: 100%; font-family: bebasNeue-bold; font-size: 30px;">
                         Direccion de entrega
