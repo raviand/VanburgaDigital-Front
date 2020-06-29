@@ -23,23 +23,32 @@ export class MenuComponent implements OnInit {
   categoryName : string;
   selectedProduct : boolean;
   opened = true;
+  loaded = false;
 
   constructor(private menuService : MenuService, private router : Router,
-    private snackBar:MatSnackBar, private orderService : OrderService) { }
+    private snackBar:MatSnackBar, private orderService : OrderService) { 
+
+      
+
+    }
 /**
  * Metodo que se dispara antes de mostrar la pagina
  */
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void>{
 
     if(this.orderService.loadClientCart() != null){
       this.cart = this.orderService.loadClientCart();
       this.getTotalAmount()
     }
 
-    this.menuService.getAllCategories().subscribe(
+    await this.menuService.getAllCategories().subscribe(
       (data:any) => {
         console.log(data.categories)
         this.categories = data.categories
+        if(this.categories[0] != null){
+          this.categorySelected(this.categories[0]);
+          this.categorySelected(this.categories[0]);
+        }
       }
     )
   }
@@ -167,6 +176,7 @@ export class MenuComponent implements OnInit {
       (data:any) => {
         console.log(data)
         this.productsData = data.products
+        this.loaded = true;
       }
     )
   }

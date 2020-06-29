@@ -47,4 +47,8 @@ export class AppComponent {
       this.carousel.onNextClick();
     });
   }
+
+  onActivate(event) {
+    window.scroll(0,0);
+}
 }

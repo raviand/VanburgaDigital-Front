@@ -11,8 +11,7 @@ export class OrderService {
   constructor(private httpClient: HttpClient) {}
 
   clientCart : Product[];
-  
-  constructor(private httpClient : HttpClient) { }
+  datePipe: DatePipe = new DatePipe("es-ES");
 
   createOrder(orderRequest : OrderRequest){
     let headers = new HttpHeaders({
@@ -22,8 +21,8 @@ export class OrderService {
   }
 
   searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
-    let from// = this.datePipe.transform(dateFrom, DATE_FORMAT)
-    let to //= this.datePipe.transform(dateTo, DATE_FORMAT)
+    let from = this.datePipe.transform(dateFrom, DATE_FORMAT)
+    let to = this.datePipe.transform(dateTo, DATE_FORMAT)
 
     let params = new HttpParams( );
     params.append("status", status)
@@ -66,6 +65,7 @@ export interface OrderResponse {
   address?:     Address;
   order?:       Order;
   orderDetail?: Product[];
+  orders?:       Order[];
 }
 
 export class OrderRequest {
@@ -85,6 +85,8 @@ export interface Order {
   status?: string;
   createDate?: Date;
   amount?: number;
+  product? : Product[];
+  
 }
 
 export class Client {

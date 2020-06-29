@@ -23,36 +23,36 @@
   fxlayoutWrap
   FxLayoutAlign="center"
 >
-  <div class="container bg-dark" fxFill fxFlex="100%">
+  <div class="container bg-light" fxFill fxFlex="100%">
     <div class="row">
-      <!-- Horarios -->
-      <mat-card class="info-sub-card bg-dark" fxFlex="50%">
-        <mat-card-header>
-          <mat-card-title class="card-title">Horarios</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ul>
-            <li>Jueves a Domingo: 19:30 a 23:30</li>
-            <li>Feriados y Pre-Feriados: 19:30 a 23:30</li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
-      <!-- Horarios -->
-
-      <!-- Delivery -->
-      <mat-card class="info-sub-card bg-dark" fxFlex="50%">
-        <mat-card-header>
-          <mat-card-title class="card-title">Delivery</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ul>
-            <li>General Pacheco</li>
-            <li>Los Troncos</li>
-            <li>El talar</li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
-      <!-- Delivery -->
+      <div class="col">
+        <!-- Horarios -->
+        <mat-card class="info-sub-card bg-dark"  fxFlex="90%">
+          <mat-card-header class="mt-3">
+            <mat-card-title class="card-title">Horarios</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="textWithDarkBG m-4">
+            <p>Jueves a Domingo: 19:30 a 23:30</p>
+            <p>Feriados y Pre-Feriados: 19:30 a 23:30</p>
+            
+          </mat-card-content>
+        </mat-card>
+        <!-- Horarios -->
+      </div>
+      <div class="col">
+        <!-- Delivery -->
+        <mat-card class="info-sub-card bg-dark"  fxFlex="90%">
+          <mat-card-header class="mt-3">
+            <mat-card-title class="card-title" >Delivery</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="textWithDarkBG m-4"  >
+            <p>General Pacheco</p>
+            <p>Los Troncos</p>
+            <p>El talar</p>
+          </mat-card-content>
+        </mat-card>
+        <!-- Delivery -->
+      </div>
     </div>
   </div>
 </section>

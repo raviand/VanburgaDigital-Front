@@ -3,7 +3,7 @@
 
 html,
 body {
-  background-color: #121212;
+  background-color: #121212 !important;
   height: 100%;
 }
 
@@ -42,4 +42,10 @@ body {
   margin: auto;
   width: 50%;
   padding: 10px;
+}
+
+.textWithDarkBG{
+  color: #a0a0a0; 
+  font-size: x-large;
+  font-family: bebasNeue-bold;
 }

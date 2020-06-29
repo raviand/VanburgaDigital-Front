@@ -14,6 +14,7 @@ import {MatChipsModule} from '@angular/material/chips';
 import {MatTableModule} from '@angular/material/table';
 import {MatSelectModule} from '@angular/material/select';
 import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 
  @NgModule({
@@ -32,7 +33,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
      MatChipsModule,
      MatTableModule,
      MatSelectModule,
-     MatFormFieldModule
+     MatFormFieldModule,
+     MatProgressSpinnerModule
     ],
    exports:[
      MatCardModule, 
