@@ -1,3 +1,4 @@
+<app-carousel [slides]="slides" [animationType]="animationType"></app-carousel>
 <section
   class="bienvenida"
   fxlayout="row"
@@ -5,7 +6,7 @@
   fxlayoutWrap
   FxLayoutAlign="center"
 >
-  <mat-card class="inicio-card bg-dark" fxFlex="100%"
+  <mat-card class="inicio-card" fxFlex="100%"
     ><img
       mat-card-image
       class="img-inicio"
@@ -23,36 +24,24 @@
   fxlayoutWrap
   FxLayoutAlign="center"
 >
-  <div class="container bg-dark" fxFill fxFlex="100%">
-    <div class="row">
-      <!-- Horarios -->
-      <mat-card class="info-sub-card bg-dark" fxFlex="50%">
-        <mat-card-header>
-          <mat-card-title class="card-title">Horarios</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ul>
-            <li>Jueves a Domingo: 19:30 a 23:30</li>
-            <li>Feriados y Pre-Feriados: 19:30 a 23:30</li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
-      <!-- Horarios -->
-
-      <!-- Delivery -->
-      <mat-card class="info-sub-card bg-dark" fxFlex="50%">
-        <mat-card-header>
-          <mat-card-title class="card-title">Delivery</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-          <ul>
-            <li>General Pacheco</li>
-            <li>Los Troncos</li>
-            <li>El talar</li>
-          </ul>
-        </mat-card-content>
-      </mat-card>
-      <!-- Delivery -->
+  <div class="row">
+    <!-- Horarios -->
+    <div class="container" fxFill fxFlex="50%">
+      <h1 class="info-sub-card">Horarios</h1>
+      <ul>
+        <li>Jue a Dom - Feriados y Pre-Feriados</li>
+        <li>19:30 a 23:30</li>
+      </ul>
     </div>
+    <!-- Horarios -->
+
+    <!-- Delivery -->
+    <div class="container" fxFill fxFlex="50%">
+      <h1 class="info-sub-card">Delivery</h1>
+      <ul>
+        <li>Consultá si llegamos a tu zona!</li>
+      </ul>
+    </div>
+    <!-- Delivery -->
   </div>
 </section>

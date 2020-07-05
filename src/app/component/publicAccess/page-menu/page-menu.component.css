@@ -1,5 +1,5 @@
 .background {
-  background-color: #212121;
+  background-color: RGBA(0, 0, 0, 0.2);
   color: #fafafa;
 }
 .header {
@@ -27,10 +27,6 @@ a:hover {
   margin-left: 5px;
   margin-right: 5px;
   width: 180px;
-}
-
-.btn {
-  font-family: bebasNeue-bold;
 }
 
 @media screen and (max-width: 500px) {

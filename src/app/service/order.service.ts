@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Product, Extra, State } from './menu.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { API_URI , DATE_FORMAT, CLIENT_CART} from '../app.constant';
+import { API_URI, DATE_FORMAT, CLIENT_CART } from '../app.constant';
 import { DatePipe } from '@angular/common';
 
 @Injectable({
@@ -10,43 +10,45 @@ import { DatePipe } from '@angular/common';
 export class OrderService {
   constructor(private httpClient: HttpClient) {}
 
-  clientCart : Product[];
-  
-  constructor(private httpClient : HttpClient) { }
+  clientCart: Product[];
 
-  createOrder(orderRequest : OrderRequest){
+  createOrder(orderRequest: OrderRequest) {
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
     });
     return this.httpClient.post(`${API_URI}order`, orderRequest, { headers });
   }
 
-  searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
-    let from// = this.datePipe.transform(dateFrom, DATE_FORMAT)
-    let to //= this.datePipe.transform(dateTo, DATE_FORMAT)
+  searchOrderList(
+    status: string,
+    dateFrom: Date,
+    dateTo: Date,
+    clientId: string
+  ) {
+    let from; // = this.datePipe.transform(dateFrom, DATE_FORMAT)
+    let to; //= this.datePipe.transform(dateTo, DATE_FORMAT)
 
-    let params = new HttpParams( );
-    params.append("status", status)
-    params.append("dateFrom", from)
-    params.append("dateTo", to)
-    params.append("clientId", clientId)
-    return this.httpClient.get(`${API_URI}order/search`)
+    let params = new HttpParams();
+    params.append('status', status);
+    params.append('dateFrom', from);
+    params.append('dateTo', to);
+    params.append('clientId', clientId);
+    return this.httpClient.get(`${API_URI}order/search`);
   }
 
-  getStates(){
-    return this.httpClient.get(`${API_URI}state`)
+  getStates() {
+    return this.httpClient.get(`${API_URI}state`);
   }
 
-  saveClientCart(cart : Product[]){
-    localStorage.setItem(CLIENT_CART, JSON.stringify(cart))
+  saveClientCart(cart: Product[]) {
+    localStorage.setItem(CLIENT_CART, JSON.stringify(cart));
   }
-  
-  loadClientCart() : Product[]{
-    if(localStorage.getItem(CLIENT_CART) != null){
-      return JSON.parse(localStorage.getItem(CLIENT_CART))
+
+  loadClientCart(): Product[] {
+    if (localStorage.getItem(CLIENT_CART) != null) {
+      return JSON.parse(localStorage.getItem(CLIENT_CART));
     }
   }
-
 }
 
 //////////////////////////////////////////////////////////////
@@ -60,17 +62,17 @@ export interface OrderList {
 }
 
 export interface OrderResponse {
-  message?:     string;
-  code?:        number;
-  status?:      number;
-  address?:     Address;
-  order?:       Order;
+  message?: string;
+  code?: number;
+  status?: number;
+  address?: Address;
+  order?: Order;
   orderDetail?: Product[];
 }
 
 export class OrderRequest {
-  client?:   Client;
-  comment?:  string;
+  client?: Client;
+  comment?: string;
   products?: Product[];
 }
 
@@ -88,7 +90,7 @@ export interface Order {
 }
 
 export class Client {
-  name?:      string;
+  name?: string;
   cellphone?: string;
   lastName?: string;
   mail?: string;
@@ -96,14 +98,13 @@ export class Client {
 }
 
 export class Address {
-  street?:     string;
+  street?: string;
   doorNumber?: string;
-  zipCode?:    string;
-  state?:      string;
-  floor?:     string;
-  door?:      string;
+  zipCode?: string;
+  state?: string;
+  floor?: string;
+  door?: string;
 }
-
 
 //////////////////////////////////////////////////////////////
 //    CONVERSORES

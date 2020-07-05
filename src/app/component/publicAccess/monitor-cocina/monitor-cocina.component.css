@@ -1,0 +1,19 @@
+.row {
+  margin: 0px 0px;
+}
+.mat-card {
+  top: 0;
+  border: 15px !important;
+  border-radius: 0px !important;
+  border: white !important;
+  font-size: 7.5vh;
+  color: white;
+  font-family: bebasNeue-bold;
+  text-align: center;
+}
+
+.mat-card h1 {
+  color: black;
+  font-family: bebasNeue-bold;
+  font-size: 7.5vh;
+}
