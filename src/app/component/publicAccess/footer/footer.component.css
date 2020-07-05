@@ -1,108 +1,87 @@
 .footer {
-  background-color: #121212;
+  background-color: black;
   font-size: 15px;
   font-family: bebasNeue-bold;
   width: 100%;
   bottom: 0;
   left: 0;
-  margin-top: 20px;
 }
 
-.footer .container-fluid {
-  width: 90%;
-  font-family: bebasNeue-bold;
-  border-style: solid;
-  border-width: 2px;
-  border-color: white;
-  border-radius: 20px;
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.card-header {
-  font-family: bebasNeue-bold;
-  color: white;
-  font-weight: bold;
-  font-size: 3em;
+ul {
+  display: block;
+  list-style-type: disc;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
+  padding-inline-start: 0px;
+  margin-inline-start: 0px;
+  margin-top: 1.5rem;
+  margin-bottom: 3rem;
 }
-
-.card-title {
-  color: white;
-}
-
-.contacto ul {
-  list-style: none;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-}
-
-.contacto li {
-  padding-left: 1px;
-}
-
-.contacto a {
-  text-decoration: none;
-  font-family: bebasNeue-bold;
-  font-size: 1.3em;
-}
-
-.icon {
-  height: 25px;
-  width: 25px;
-  margin-right: 2px;
-}
-
-.map {
-  height: 100%;
-  width: 100%;
-}
-
-.map_iframe {
-  overflow: hidden;
-  background: none !important;
-  height: 100%;
-  width: 100%;
-}
-
 .social-icons li {
   display: inline-block;
-  margin-top: 8px;
-  margin-bottom: 8px;
+}
+
+.whatsapp {
+  fill: white;
+}
+
+.facebook {
+  fill: white;
+}
+.instagram {
+  fill: white;
+}
+
+.maps {
+  fill: white;
 }
 
 .social-icons a {
-  background-color: #343a40;
-  color: #818a91;
   font-size: 16px;
   display: inline-block;
-  line-height: 44px;
   width: 45px;
   height: 45px;
-  text-align: center;
-  margin-right: 8px;
+  margin: 0px 50px;
   border-radius: 100%;
+  transition-duration: 800ms;
 }
-.social-icons a:active,
-.social-icons a:focus,
-.social-icons a:hover {
-  background-color: #343a40;
+
+.social-icons a.whatsapp:hover {
+  fill: #4fce5d;
+  transform: rotate(360deg);
 }
-.social-icons.size-sm a {
-  line-height: 34px;
-  height: 14px;
-  width: 14px;
-  font-size: 14px;
-}
+
 .social-icons a.facebook:hover {
-  background-color: #3b5998;
-}
-.social-icons a.twitter:hover {
-  background-color: #00aced;
+  fill: #3b5998;
+  transform: rotate(360deg);
 }
 
 .social-icons a.instagram:hover {
-  background-color: #ea4c89;
+  fill: #ea4c89;
+  transform: rotate(360deg);
 }
+.social-icons a.maps:hover {
+  fill: #dd4d42;
+  transform: rotate(360deg);
+}
+
 @media (max-width: 767px) {
+  .social-icons a {
+    font-size: 16px;
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    margin: 0px 50px;
+    border-radius: 100%;
+    transition-duration: 800ms;
+  }
+
   .social-icons li.title {
     display: block;
     margin-right: 0;

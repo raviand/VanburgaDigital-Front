@@ -1,7 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-import { Slide } from './carousel/carousel.interface';
-import { AnimationType } from './carousel/carousel.animations';
-import { CarouselComponent } from './carousel/carousel.component';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-root',

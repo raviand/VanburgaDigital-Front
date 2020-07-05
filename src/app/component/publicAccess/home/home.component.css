@@ -1,21 +1,18 @@
-body {
-  background-color: black;
-}
-
 .bienvenida {
-  margin-top: 20px;
-  padding: 0 20px;
   display: flex;
+  background-color: black;
   justify-content: center;
 }
 
 .inicio-card {
   max-height: 70vh;
-  max-width: 990px;
+  max-width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  text-align: center;
-  vertical-align: middle;
+  background-color: RGBA(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .img-inicio {
@@ -25,55 +22,51 @@ body {
 }
 
 .info {
-  margin-top: 15px;
+  background-image: url("/assets/img/LOCAL.jpg");
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-color: black;
   padding: 0 20px;
-  display: flex;
-  justify-content: center;
 }
 
 .container {
-  max-width: 990px;
-  height: 70vh;
-  border-radius: 20px;
-  overflow: visible;
-  position: relative;
-  align-items: stretch;
-}
-
-.mat-card-header {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+  max-width: 100%;
+  margin: 30vh 0vh;
 }
 
 .info-sub-card {
-  max-width: 300px;
-  margin: 5px;
-  padding: 5px;
-  max-height: 70vh;
-  border-radius: 20px;
-  overflow: visible;
-  position: relative;
-  justify-content: center;
-}
-
-.card-title {
   font-family: bebasNeue-bold;
   font-size: 3em;
   font-weight: bold;
-  color: white;
+  color: #fafafa;
+  max-width: 100%;
+  padding: 5px;
+  overflow: visible;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 ul {
   list-style: none;
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 li {
   font-family: bebasNeue-bold;
+  color: #fafafa;
   font-size: 2vw;
   line-height: 150%;
-  padding-left: 20px;
-  display: block;
 }
 
 @media (max-width: 450px) {

@@ -1,4 +1,4 @@
-<div class="header bg-dark">
+<div class="header">
   <a href="/">
     <img
       class="header__img"
@@ -8,23 +8,6 @@
     />
   </a>
   <div class="header-right">
-    <button *ngIf="isLoggedIn()" (click)="signOut()" class="btn btn-outline-light btn-lg pull-right ml-auto-p2">LogOut</button>
-    <button *ngIf="!isLoggedIn()" [routerLink]="['/login']" class="btn btn-outline-light btn-lg pull-right ml-auto-p2">Login</button>
-    <button
-      type="button"
-      class="btn btn-outline-light btn-lg pull-right ml-auto-p2"
-      [routerLink]="['/menu']"
-      routerLinkActive="router-link-active"
-    >
-      Hacé tu pedido!
-    </button>
-    <button
-      type="button"
-      class="btn btn-outline-light btn-lg pull-right ml-auto-p2"
-      [routerLink]="['/menu']"
-      routerLinkActive="router-link-active"
-    >
-      Contactanos
-    </button>
+    <app-header-menu></app-header-menu>
   </div>
 </div>
