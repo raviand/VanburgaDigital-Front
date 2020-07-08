@@ -54,6 +54,7 @@ export function getAuthServiceConfigs() {
     HeaderMenuComponent,
     ContactoComponent,
     MonitorCocinaComponent,
+    CarouselComponent
   ],
   imports: [
     BrowserModule,

@@ -46,8 +46,18 @@
     mat-menu-item
     [routerLink]="['/cocina']"
     class="btn btn-lg pull-right ml-auto-p2"
+    *ngIf="kitchenAccess()"
   >
     <mat-icon>kitchen</mat-icon>
     <span>Cocina</span>
+  </button>
+  <button
+    mat-menu-item
+    [routerLink]="['/stages']"
+    class="btn btn-lg pull-right ml-auto-p2"
+    *ngIf="stagesAccess()"
+  >
+    <mat-icon>linear_scale</mat-icon>
+    <span>Estados</span>
   </button>
 </mat-menu>

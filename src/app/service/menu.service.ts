@@ -56,6 +56,7 @@ export class ConvertCategory {
 export class State {
   id?:          string;
   state?:        string;
+  amount?:     number;
 }
 
 // Converts JSON strings to/from your types
@@ -77,6 +78,9 @@ export class Product {
   description?: string;
   available?:   boolean;
   extras?:      Extra[];
+  rawMaterial? :number;
+  button?:      any;
+
 }
 
 
@@ -91,13 +95,16 @@ export class ConvertProduct {
   }
 }
 
-export interface Extra {
+export class Extra {
   id?:        number;
   name?:      string;
   price?:     number;
   available?: boolean;
   selected?:  boolean;
-  quantity?:  number;
+  quantity?:  number = 0;
+  quantityLimit?: number;
+  rawMaterial? : number;
+
 }
 
 // Converts JSON strings to/from your types

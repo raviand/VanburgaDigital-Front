@@ -54,3 +54,60 @@ body {
   font-size: x-large;
   font-family: bebasNeue-bold;
 }
+
+.cards{
+  background-color: #343a40;
+  font-size: 20px;
+  font-family: bebasNeue-bold;
+  color: #fafafa;
+  border-radius: 25px;
+  margin: 2px;
+}
+
+.dangerButton{
+  font-family: bebasNeue-bold;
+  background-color: #742e2ed7;
+  color: #fafafa;
+  font-size: 20px;
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+  border-radius: 15px;
+  margin-bottom: 5px;
+}
+
+.successButton{
+  font-family: bebasNeue-bold;
+  background-color: rgb(50, 83, 56);
+  color: #fafafa;
+  font-size: 20px;
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+  border-radius: 15px;
+  margin-bottom: 5px;
+}
+
+.ConfirmButton{
+  font-family: bebasNeue-bold;
+  background-color: rgb(33, 41, 78);
+  color: #fafafa;
+  font-size: 20px;
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+  border-radius: 15px;
+  margin-bottom: 5px;
+}
+
+.nextButton{
+  font-family: bebasNeue-bold;
+  background-color: rgb(165, 160, 85);
+  color: #fafafa;
+  font-size: 20px;
+  padding: 8px;
+  position: absolute;
+  right: 10px;
+  border-radius: 15px;
+  margin-bottom: 5px;
+}

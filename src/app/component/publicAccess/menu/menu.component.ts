@@ -1,10 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import {
-  MenuService,
-  Category,
-  Extra,
-  Product,
-} from 'src/app/service/menu.service';
+import { MenuService, Category, Extra, Product } from 'src/app/service/menu.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderService } from 'src/app/service/order.service';
@@ -12,41 +7,37 @@ import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-menu',
-
+  
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css'],
+  styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  categories = [
-    { description: 'Las mejores del condado', id: 1, name: 'Burgers' },
-    {
-      description: 'Tomate una fresca',
-      id: 2,
-      name: 'Bebidas',
-    },
-    {
-      description: 'No podes pedir la hamburguesa sin unas buenas papas',
-      id: 3,
-      name: 'Acompañamientos',
-    },
-  ];
-  productsData: Product[];
-  cartProduct: Product;
-  cart: Product[] = [];
-  extrasSelected: Extra[];
-  extraIndexSelected: number;
+
+  categories : Category[];
+  productsData : Product[];
+  cartProduct : Product;
+  cart : Product[] = [];
+  extrasSelected : Extra[];
+  extraIndexSelected : number;
   cartTotalAmount = 0.0;
-  categoryName: string;
-  selectedProduct: boolean;
+  categoryName : string;
+  selectedProduct : boolean;
   opened = true;
   loaded = false;
+  notSelected = 'secondary'
+  selected = 'success'
+  canSelected = false;
+
+  buttons = [
+    { name: 'Simple',     buttonColor:'silver', id:1, extra: 0, selected: false }, 
+    { name: 'Doble',      buttonColor:'silver', id:2, extra: 1, selected: false }, 
+    { name: 'Triple',     buttonColor:'silver', id:3, extra: 2, selected: false }, 
+    { name: 'Cuadruple',  buttonColor:'silver', id:4, extra: 3, selected: false }, 
+  ]
 
   constructor(private menuService : MenuService, private router : Router,
-    private snackBar:MatSnackBar, private orderService : OrderService) { 
+    private snackBar:MatSnackBar, private orderService : OrderService) {}
 
-      
-
-    }
 /**
  * Metodo que se dispara antes de mostrar la pagina
  */
@@ -54,7 +45,7 @@ export class MenuComponent implements OnInit {
 
     if(this.orderService.loadClientCart() != null){
       this.cart = this.orderService.loadClientCart();
-      this.getTotalAmount();
+      this.getTotalAmount()
     }
 
     await this.menuService.getAllCategories().subscribe(
@@ -69,147 +60,203 @@ export class MenuComponent implements OnInit {
     )
   }
 
+  totalProduct(pd : Product){
+    let productTotal = 0
+    pd.extras.forEach(e=>{
+      if(e.quantity > 0){
+        productTotal += (e.price * e.quantity)
+      }
+      if(e.rawMaterial > 0){
+        this.buttons.forEach(b=>{
+          if(b.selected){
+            productTotal += ((e.price * b.extra) + pd.price)
+          }
+        })
+      }
+    })
+
+    return productTotal
+  }
+
   /**
    * Extiende un listado de extras del producto seleccionado
-   *
+   * 
    * @param i Index del producto al que se le selecciona el boton extra
    */
-  lookExtras(i: number) {
-    if (this.extraIndexSelected == i) {
+  lookExtras(i:number){
+    if(this.extraIndexSelected == i){
       this.selectedProduct = !this.selectedProduct;
-    } else {
-      this.cartProduct.extras = [];
+    }else{
+      this.cartProduct.extras = []
       this.selectedProduct = true;
     }
     this.extraIndexSelected = i;
   }
 
+  closeModal(product:Product, index : number){
+    product.extras.forEach(e => e.quantity = 0)
+    this.buttons.forEach(b => b.selected=false)
+    this.canSelected = false;
+  }
+
   /**
    * selecciona un extra y lo agrega al producto del carro
-   * @param product
-   * @param idExtra
+   * @param product 
+   * @param idExtra 
    */
-  selectExtra(product: Product, idExtra: number) {
-    console.log('idExtra : ' + idExtra);
-    product = JSON.parse(JSON.stringify(product));
-    product.extras.forEach((ex) => {
-      if (ex.id === idExtra) {
-        console.log(ex);
-        ex.selected = !ex.selected;
-        if (ex.selected) {
-          console.log('true');
-          console.log(ex);
-          this.cartProduct.extras.push(ex);
-        } else {
-          console.log('false');
-          console.log(ex);
-          let index = this.cartProduct.extras.indexOf(ex, 0);
-          this.cartProduct.extras.splice(index, 1);
-          console.log(this.cartProduct.extras);
+  selectExtra(product:Product,idExtra:number){ 
+    console.log('idExtra : ' + idExtra)
+    product = JSON.parse(JSON.stringify(product))
+    product.extras.forEach(ex => {
+      if(ex.id === idExtra){
+        console.log(ex)
+        ex.selected = !ex.selected
+        if(ex.selected){
+          console.log('true')
+          console.log(ex)
+          this.cartProduct.extras.push(ex)
+        }else{
+          console.log('false')
+          console.log(ex)
+          let index = this.cartProduct.extras.indexOf(ex,0)
+          this.cartProduct.extras.splice(index, 1)
+          console.log(this.cartProduct.extras)
         }
       }
     });
   }
 
-  resetSelectedExtras(prod: Product) {
-    prod.extras?.forEach((ex) => (ex.selected = false));
+  resetSelectedExtras(prod : Product){
+    prod.extras?.forEach(ex=> ex.selected = false)
   }
 
   /**
    * Agrega el producto con sus extras seleccionados al carrito
-   * @param product
+   * @param product 
    */
-  addToCart(product: Product, index: number) {
-    let extras = [];
-    let productTotal = 0;
+  addToCart(product:Product, index : number){
+    let extras = []
+    let productTotal = 0
 
     productTotal = product.price;
-    //Busco los extras que tengo que eliminar
-    product.extras?.forEach((e) => {
-      if (!e.selected) {
-        extras.push(e);
-      }
-    });
+
     //hago una copia no relacionada con el objeto original
-    let cartProduct = JSON.parse(JSON.stringify(product));
-    //let cartProduct = product
-    if (extras.length > 0) {
-      extras.forEach((extras) => {
-        let i = cartProduct.extras.indexOf(extras, 0);
-        cartProduct.extras.splice(i, 1);
-      });
+    let cartProduct : Product = JSON.parse(JSON.stringify(product))
+
+    //Extraigo los que tienen una cantidad mayo a cero
+    cartProduct.extras?.forEach(e =>{
+      if(e.quantity != 0 || e.rawMaterial > 0){
+        extras.push(e)
+        productTotal += (e.price * e.quantity)
+      }
+      if(e.rawMaterial > 0){
+        this.buttons.forEach(b=>{
+          if(b.selected){
+            productTotal += ((e.price * b.extra) + cartProduct.price)
+            cartProduct.price += (e.price * b.extra)
+          }
+        })
+      }
+    })
+    //Elimino todos los extras para agregar la lista de los seleccionados
+    cartProduct.extras = null;
+    cartProduct.extras = extras;
+    this.buttons.forEach(b => {
+      if(b.selected) {
+        cartProduct.button = b;
+      }
+    })
+    console.log(cartProduct.extras)
+
+    if(this.cartProduct.extras?.length > 0){
+      cartProduct.extras = JSON.parse(JSON.stringify(this.cartProduct.extras))
     }
-    if (this.cartProduct.extras?.length > 0) {
-      cartProduct.extras = JSON.parse(JSON.stringify(this.cartProduct.extras));
-    }
-    this.lookExtras(index);
-    console.log(product);
-    this.cart.push(cartProduct);
-    this.cartProduct.extras = [];
-    console.log(this.cart);
-    this.getTotalAmount();
-    this.snackBar.open(
-      'Agregaste un ' + product.name + ' al pedido!',
-      'Cerrar',
-      { duration: 2000 }
-    );
+    this.lookExtras(index)
+    console.log(product)
+    this.cart.push(cartProduct)
+    this.cartProduct.extras = []
+    console.log(this.cart)
+    this.getTotalAmount()
+    this.snackBar.open('Agregaste un ' + product.name + ' al pedido!', 'Cerrar', {duration : 2000})
   }
 
   /**
-   * Elimina el
-   * @param extra
-   * @param product
+   * Elimina el 
+   * @param extra 
+   * @param product 
    */
-  removeExtra(extra: Extra, product: Product) {
-    let indexProduct = this.cart.indexOf(product);
-    let i = this.cart[indexProduct].extras.indexOf(extra, 0);
-    this.cart[indexProduct].extras.splice(i, 1);
-    this.getTotalAmount();
-    this.orderService.saveClientCart(this.cart);
+  removeExtra(extra : Extra, product : Product){
+    let indexProduct = this.cart.indexOf(product)
+    let i = this.cart[indexProduct].extras.indexOf(extra, 0)
+    this.cart[indexProduct].extras.splice(i,1)
+    this.getTotalAmount()
+    this.orderService.saveClientCart(this.cart)
   }
 
   /**
    * Elimina el producto del canasto
-   * @param product
+   * @param product 
    */
-  removeProduct(product: Product) {
+  removeProduct(product : Product){
     //Descuento todos los extras del total
-    product.extras?.forEach((e) => (this.cartTotalAmount -= e.price));
+    product.extras?.forEach(e => this.cartTotalAmount -= e.price)
     //descuento el precio del producto
-    let indexProduct = this.cart.indexOf(product);
-    this.cart.splice(indexProduct, 1);
-    this.getTotalAmount();
-    this.orderService.saveClientCart(this.cart);
+    let indexProduct = this.cart.indexOf(product)
+    this.cart.splice(indexProduct,1)
+    this.getTotalAmount()
+    this.orderService.saveClientCart(this.cart)
   }
+
+  
 
   /**
    * Busca en el servicio los productos que pertenecen a la categoria
    * @param id id de la categoria
    */
-  categorySelected(category: Category) {
+  categorySelected(category : Category){
     this.categoryName = category.name;
     this.cartProduct = new Product();
     this.menuService.getProductByCategory(category.id).subscribe(
       (data:any) => {
         console.log(data)
         this.productsData = data.products
+        this.productsData.forEach(element => {
+          element.extras?.forEach( e => e.quantity = 0 )
+        });
         this.loaded = true;
       }
     )
   }
 
-  confirm() {
-    if (this.cart.length > 0) {
+  confirm(){
+    if(this.cart.length > 0){
       this.orderService.saveClientCart(this.cart);
-      this.router.navigate(['/order']);
+      this.router.navigate(['/order'])
+
     }
   }
 
-  getTotalAmount() {
-    this.cartTotalAmount = 0;
-    this.cart.forEach((prod) => {
-      this.cartTotalAmount += prod.price;
-      prod.extras?.forEach((ex) => (this.cartTotalAmount += ex.price));
-    });
+  getTotalAmount(){
+    this.cartTotalAmount = 0
+    this.cart.forEach(
+      prod => {
+        this.cartTotalAmount += prod.price
+        prod.extras?.forEach( ex => this.cartTotalAmount += (ex.price * ex.quantity))
+      }
+    )
   }
+
+  
+  hamburgerTypeSelected(id : number){
+    this.buttons.forEach(  b => {
+      if(b.id == id){
+        b.selected = true;
+      }else{
+        b.selected = false;
+      }
+    })
+    this.canSelected = true;
+  }
+
+  
 }

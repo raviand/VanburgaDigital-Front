@@ -3,6 +3,8 @@ import { Socialusers, LoginService } from 'src/app/service/login.service';
 import { Router } from '@angular/router';
 import { SocialService } from "ngx-social-button";
 import { FormBuilder, Validators } from '@angular/forms';
+import { USER } from 'src/app/app.constant';
+import { OrderService } from 'src/app/service/order.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +30,8 @@ export class LoginComponent implements OnInit {
   
     constructor(    
       private SocialloginService: LoginService,  
-      private router: Router, private formBuilder: FormBuilder
+      private router: Router, private formBuilder: FormBuilder,
+      private orderService : OrderService
     ) { }  
   
   get f() {         return this.registerForm.controls; }
@@ -67,9 +70,10 @@ export class LoginComponent implements OnInit {
       console.log(res);  
       this.socialusers=res.user;  
       this.response = res.userDetail;  
-      localStorage.setItem('socialusers', JSON.stringify( this.socialusers));  
-      console.log(localStorage.setItem('socialusers', JSON.stringify(this.socialusers)));  
+      this.SocialloginService.saveUserInSession(this.socialusers)
+      console.log(JSON.stringify(this.socialusers));  
       this.router.navigate([`/menu`]);  
+      
     })  
   }  
 

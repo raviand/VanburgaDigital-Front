@@ -1,4 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { CarouselComponent } from './carousel/carousel.component';
+import { AnimationType } from './carousel/carousel.animations';
+import { Slide } from './carousel/carousel.interface';
 
 @Component({
   selector: 'app-root',
@@ -36,7 +39,8 @@ export class AppComponent {
     { src: 'assetsimgOklahoma.jpeg' },
     { src: 'assetsimgCuarto Vanburga.jpeg' },
   ];
-  constructor() {}
+  constructor() {
+  }
 
   setAnimationType(type) {
     this.animationType = type.value;

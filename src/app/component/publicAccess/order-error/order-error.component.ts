@@ -3,6 +3,7 @@ import { OrderService, Client } from 'src/app/service/order.service';
 import { Product } from 'src/app/service/menu.service';
 import { Router } from '@angular/router';
 import { HttpParameterCodec, HttpUrlEncodingCodec } from '@angular/common/http';
+import { CLIENT } from 'src/app/app.constant';
 
 @Component({
   selector: 'app-order-error',
@@ -16,9 +17,10 @@ export class OrderErrorComponent implements OnInit {
   stringCart:string
   cart : Product[];
   parameterEncoding :ParameterEncoder
-  @Input() client :Client
+  client :Client
 
   ngOnInit(): void {
+    this.client = JSON.parse(sessionStorage.getItem(CLIENT)) 
     this.parameterEncoding = new ParameterEncoder() 
     this.cart = this.orderService.loadClientCart();
     if(this.cart == null  || this.cart.length == 0){
@@ -30,7 +32,7 @@ export class OrderErrorComponent implements OnInit {
       if(prod.extras?.length > 0){
         this.stringCart += `Con extras \n`
         prod.extras.forEach(ex => {
-          this.stringCart += `* ${ex.name} - $${ ex.price } \n`
+          this.stringCart += `* ${ex.name} X ${ex.quantity} - $${ ex.price } \n`
         })
       }
       this.stringCart += `\n-----------------------`

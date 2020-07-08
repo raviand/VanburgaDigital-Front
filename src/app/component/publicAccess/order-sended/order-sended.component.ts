@@ -11,11 +11,11 @@ export class OrderSendedComponent implements OnInit {
 
   constructor(private service:OrderService) { }
 
-  @Input() cartSended :string;
+  
   cart : Product[]
   whatsappLink:string
   ngOnInit(): void  {
-    this.cart = JSON.parse(this.cartSended)
+    this.cart = this.service.loadClientCart()
   }
 
 }

@@ -1,116 +1,147 @@
-<!-- Side bar para mostrar el pedido -->
+<!-- Side bat para mostrar el pedido -->
 <div id="mySidenav" class="sidenav">
-  <div *ngIf="!opened" style="width: 100%;">
-    <span
-      style="font-size: 50px; cursor: pointer; color: #fafafa;"
-      href="javascript:void(0)"
-      class="ml-4 text-right"
-      (click)="opened = !opened"
-      onclick="closeNav()"
-      >&times;</span
-    >
-  </div>
-  <h2 class="vurga-titles text-center" style="color: #fafafa;">Tu pedido</h2>
+    <div class="mt-5">
 
-  <div *ngFor="let pd of cart" class="m-1 cart-items">
-    <div>
-      <button class="buttonsColor btn float-right" (click)="removeProduct(pd)">
-        eliminar
-      </button>
-      <h3 class="vurga-titles">{{ pd.name }}</h3>
-    </div>
-    <p>Precio: {{ pd.price | currency: "ARS":"symbol-narrow" }}</p>
-    <ul>
-      <li *ngFor="let ex of pd.extras">
-        <mat-chip-list aria-label="Fish selection">
-          <p>
-            {{ ex.name }} - {{ ex.price | currency: "ARS":"symbol-narrow" }}
-            <mat-chip class="buttonsColor btn" (click)="removeExtra(ex, pd)"
-              >Quitar</mat-chip
-            >
-          </p>
-        </mat-chip-list>
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="cart.length > 0">
-    <button
-      class="buttonsColor btn btn-lg btn-block"
-      style="margin-bottom: 90px;"
-      (click)="confirm()"
-    >
-      Confirmar Pedido {{ cartTotalAmount | currency: "ARS":"symbol-narrow" }}
-    </button>
-  </div>
-</div>
-<!-- Boton de acceso al carrito -->
-<div class="mt-4">
-    <div *ngIf="opened">
-      <span style="font-size:30px;cursor:pointer" class="text-light" (click)="opened = !opened" onclick="openNav()">&#9776; Pedido</span>
-    </div>
-</div>
-<div class="d-flex justify-content-center" *ngIf="!loaded">
-    <div class="spinner-border text-light" role="status">
-        <span class="sr-only">Cargando...</span>
-      </div>
-</div>
-<div *ngIf="loaded">
-
-    <!-- Categorias -->
-    <div class="d-flex justify-content-around" >
-        <div *ngFor="let category of categories">
-            <button class="btn btn-secondary mt-2" style="background-color: #666; width: 150px; font-size: 20px;" id="{{ category.name }}" (click)="categorySelected(category)" >{{ category.name }}</button>
+        <div *ngIf="!opened" style="width: 100%;">
+            <span style="font-size:50px;cursor:pointer;color: #fafafa;" href="javascript:void(0)" class="ml-4 text-right" (click)="opened = !opened" onclick="closeNav()">&times;</span>
         </div>
-    </div>
-    <!-- Tarjetas con el resultado de la categoria -->
-    <div class="tab-content" id="v-pills-tabContent">
-        <div class="tab-pane fade show active" id="{{categoryName}}" role="tabpanel" aria-labelledby="v-pills-home-tab">
-            <mat-grid-list cols="2" rowHeight="1:1" gutterSize="4px" [style.height]="'100%'">
-                <div >
-                    <mat-card [style.width]="'100%'" [style.height]="'80%'" *ngFor="let pd of productsData; let i of index" class="mt-3" style="background-color: #fafafa;">
-                        <button mat-mini-fab class="buttonsColor m-3 float-right" (click)="addToCart(pd, i)" type="submit">
-                            <mat-icon >add_shopping_cart</mat-icon>
-                        </button>
-                        <img src="assets/img/{{pd.code}}.jpeg" style="max-width:10%;max-height:10%;" class="float-right" alt="Burgas">
-                        <mat-card-header>
-                            <mat-card-title class="vurga-titles">
-                                {{pd.name}}
-                            </mat-card-title>
-                        </mat-card-header>
-                        <mat-card-content>
-                            <p>{{pd.price | currency : 'ARS' : 'symbol-narrow'}}</p>
-                            <small>{{pd.description}}</small><br>
-                            <button *ngIf="pd.extras?.length > 0" style="background-color: #212121; color: #fafafa;" mat-button (click)="lookExtras(i)" data-toggle="modal" data-target="#exampleModal">Extras!</button>
-                            <div *ngIf="selectedProduct && i==extraIndexSelected">
-                                <div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-center" style="font-size: 30px;" id="exampleModalLabel">Extras</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <mat-selection-list #shoes>
-                                                <mat-list-option *ngFor="let ex of pd.extras; let j = index" (click)="selectExtra(pd,ex.id)">
-                                                    {{ ex.name }} - {{ex.price | currency : 'ARS' : 'symbol-narrow'}} 
-                                                </mat-list-option>
-                                                </mat-selection-list>
-    
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="addToCart(pd, i)" type="submit">Agregar al pedido</button>
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </mat-card-content>
-                    </mat-card>
+        <h2 class="vurga-titles text-center" style="color: #fafafa;">Tu pedido</h2>
+        
+        <div *ngFor="let pd of cart" class="m-1 cart-items" > 
+            <div>
+                <button class="buttonsColor btn float-right" (click)="removeProduct(pd)" >eliminar</button>
+                <h3 class="vurga-titles">{{pd.name}} <small>{{ pd.button.name }}</small></h3>
+            </div>
+            <p>Precio: {{ pd.price | currency : 'ARS' : 'symbol-narrow'}}</p>
+            <ul>
+                <div *ngFor="let ex of pd.extras">
+                    <li *ngIf="ex.quantity > 0">
+                            <mat-chip-list aria-label="Fish selection" >
+                                <p>{{ ex.name }} X {{ ex.quantity }}  {{ (ex.price * ex.quantity) | currency : 'ARS' : 'symbol-narrow'}} <mat-chip class="buttonsColor btn" (click)="removeExtra(ex, pd)" >Quitar</mat-chip> </p>
+                            </mat-chip-list>
+                    </li>
                 </div>
-        </mat-grid-list>
+            </ul>
+        </div>
+        <div *ngIf="cart.length > 0" >
+            <button class="buttonsColor btn btn-lg btn-block" style="margin-bottom: 90px;" (click)="confirm()">Confirmar Pedido {{cartTotalAmount | currency : 'ARS' : 'symbol-narrow'}}</button>
         </div>
     </div>
 </div>
+
+<div class="container" style="margin-top: 80px; margin-bottom: 110px; padding-top: 10px;">
+    <!-- Boton de acceso al carrito -->
+    <div class="mt-4">
+      <div *ngIf="opened">
+        <span style="font-size:30px;cursor:pointer" class="text-light" (click)="opened = !opened" onclick="openNav()">&#9776; Pedido</span>
+      </div>
+    </div>
+    <div class="d-flex justify-content-center" *ngIf="!loaded">
+      <div class="spinner-border text-light" role="status">
+          <span class="sr-only">Cargando...</span>
+        </div>
+    </div>
+    <div *ngIf="loaded">
+    
+      <!-- Categorias -->
+      <div class="d-flex justify-content-around" >
+          <div *ngFor="let category of categories">
+              <button class="btn btn-secondary mt-2" style="background-color: #666; width: 150px; font-size: 20px;" id="{{ category.name }}" (click)="categorySelected(category)" >{{ category.name }}</button>
+          </div>
+      </div>
+      <!-- Tarjetas con el resultado de la categoria -->
+      <div class="tab-content" id="v-pills-tabContent">
+          <div class="tab-pane fade show active" id="{{categoryName}}" role="tabpanel" aria-labelledby="v-pills-home-tab">
+              <mat-grid-list cols="2" rowHeight="1:1" gutterSize="4px" [style.height]="'100%'">
+                  <div >
+                      <mat-card [style.width]="'100%'" [style.height]="'80%'" *ngFor="let pd of productsData; let i of index" class="mt-3" style="background-color: #fafafa;">
+                          <!-- <button mat-mini-fab class="buttonsColor m-3 float-right" (click)="addToCart(pd, i)" type="submit">
+                              <mat-icon >add_shopping_cart</mat-icon>
+                          </button> -->
+                          <img src="assets/img/{{pd.code}}.jpeg" style="max-width:10%;max-height:10%;" class="float-right" alt="Burgas">
+                          <mat-card-header>
+                              <mat-card-title class="vurga-titles">
+                                  {{pd.name}}
+                              </mat-card-title>
+                          </mat-card-header>
+                          <mat-card-content>
+                              <!-- <p>{{pd.price | currency : 'ARS' : 'symbol-narrow'}}</p> -->
+                              <p>{{pd.description}}</p><br>
+                              <button *ngIf="pd.extras?.length > 0" style="background-color: #212121; color: #fafafa;" mat-button (click)="lookExtras(i)" data-toggle="modal" data-target="#exampleModal">Seleccionar!</button>
+                              <div *ngIf="selectedProduct && i==extraIndexSelected">
+                                  <div class="modal fade mt-5" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                          <div class="modal-header">
+                                              <h5 class="modal-title text-center" style="font-size: 25px;" id="exampleModalLabel">Como queres tu {{ pd.name }}?</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                              </button>
+                                          </div>
+                                          <div class="modal-body">
+
+                                            <!-- Lista de tipos de hamburguesas -->
+                                            <div class="d-flex justify-content-around mb-2" >
+                                                <div *ngFor="let button of buttons">
+                                                    <button class="btn btn-secundary mt-2" id="{{ button.name }}" style="color: silver;" (click)="hamburgerTypeSelected(button.id)" *ngIf="!button.selected" >{{ button.name }}</button>
+                                                    <button class="btn btn-secundary mt-2" id="{{ button.name }}" style="color: black;" (click)="hamburgerTypeSelected(button.id)" *ngIf="button.selected" >{{ button.name }}</button>
+                                                </div>
+
+                                            </div>
+                                            <hr>
+                                              <ul>
+                                                  <li *ngFor="let ex of pd.extras; let j = index">
+                                                      <div class="row">
+                                                          <div class="col">
+                                                              {{ ex.name }} - {{ex.price | currency : 'ARS' : 'symbol-narrow'}}  &nbsp;
+                                                          </div>
+                                                          <div class="col">
+                                                              <div class="row">
+                                                                  <div class="col">
+                                                                      <span class="input-group-btn">
+                                                                          <button type="button" class="btn btn-number" *ngIf="ex.quantity > 0"
+                                                                                  (click)="ex.quantity = ex.quantity - 1" data-type="minus" data-field="quant[3]">
+                                                                                  <mat-icon>remove</mat-icon>
+                                                                          </button>
+                                                                      </span>
+                                                                  </div>
+                                                                  <div class="col">
+                                                                      {{ ex.quantity }}
+                                                                  </div>
+                                                                  <div class="col">
+                                                                      <span class="input-group-btn">
+                                                                          <button type="button" class="btn btn-number" *ngIf="ex.quantity < ex.quantityLimit"
+                                                                                  (click)="ex.quantity = ex.quantity + 1" data-type="plus" data-field="quant[3]">
+                                                                              <mat-icon>add</mat-icon>
+                                                                          </button>
+                                                                      </span>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </li>
+                                              </ul>
+                                          </div>
+                                          <div class="modal-footer">
+                                              <h3 class="mr-auto">Total producto: {{ totalProduct(pd) | currency : 'ARS' : 'symbol-narrow' }}</h3>
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModal(pd, i)">Close</button>
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="addToCart(pd, i)" type="submit" [disabled]=" !canSelected ">Agregar al pedido</button>
+                                          </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </mat-card-content>
+                      </mat-card>
+                  </div>
+          </mat-grid-list>
+          </div>
+      </div>
+    </div>
+</div>
+
+
+
+
+  
+
