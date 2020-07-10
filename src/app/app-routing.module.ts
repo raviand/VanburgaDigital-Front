@@ -17,6 +17,8 @@ const routes: Routes = [
   { path: 'menu', component: MenuComponent },
   { path: 'contacto', component: ContactoComponent },
   { path: 'cocina', component: MonitorCocinaComponent },
+  { path: 'error', component: OrderErrorComponent },
+  { path: 'success', component: OrderSendedComponent },
   {
     path: 'order',
     component: ClientComponent,

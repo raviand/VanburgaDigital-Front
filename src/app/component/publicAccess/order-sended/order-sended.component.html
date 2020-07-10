@@ -1,8 +1,28 @@
-<mat-card [style.width]="'100%'" [style.height]="'80%'">
-    <div class="alert alert-success" role="alert">
-        <h4 class="alert-heading vanburga-title">Pedido enviado!</h4>
-        <p>Su pedido se proceso correctamente. Puede enviar el pedido por Whatsapp para seguir el estado del mismo</p>
-        <hr>
-        <p class="mb-0">Presione <a>Aqui!</a> para enviarnos el mensaje.</p>
-    </div>
-</mat-card>
+<div class="main">
+  <mat-card class="order-sended-card">
+    <mat-card-title class="alert-heading vanburga-title"
+      >Pedido confirmado 😁</mat-card-title
+    >
+    <mat-card-actions class="enviar">
+      <button type="button" class="btn btn-primary" [routerLink]="['/menu']">
+        VOLVER AL MENÚ
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        href="https://api.whatsapp.com/send?phone=5491123915925&text=Hola%20Vanburga!"
+        target="_blank"
+      >
+        ENVIAR WHATSAPP
+      </button>
+    </mat-card-actions>
+    <mat-card-header>
+      <img mat-card-image src="../assets/img/exito.png" alt="vanburga éxito" />
+    </mat-card-header>
+    <mat-card-content>
+      <p class="texto">
+        Escribinos para coordinar el pedido
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>

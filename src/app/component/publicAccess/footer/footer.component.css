@@ -1,6 +1,6 @@
 .footer {
   background-color: black;
-  font-size: 15px;
+  font-size: 1.5vw;
   font-family: bebasNeue-bold;
   width: 100%;
   bottom: 0;
@@ -43,11 +43,10 @@ ul {
 }
 
 .social-icons a {
-  font-size: 16px;
   display: inline-block;
-  width: 45px;
-  height: 45px;
-  margin: 0px 50px;
+  width: 5vw;
+  height: 5vw;
+  margin: 0vw 5vw;
   border-radius: 100%;
   transition-duration: 800ms;
 }
@@ -71,7 +70,7 @@ ul {
   transform: rotate(360deg);
 }
 
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .social-icons a {
     font-size: 16px;
     display: inline-block;
@@ -87,4 +86,4 @@ ul {
     margin-right: 0;
     font-weight: 600;
   }
-}
+} */

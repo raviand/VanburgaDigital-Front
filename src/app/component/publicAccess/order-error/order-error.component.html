@@ -1,8 +1,28 @@
-<mat-card [style.width]="'100%'" [style.height]="'80%'">
-    <div class="alert alert-danger" role="alert">
-        <h4 class="alert-heading vanburga-title">Ocurrio un error!</h4>
-        <p>No pudimos procesar su pedido. Comuniquese con nosotros para realizar el pdido</p>
-        <hr>
-        <p class="mb-0">Presione <a href="https://wa.me/54{{ client.cellphone }}?text={{ stringCart }}" target="_blank">Aqui!</a> para enviarnos el mensaje de whatsapp con todo el pedido.</p>
-    </div>
-</mat-card>
+<div class="main">
+  <mat-card class="order-error-card">
+    <mat-card-title class="alert-heading vanburga-title"
+      >Ocurrió un error 😣</mat-card-title
+    >
+    <mat-card-actions class="enviar">
+      <button type="button" class="btn btn-primary" [routerLink]="['/menu']">
+        NUEVO PEDIDO
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        href="https://api.whatsapp.com/send?phone=5491123915925&text=Hola%20Vanburga!"
+        target="_blank"
+      >
+        ENVIAR WHATSAPP
+      </button>
+    </mat-card-actions>
+    <mat-card-header class="header">
+      <img mat-card-image src="../assets/img/error.png" alt="vanburga error" />
+    </mat-card-header>
+    <mat-card-content>
+      <p class="texto">
+        No pudimos procesar tu pedido
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>
