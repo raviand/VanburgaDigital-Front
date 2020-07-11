@@ -18,15 +18,15 @@ export class HomeComponent {
     },
   ];
   slides: Slide[] = [
-    { src: '/assets/img/H-A.jpeg' },
+    { src: '/assets/img/H-AR.jpeg' },
     { src: '/assets/img/H-B.jpeg' },
-    { src: '/assets/img/H-C.jpeg' },
-    { src: '/assets/img/H-CHB.jpeg' },
-    { src: '/assets/img/H-CO.jpeg' },
+    { src: '/assets/img/H-CH.jpeg' },
+    { src: '/assets/img/H-CL.jpeg' },
+    { src: '/assets/img/H-CR.jpeg' },
     { src: '/assets/img/H-CV.jpeg' },
-    { src: '/assets/img/H-O.jpeg' },
-    { src: '/assets/img/H-SO.jpeg' },
-    { src: '/assets/img/H-SS.jpeg' },
+    { src: '/assets/img/H-OK.jpeg' },
+    { src: '/assets/img/H-SM.jpeg' },
+    { src: '/assets/img/H-SW.jpeg' },
   ];
 
   setAnimationType(type) {

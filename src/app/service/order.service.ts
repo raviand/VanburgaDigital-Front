@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { API_URI , DATE_FORMAT, CLIENT_CART, USER} from '../app.constant';
 import { DatePipe } from '@angular/common';
 import { Socialusers } from './login.service';
+import { interval } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,25 +26,34 @@ export class OrderService {
 
   searchOrderList(status : string, dateFrom : Date , dateTo : Date, clientId : string){
     let from = this.datePipe.transform(dateFrom, DATE_FORMAT)
-    let to = this.datePipe.transform(dateTo, DATE_FORMAT)
+    let url = `${API_URI}order/search?dateFrom=${from}`
+    if(dateTo != null) {
+      let to = this.datePipe.transform(dateTo, DATE_FORMAT)
+      url += `&dateTo=${to}`
+    }
+    if(status != null){
+      url += `&status=${status}`
+    }
+    if(clientId != null){
+      url += `&clientId=${clientId}`
+    }
 
-    let params = new HttpParams( );
-    params.append("status", status)
-    params.append("dateFrom", from)
-    params.append("dateTo", to)
-    params.append("clientId", clientId)
-   
-    return this.httpClient.get(`${API_URI}order/search?dateFrom=${from}`, { headers: this.headers })
+    return this.httpClient.get(url, { headers: this.headers })
   }
 
   getStates(){
     return this.httpClient.get(`${API_URI}state`)
   }
 
-  updateStatus(orderId:number, status : string){
+  getExtras(){
+    return this.httpClient.get(`${API_URI}extra`)
+  }
+
+  updateStatus(orderId:number, status : string, time : string){
     let request = new OrderRequest();
     request.status = status;
     request.orderId = orderId;
+    if( time != null) request.deliverTime = time
     return this.httpClient.put(`${API_URI}order`,request, { headers: this.headers })
   }
 
@@ -101,6 +111,8 @@ export class OrderRequest {
   delivery?: boolean;
   orderId?:   number;
   status?:    string;
+  paymentType?: string;
+  deliverTime?: string;
 }
 
 //////////////////////////////////////////////////////////////
@@ -116,8 +128,11 @@ export interface Order {
   amount?: number;
   products? : Product[];
   selected?: boolean;
+  delivery?: boolean;
   totalRawMaterial? : number;
   confirmed? : boolean;
+  paymentType?: string;
+  deliverTime?: string;
 }
 
 export class Client {
@@ -132,9 +147,10 @@ export class Address {
   street?:     string;
   doorNumber?: string;
   zipCode?:    string;
-  state?:      string;
+  state?:      State;
   floor?:     string;
   door?:      string;
+  reference?: string;
 }
 
 

@@ -76,6 +76,7 @@ export class Product {
   category?:    Category;
   price?:       number;
   description?: string;
+  color?:       string;
   available?:   boolean;
   extras?:      Extra[];
   rawMaterial? :number;

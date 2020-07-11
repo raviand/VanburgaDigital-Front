@@ -11,7 +11,7 @@
             <div  *ngFor="let pd of cart">
                 <ul class="list-group" >
                     <li class="list-group-item list-group-item-dark">
-                        {{ pd.name }} {{ pd.button.name }} - {{ pd.price | currency : 'ARS' : 'symbol-narrow' }}
+                        {{ pd.name }} {{ pd.button?.name }} - {{ pd.price | currency : 'ARS' : 'symbol-narrow' }}
                     </li>
                     <div  *ngFor="let ex of pd.extras">
                         <li  class="list-group-item list-group-item-secondary" *ngIf="ex.quantity > 0">
@@ -53,6 +53,13 @@
                                     El campo Telefono es <strong>Obligatorio</strong>
                                 </mat-error>
                             </mat-form-field>
+                            <mat-form-field class="example-half-width ">
+                                <mat-label>Modo de pago</mat-label>
+                                <mat-select  [(ngModel)]="paymentTypeSelected" formControlName="paymentType" >
+                                    <mat-option>--Seleccione un modo de pago--</mat-option>
+                                    <mat-option *ngFor="let pt of paymentsTypes" [value]="pt">{{ pt }}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
                         <div class="col-4">
                             <mat-form-field class="example-half-width ">
@@ -72,11 +79,12 @@
                         </div>
                         
                     </div>
-                    <div class="form-check text-center">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" (change)="clickDelivery()" >
-                        <label class="form-check-label vurga-titles" for="flexCheckDefault">
-                            Te lo llevamos?
-                        </label>
+                    <br><br><br>
+
+
+                    <div class="d-flex justify-content-around mb-2" >
+                            <button class="btn btn-secundary mt-2" id="a domicilio" [ngStyle]="{'color': delivery ? 'black' : 'silver', 'font-size': delivery ? '70px' : '50px'}" style="font-size: 100px !important;" (click)="delivery = true"  >Te lo llevamos!</button>
+                            <button class="btn btn-secundary mt-2" id="take away" [ngStyle]="{'color': !delivery ? 'black' : 'silver', 'font-size': !delivery ? '70px' : '50px'}" (click)="delivery = false"  >take away!</button>
                     </div>
                     <hr style="border-top: 2px dashed #a0a0a0;">
     
@@ -104,8 +112,8 @@
                             </div>
                             <div class="col-4" >
                                 <mat-form-field class="example-half-width ">
-                                    <mat-label>Codigo Postal</mat-label>
-                                    <input matInput formControlName="zipCode" [(ngModel)]="client.address.zipCode">
+                                    <mat-label>Entre calles</mat-label>
+                                    <input matInput formControlName="reference" [(ngModel)]="client.address.reference">
                                 </mat-form-field>
                                 <mat-form-field class="example-half-width ">
                                     <mat-label>Numero</mat-label>

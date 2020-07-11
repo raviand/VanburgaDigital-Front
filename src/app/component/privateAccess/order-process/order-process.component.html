@@ -2,8 +2,8 @@
 
 <!-- Pop Up con detalle -->
 <!-- Modal -->
-<div class="modal fade mt-4" id="exampleModal" *ngIf="showDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable ">
+<div class="modal fade mt-4 mb-2" id="exampleModal" *ngIf="showDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable ">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title" id="exampleModalLabel">{{orderDetail.client.name }}</h1>
@@ -13,33 +13,114 @@
       </div>
       <div class="modal-body">
           <ul>
-              <h2>Total de hamburguesas = {{ orderDetail.totalRawMaterial }}</h2>
-              <li *ngFor="let prod of orderDetail.products">
-                  <h3>
-                      {{prod.name}} - {{prod.price | currency : 'ARS' : 'symbol-narrow'}}
-                  </h3>
-                  <h5 *ngFor="let ext of prod.extras">
-                      - {{ ext.name }} - X {{ ext.quantity }} - {{ext.price | currency : 'ARS' : 'symbol-narrow'}} 
-                  </h5>
-                  <hr>
-              </li>
+            
+            <li *ngFor="let prod of orderDetail.products">
+                <h3>
+                    {{prod.name}} - {{prod.price | currency : 'ARS' : 'symbol-narrow'}}
+                </h3>
+                <h5 *ngFor="let ext of prod.extras">
+                    - {{ ext.name }} - X {{ ext.quantity }} - {{ext.price | currency : 'ARS' : 'symbol-narrow'}} 
+                </h5>
+                <hr>
+            </li>
           </ul>
+          <div>
+            <p><strong>Total de hamburguesas: </strong> {{ orderDetail.totalRawMaterial }} </p>
+            <p><strong>Metodo de pago: </strong> {{ orderDetail.paymentType }} </p>
+            <p><strong>Hora de entrega: </strong> {{ orderDetail.deliverTime }} </p>
+            <p><strong>Modo de entrega: </strong>{{ orderDetail.delivery ? 'Delivery' : 'Take Away' }} </p>
+            <div *ngIf="orderDetail.delivery">
+              <ul>
+                <li> <strong>Calle: </strong> {{ orderDetail.client.address.street}}      </li>
+                <li> <strong>Altura: </strong> {{ orderDetail.client.address.doorNumber}} </li>
+                <li> <strong>Localidad: </strong> {{ orderDetail.client.address.state.state}}   </li>
+                <li> <strong>Piso: </strong>  {{ orderDetail.client.address.floor}}        </li>
+                <li> <strong>Depto: </strong>  {{ orderDetail.client.address.door}}        </li>
+                <li> <strong>Referencia: </strong>  {{ orderDetail.client.address.reference}}        </li>
+              </ul>
+            </div>
+          </div>
       </div>
       <div class="modal-footer">
+        <h3 class="mr-auto">Total: {{ totalOrder(orderDetail) | currency : 'ARS' : 'symbol-narrow' }}</h3>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="fowardDetailStatus()" data-dismiss="modal">Proximo estado</button>
-        <button type="button" class="btn btn-primary" (click)="backwardStatus()" data-dismiss="modal">Volver estado</button>
+        <button type="button" class="btn" *ngIf="orderDetail.status != 'Pending'"> <fa-icon [icon]="faPaperPlane"></fa-icon>Enviar Whatsapp</button>
+        <button type="button" class="btn btn-primary" (click)="fowardDetailStatus()" data-dismiss="modal" *ngIf="orderDetail.status != 'Pending'">Proximo estado</button>
+        <button type="button" class="btn btn-primary" (click)="backwardStatus()" data-dismiss="modal" *ngIf="orderDetail.status != 'Pending'">Volver estado</button>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- Modal de cancelacion de Orden -->
+<div class="modal fade" id="cancelModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="color: black !important;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Cancelar Pedido!</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <mat-icon style="color: red;">warning</mat-icon>
+           Esta seguro que desea eliminar el pedido con id {{ toCancelOrder?.id }}? 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="cancelOrder(toCancelOrder)" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmacion de orden-->
+<div class="modal fade" id="confirmOrderModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="color: black !important;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Confirmar Pedido!</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+           A que hora se pacto la entrega?
+           <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Horario de entrega
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <div *ngFor="let time of deliveryTime">
+                <a class="dropdown-item"  (click)="selectedDeliveryTime = time" >{{ time }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <h3 class="mr-auto">Horario: {{ selectedDeliveryTime }}</h3>
+        <button type="button" class="btn" > <fa-icon [icon]="faPaperPlane"></fa-icon>Enviar Whatsapp</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="selectedDeliveryTime = null">Close</button>
+        <button type="button" class="btn btn-success"  (click)="confirmOrder(toConfirmOrder)" data-dismiss="modal" [disabled]="selectedDeliveryTime == null">Confirmar</button>
+        
+        
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <div class="container pt-3 cards" style="margin-top: 80px;" >
   <button (click)="orderOrdersByStatus()" type="button" class="btn btn-outline-light btn-lg pull-right ml-auto-p2 mb-3">
       Recargar
   </button>
 
-<div class="row">
+    <div class="row">
       <div class="col">
           <p class="vurga-titles">Pedidos Pendientes</p>
           <p>Pedidos por confirmar: {{pendigsNumber}}</p>
@@ -55,79 +136,55 @@
           <p>Pendientes de entrega: {{ toDeliverNumber }}</p>
           <p>Pedidos entregados: {{ finishedNumber }}</p>
       </div>
-  </div>
+    </div>
   <div class="p-3 mb-2 bg-danger text-white" style="border-radius: 25px;">
       Pedidos Cancelados : {{ canceledNumber }}
   </div>
 </div>
 
-<div class="container">
+<div class="container" >
   <div class="row">
     <div class="col" >
         
         
         <mat-card *ngFor="let p of toConfirmOrders" class="cards">
             <div class="row">
-                <div class="col">
-    
-                    <h2>{{ p.client.name }} </h2>
-                    <h3>{{ p.amount | currency : 'ARS' : 'symbol-narrow' }}</h3>
-                    <p>Total de hamburguesas: {{ p.totalRawMaterial }}</p>
-                    <h3>Estado: <strong>{{ p.status }} </strong> </h3>
-                </div>
-                <div class="col">
+              <div class="col">
   
-                    <table style="height: 80%;">
-                        <tbody>
-                          <tr>
-                            <td class="align-top"><button class="ConfirmButton" data-toggle="modal" data-target="#NAN" (click)="confirmOrder(p)" *ngIf="!p.confirmed">Confirmar orden</button></td>
-                            <td class="align-middle"><button class="successButton" data-toggle="modal" data-target="#exampleModal" (click)="viewOrderDetail(p)">ver orden</button></td>
-                            <!-- <td class="align-bottom"><button class="dangerButton" (click)="cancelOrder(p)">Cancelar</button></td> -->
-                            <td class="align-bottom">
-                              <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelToConfirmModal">
-                                Cancelar
-                              </button>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                </div>
-            </div>
-  
-             <!-- Modal -->
-             <div class="modal fade" id="cancelToConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style="color: black !important;">
-                  <div class="modal-header">
-                    <h2 class="modal-title" id="exampleModalLabel">Cancelar Pedido!</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="text-center">
-                      <mat-icon style="color: red;">warning</mat-icon>
-                       Esta seguro que desea eliminar este pedido? 
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger"  (click)="cancelOrder(p)" data-dismiss="modal">Cancelar</button>
-                    
-                    
-                  </div>
-                </div>
+                  <h2>{{ p.client.name }} </h2>
+                  <h5>id: {{ p.id }}</h5>
+                  <p>Total de hamburguesas: {{ p.totalRawMaterial }}</p>
+                  <h3>Estado: <strong>{{ p.status }} </strong> </h3>
+              </div>
+              <div class="col">
+
+                  <table style="height: 80%;">
+                      <tbody>
+                        <tr>
+                          <td class="align-top"><button class="ConfirmButton" data-toggle="modal" data-target="#confirmOrderModal"  *ngIf="!p.confirmed" (click)="toConfirmOrder = p" >Confirmar orden</button></td>
+                          <td class="align-middle"><button class="successButton" data-toggle="modal" data-target="#exampleModal" (click)="viewOrderDetail(p)">ver orden</button></td>
+                          <!-- <td class="align-bottom"><button class="dangerButton" (click)="cancelOrder(p)">Cancelar</button></td> -->
+                          <td class="align-bottom">
+                            <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelModal" (click)="toCancelOrder = p">
+                              Cancelar
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
               </div>
             </div>
+            
         </mat-card>
         <mat-card *ngFor="let co of confirmedOrders" class="cards">
             <div class="row">
                 <div class="col">
     
-                    <h2>{{ co.client.name }} </h2>
-                    <h3>{{ co.amount | currency : 'ARS' : 'symbol-narrow' }}</h3>
-                    <p>Total de hamburguesas: {{ co.totalRawMaterial }}</p>
-                    <h3>Estado: <strong>{{ co.status }} </strong> </h3>
+                  <h5>id: {{ co.id }}</h5>
+                  <p>{{ co.client.name }} </p>
+                  <p>Hamburguesas: {{ co.totalRawMaterial }}</p>
+                  <p>Entrega: {{co.deliverTime }}</p>
+                  <p>Estado: <strong>{{ co.status }} </strong> </p>
                 </div>
                 <div class="col">
                     <table style="height: 80%;">
@@ -138,7 +195,7 @@
                             <td class="align-middle"><button class="nextButton" data-toggle="modal" data-target="#NAN" (click)="fowardStatus(co)">Siguiente estado</button></td>
 
                             <td class="align-bottom">
-                              <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelConfirmedModal">
+                              <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelModal" (click)="toCancelOrder = co">
                                 Cancelar
                               </button>
                             </td>
@@ -146,30 +203,6 @@
                         </tbody>
                       </table>
                 </div>
-            </div>
-  
-            <!-- Modal -->
-            <div class="modal fade" id="cancelConfirmedModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style="color: black !important;">
-                  <div class="modal-header">
-                    <h2 class="modal-title" id="exampleModalLabel">Cancelar Pedido!</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="text-center">
-                      <mat-icon style="color: red;">warning</mat-icon>
-                       Esta seguro que desea eliminar este pedido? 
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger"  (click)="cancelOrder(co)" data-dismiss="modal">Cancelar</button>
-                  </div>
-                </div>
-              </div>
             </div>
         </mat-card>
     </div>
@@ -181,8 +214,9 @@
             <div class="row">
                 <div class="col">
                     <h2>{{ k.client.name }} </h2>
-                    <h3>{{ k.amount | currency : 'ARS' : 'symbol-narrow' }}</h3>
-                    <p>Total de hamburguesas: {{ k.totalRawMaterial }}</p>
+                    <h5>id: {{ k.id }}</h5>
+                    <h3>Hamburguesas: {{ k.totalRawMaterial }}</h3>
+                    <h3>Entrega: {{k.deliverTime}}</h3>
                     <h3>Estado: <strong>{{ k.status }} </strong> </h3>
                 </div>
                 <div class="col">
@@ -193,7 +227,7 @@
                             <td class="align-middle"><button class="nextButton" data-toggle="modal" data-target="#NAN" (click)="fowardStatus(k)">Siguiente estado</button></td>
                             <td class="align-bottom">
   
-                              <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelKitchenModal">
+                              <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelModal" (click)="toCancelOrder = k">
                                 Cancelar
                               </button>
                             </td>
@@ -203,29 +237,7 @@
                 </div>
             </div>
   
-            <!-- Modal -->
-            <div class="modal fade" id="cancelKitchenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style="color: black !important;">
-                  <div class="modal-header">
-                    <h2 class="modal-title" id="exampleModalLabel">Cancelar Pedido!</h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <div class="text-center">
-                      <mat-icon style="color: red;">warning</mat-icon>
-                       Esta seguro que desea eliminar este pedido? 
-                    </div>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger" (click)="cancelOrder(k)" data-dismiss="modal">Cancelar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
         </mat-card>
   
     </div>
@@ -235,8 +247,9 @@
         <div class="row">
             <div class="col">
                 <h2>{{ td.client.name }} </h2>
-                <h3>{{ td.amount | currency : 'ARS' : 'symbol-narrow' }}</h3>
-                <p>Total de hamburguesas: {{ td.totalRawMaterial }}</p>
+                <h4>id: {{ td.id }}</h4>
+                <h3>Hamburguesas: {{ td.totalRawMaterial }}</h3>
+                <h3>Entrega: {{ td.deliverTime }}</h3>
                 <h3>Estado: <strong>{{ td.status }} </strong> </h3>
             </div>
             <div class="col">
@@ -247,7 +260,7 @@
                         <td class="align-middle"><button class="nextButton" data-toggle="modal" data-target="#NAN" (click)="fowardStatus(td)" >Finalizar</button></td>
                         <td class="align-bottom">
   
-                          <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelDeliverModal">
+                          <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelModal" (click)="toCancelOrder = td">
                             Cancelar
                           </button>
                         </td>
@@ -257,29 +270,6 @@
             </div>
         </div>
   
-        <!-- Modal -->
-        <div class="modal fade" id="cancelDeliverModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="color: black !important;">
-              <div class="modal-header">
-                <h2 class="modal-title" id="exampleModalLabel">Cancelar Pedido!</h2>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="text-center">
-                  <mat-icon style="color: red;">warning</mat-icon>
-                   Esta seguro que desea eliminar este pedido? 
-                </div>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-danger" (click)="cancelOrder(td)" data-dismiss="modal">Cancelar</button>
-              </div>
-            </div>
-          </div>
-        </div>
       </mat-card>
     </div>
   </div>

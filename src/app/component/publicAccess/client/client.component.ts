@@ -34,7 +34,8 @@ export class ClientComponent implements OnInit {
   parameterEncoding :ParameterEncoder
   extraError = false;
   extendedErrorMessage : string;
-
+  paymentsTypes = ['Efectivo', 'Mercado Pago']
+  paymentTypeSelected : string;
 
   deliverForm =   new FormGroup({
     name        : new FormControl('', [Validators.minLength(3), Validators.maxLength(20),Validators.required]),
@@ -43,11 +44,12 @@ export class ClientComponent implements OnInit {
     mail        : new FormControl('', [Validators.min(3), Validators.required, Validators.email]),
     street      : new FormControl(''),
     doorNumber  : new FormControl(''),
-    zipCode     : new FormControl(''),
+    reference   : new FormControl(''),
     floor       : new FormControl(''),
     door        : new FormControl(''),
     state       : new FormControl('') ,
-    comments    : new FormControl('') 
+    comments    : new FormControl(''),
+    paymentType : new FormControl('', Validators.required) 
   })
 
   get name(){       return this.deliverForm.get('name')}
@@ -56,7 +58,7 @@ export class ClientComponent implements OnInit {
   get mail(){       return this.deliverForm.get('mail')}
   get street(){     return this.deliverForm.get('street')}
   get doorNumber(){ return this.deliverForm.get('doorNumber')}
-  get zipCode(){    return this.deliverForm.get('zipCode')}
+  get reference(){  return this.deliverForm.get('reference')}
   get floor(){      return this.deliverForm.get('floor')}
   get door(){       return this.deliverForm.get('door')}
   get comments(){   return this.deliverForm.get('comments')}
@@ -91,11 +93,12 @@ export class ClientComponent implements OnInit {
     this.submitted = true;
     let orderRequest : OrderRequest;
     orderRequest = new OrderRequest();
+    orderRequest.paymentType = this.paymentTypeSelected;
     orderRequest.client = this.client;
     orderRequest.comment = this.comment;
     orderRequest.products = this.cart;
     orderRequest.products.forEach(prod =>{
-      let addExtra = prod.button.extra
+      let addExtra = prod.button?.extra
       if(addExtra > 0){
         prod.extras.forEach( ex => {
           if(ex.rawMaterial > 0){
@@ -107,25 +110,29 @@ export class ClientComponent implements OnInit {
     orderRequest.delivery = this.delivery
     if(this.delivery){
       let hasError
-      if(this.client.address?.state == null) hasError = true; 
+      console.log(this.client);
+      console.log(this.selectedState);
+      
+      if(this.selectedState == null) hasError = true; 
       if(this.client.address?.street == null) hasError = true;
       if(this.client.address?.doorNumber == null) hasError = true;
-      if(this.client.address?.zipCode == null) hasError = true;
+      if(this.client.address?.reference == null) hasError = true;
       if(hasError){
         this.hasError = true;
         this.errorMessage = 'Debe completar los datos de la direccion si desea que le enviemos el pedido'
         return;
       }
-      this.client.address.state = this.selectedState.id
+      this.client.address.state = this.selectedState
     }else{
       orderRequest.client.address = null
     }
-
+    console.log(orderRequest);
+    
     this.orderService.createOrder(orderRequest).subscribe(
       res => {
         this.orderService.saveClientCart([]);
         this.cartSended = JSON.stringify(this.cart)
-        console.log(this.cartSended)
+        console.log(this.cart)
         sessionStorage.setItem(CLIENT,JSON.stringify(this.client) )
         this.router.navigate(['/success'])
       },
@@ -177,28 +184,6 @@ export class ClientComponent implements OnInit {
   }
 
 
-}
-
-// custom validator to check that two fields match
-export function MustMatch(controlName: string, matchingControlName: string) {
-  return (formGroup: FormGroup) => {
-      const control = formGroup.controls[controlName];
-      const matchingControl = formGroup.controls[matchingControlName];
-
-      if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-          // return if another validator has already found an error on the matchingControl
-          return;
-      }
-
-      // set error on matchingControl if validation fails
-      if (control.value !== matchingControl.value) {
-          matchingControl.setErrors({ mustMatch: true });
-          this.sended = 1;
-      } else {
-          matchingControl.setErrors(null);
-          this.sended = -1;
-      }
-  }
 }
 
 export class ParameterEncoder extends HttpUrlEncodingCodec{

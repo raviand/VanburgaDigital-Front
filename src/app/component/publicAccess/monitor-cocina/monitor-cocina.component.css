@@ -17,3 +17,13 @@
   font-family: bebasNeue-bold;
   font-size: 7.5vh;
 }
+
+.order-div {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: silver;
+  width: 120px;
+  height: 35px;
+  border: 2px solid #757575;
+}

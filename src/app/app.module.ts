@@ -25,6 +25,7 @@ import { HeaderMenuComponent } from './component/publicAccess/header-menu/header
 import { MatMenuModule } from '@angular/material/menu';
 import { ContactoComponent } from './component/publicAccess/contacto/contacto.component';
 import { MonitorCocinaComponent } from './component/publicAccess/monitor-cocina/monitor-cocina.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 // Configs
 export function getAuthServiceConfigs() {
@@ -68,6 +69,7 @@ export function getAuthServiceConfigs() {
     ReactiveFormsModule,
     NgxSocialButtonModule,
     MatMenuModule,
+    FontAwesomeModule
   ],
   providers: [
     {

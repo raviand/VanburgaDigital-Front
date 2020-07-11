@@ -60,13 +60,23 @@ export class MenuComponent implements OnInit {
     )
   }
 
+  isBurger(prod : Product){
+    if(prod.rawMaterial > 0){
+      
+      return true;
+    }
+    return false;
+  }
+
   totalProduct(pd : Product){
     let productTotal = 0
-    pd.extras.forEach(e=>{
+    let haveRaw = false
+    pd.extras?.forEach(e=>{
       if(e.quantity > 0){
         productTotal += (e.price * e.quantity)
       }
       if(e.rawMaterial > 0){
+        
         this.buttons.forEach(b=>{
           if(b.selected){
             productTotal += ((e.price * b.extra) + pd.price)
@@ -74,6 +84,10 @@ export class MenuComponent implements OnInit {
         })
       }
     })
+    if(pd.rawMaterial == 0){
+      this.canSelected = true;
+      productTotal += pd.price;
+    }
 
     return productTotal
   }
@@ -166,11 +180,14 @@ export class MenuComponent implements OnInit {
         cartProduct.button = b;
       }
     })
+
+    this.buttons.forEach(b => b.selected = false)
     console.log(cartProduct.extras)
 
     if(this.cartProduct.extras?.length > 0){
       cartProduct.extras = JSON.parse(JSON.stringify(this.cartProduct.extras))
     }
+    this.canSelected = false;
     this.lookExtras(index)
     console.log(product)
     this.cart.push(cartProduct)

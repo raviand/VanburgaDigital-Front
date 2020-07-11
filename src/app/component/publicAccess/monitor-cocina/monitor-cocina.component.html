@@ -1,57 +1,118 @@
-<div class="row">
-  <mat-card class="col-sm bg-dark">25 COMBOS</mat-card>
-  <mat-card class="col-sm bg-dark">8 PEDIDOS</mat-card>
+<div class="mb-5">
+
+  <div class="row">
+    <mat-card class="col-sm bg-dark">25 COMBOS</mat-card>
+    <mat-card class="col-sm bg-dark">8 PEDIDOS</mat-card>
+  </div>
+  
+  <div class="row">
+    <mat-card class="col-sm bg-dark">🍟6250gr</mat-card>
+    <mat-card class="col-sm bg-dark">➕</mat-card>
+    <mat-card class="col-sm bg-dark">🍔35 PATYS</mat-card>
+    <mat-card class="col-sm bg-dark">➕</mat-card>
+    <mat-card class="col-sm bg-dark">🍔25 2xCHDR</mat-card>
+  </div>
+  
+  <div class="row">
+    <mat-card class="col-sm bg-dark">🧀 5 1xCHDR</mat-card>
+    <mat-card class="col-sm bg-dark">➕</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 3 DAMBO</mat-card>
+    <mat-card class="col-sm bg-dark">➕</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 2 S/QSO</mat-card>
+  </div>
+  
+  <div class="row">
+    <mat-card class="col-6 col-md-2"></mat-card>
+    <mat-card class="col-sm-6 col-md-8"><h1>PRODUCTOS</h1></mat-card>
+    <mat-card class="col-6 col-md-2"><h1>PEDIDOS</h1></mat-card>
+  </div>
+  
+  <div class="row no-gutters">
+    <mat-card class="col-6 col-md-2">
+      <mat-grid-list cols="1" rowHeight="900px" >
+        <div >
+          <mat-grid-tile class="bg-dark text-left">
+            <div>
+              <p *ngFor="let e of extrasList" style="font-size: 20px;"> {{ e.code }} = {{ e.name }}</p> 
+            </div>
+          </mat-grid-tile>
+        </div>
+  
+      </mat-grid-list>
+    </mat-card>
+    <mat-card class="col-sm-6 col-md-8">
+      <mat-grid-list cols="6" rowHeight="200px" >
+        <div *ngFor="let o of orders">
+          <div  *ngFor="let p of o.products">
+            <mat-grid-tile *ngIf="p.category.id == 1" [ngStyle]="{'background-color': '#'+p.color}">
+              <div>
+                <div class="order-div text-left" style="color: black;">
+                  <h2>Orden: {{ o.id }}</h2>
+                </div>
+                <h3 style="color: black;"><strong>{{ p.name }} x {{ p.rawMaterial }}</strong>  </h3>
+                <div style="width: 100%;">
+                  <div class="row no-gutters" style="font-size: 15px; color: black; padding: 0;">
+                    <div class="col ">
+                      <div  *ngFor="let e of p.extras; let i = index">
+                        <p *ngIf="i%2 == 0" >{{ e.code }} X {{ e.quantity }}</p>
+                      </div>
+                    </div>
+                    <div class="col ">
+                      <div *ngFor="let e of p.extras; let j = index">
+                        <p *ngIf="j%2 != 0">{{ e.code }} X {{ e.quantity }}</p>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+                <!-- <ul style="font-size: 20px; color: black;">
+                  <li >
+                    
+                  </li>
+                </ul> -->
+              </div>
+            </mat-grid-tile>
+          </div>
+
+        </div>
+      </mat-grid-list>
+    </mat-card>
+    <mat-card class="col-6 col-md-2">
+      <mat-grid-list cols="1" rowHeight="200px" >
+        <div *ngFor="let or of orders">
+          <mat-grid-tile class="bg-dark">
+
+            <div>
+              <div class="order-div text-left" style="color: black;">
+                <h2>Orden: {{ or.id }}</h2>
+              </div>
+              
+              <!-- <div *ngFor="let prod of or.products" > -->
+
+                <!-- <h3  *ngIf="prod.category.id != 1"> {{ prod.name }} </h3> -->
+                <p style="font-size: 23px;">{{ or.client.name }}</p>
+                <div class="row no-gutters" style="font-size: 15px; color: white; padding: 0;">
+                  <div class="col ">
+                    <div  *ngFor="let prod of or.products; let x = index">
+                      <p *ngIf="x%2 == 0 && prod.category.id != 1">{{ prod.name }}</p>
+                    </div>
+                  </div>
+                  <div class="col ">
+                    <div *ngFor="let prod of or.products; let y = index">
+                      <p *ngIf="y%2 != 0 && prod.category.id != 1">{{ prod.name }}</p>
+                    </div>
+                  </div>
+
+                </div>
+              <!-- </div> -->
+             
+            </div>
+          </mat-grid-tile>
+        </div>
+  
+      </mat-grid-list>
+    </mat-card>
+  </div>
 </div>
 
-<div class="row">
-  <mat-card class="col-sm bg-dark">🍟6250gr</mat-card>
-  <mat-card class="col-sm bg-dark">➕</mat-card>
-  <mat-card class="col-sm bg-dark">🍔35 PATYS</mat-card>
-  <mat-card class="col-sm bg-dark">➕</mat-card>
-  <mat-card class="col-sm bg-dark">🍔25 2xCHDR</mat-card>
-</div>
-
-<div class="row">
-  <mat-card class="col-sm bg-dark">🧀 5 1xCHDR</mat-card>
-  <mat-card class="col-sm bg-dark">➕</mat-card>
-  <mat-card class="col-sm bg-dark">🧀 3 DAMBO</mat-card>
-  <mat-card class="col-sm bg-dark">➕</mat-card>
-  <mat-card class="col-sm bg-dark">🧀 2 S/QSO</mat-card>
-</div>
-
-<div class="row">
-  <mat-card class="col-sm"><h1>PRODUCTOS</h1></mat-card>
-  <mat-card class="col-sm"><h1>PEDIDOS</h1></mat-card>
-</div>
-
-<div class="row">
-  <mat-card class="col-sm">
-    <mat-grid-list cols="2" rowHeight="50px">
-      <mat-grid-tile class="bg-dark">1</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">2</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">3</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">4</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">5</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">6</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">7</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">8</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">9</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">10</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">11</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">12</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">13</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">14</mat-grid-tile>
-    </mat-grid-list>
-  </mat-card>
-  <mat-card class="col-sm">
-    <mat-grid-list cols="1" rowHeight="50px">
-      <mat-grid-tile class="bg-dark">1</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">2</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">3</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">4</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">5</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">6</mat-grid-tile>
-      <mat-grid-tile class="bg-dark">7</mat-grid-tile>
-    </mat-grid-list>
-  </mat-card>
-</div>
