@@ -1,5 +1,10 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { MenuService, Category, Extra, Product } from 'src/app/service/menu.service';
+import {
+  MenuService,
+  Category,
+  Extra,
+  Product,
+} from 'src/app/service/menu.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderService } from 'src/app/service/order.service';
@@ -7,21 +12,32 @@ import { MatAccordion } from '@angular/material/expansion';
 
 @Component({
   selector: 'app-menu',
-  
+
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']
+  styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent implements OnInit {
-
-  categories : Category[];
-  productsData : Product[];
-  cartProduct : Product;
-  cart : Product[] = [];
-  extrasSelected : Extra[];
-  extraIndexSelected : number;
+  categories = [
+    { description: 'Las mejores del condado', id: 1, name: 'Burgers' },
+    {
+      description: 'Tomate una fresca',
+      id: 2,
+      name: 'Bebidas',
+    },
+    {
+      description: 'No podes pedir la hamburguesa sin unas buenas papas',
+      id: 3,
+      name: 'Acompañamientos',
+    },
+  ];
+  productsData: Product[];
+  cartProduct: Product;
+  cart: Product[] = [];
+  extrasSelected: Extra[];
+  extraIndexSelected: number;
   cartTotalAmount = 0.0;
-  categoryName : string;
-  selectedProduct : boolean;
+  categoryName: string;
+  selectedProduct: boolean;
   opened = true;
   loaded = false;
   notSelected = 'secondary'
@@ -45,7 +61,7 @@ export class MenuComponent implements OnInit {
 
     if(this.orderService.loadClientCart() != null){
       this.cart = this.orderService.loadClientCart();
-      this.getTotalAmount()
+      this.getTotalAmount();
     }
 
     await this.menuService.getAllCategories().subscribe(
@@ -104,14 +120,14 @@ export class MenuComponent implements OnInit {
 
   /**
    * Extiende un listado de extras del producto seleccionado
-   * 
+   *
    * @param i Index del producto al que se le selecciona el boton extra
    */
-  lookExtras(i:number){
-    if(this.extraIndexSelected == i){
+  lookExtras(i: number) {
+    if (this.extraIndexSelected == i) {
       this.selectedProduct = !this.selectedProduct;
-    }else{
-      this.cartProduct.extras = []
+    } else {
+      this.cartProduct.extras = [];
       this.selectedProduct = true;
     }
     this.extraIndexSelected = i;
@@ -125,42 +141,42 @@ export class MenuComponent implements OnInit {
 
   /**
    * selecciona un extra y lo agrega al producto del carro
-   * @param product 
-   * @param idExtra 
+   * @param product
+   * @param idExtra
    */
-  selectExtra(product:Product,idExtra:number){ 
-    console.log('idExtra : ' + idExtra)
-    product = JSON.parse(JSON.stringify(product))
-    product.extras.forEach(ex => {
-      if(ex.id === idExtra){
-        console.log(ex)
-        ex.selected = !ex.selected
-        if(ex.selected){
-          console.log('true')
-          console.log(ex)
-          this.cartProduct.extras.push(ex)
-        }else{
-          console.log('false')
-          console.log(ex)
-          let index = this.cartProduct.extras.indexOf(ex,0)
-          this.cartProduct.extras.splice(index, 1)
-          console.log(this.cartProduct.extras)
+  selectExtra(product: Product, idExtra: number) {
+    console.log('idExtra : ' + idExtra);
+    product = JSON.parse(JSON.stringify(product));
+    product.extras.forEach((ex) => {
+      if (ex.id === idExtra) {
+        console.log(ex);
+        ex.selected = !ex.selected;
+        if (ex.selected) {
+          console.log('true');
+          console.log(ex);
+          this.cartProduct.extras.push(ex);
+        } else {
+          console.log('false');
+          console.log(ex);
+          let index = this.cartProduct.extras.indexOf(ex, 0);
+          this.cartProduct.extras.splice(index, 1);
+          console.log(this.cartProduct.extras);
         }
       }
     });
   }
 
-  resetSelectedExtras(prod : Product){
-    prod.extras?.forEach(ex=> ex.selected = false)
+  resetSelectedExtras(prod: Product) {
+    prod.extras?.forEach((ex) => (ex.selected = false));
   }
 
   /**
    * Agrega el producto con sus extras seleccionados al carrito
-   * @param product 
+   * @param product
    */
-  addToCart(product:Product, index : number){
-    let extras = []
-    let productTotal = 0
+  addToCart(product: Product, index: number) {
+    let extras = [];
+    let productTotal = 0;
 
     productTotal = product.price;
 
@@ -208,39 +224,37 @@ export class MenuComponent implements OnInit {
   }
 
   /**
-   * Elimina el 
-   * @param extra 
-   * @param product 
+   * Elimina el
+   * @param extra
+   * @param product
    */
-  removeExtra(extra : Extra, product : Product){
-    let indexProduct = this.cart.indexOf(product)
-    let i = this.cart[indexProduct].extras.indexOf(extra, 0)
-    this.cart[indexProduct].extras.splice(i,1)
-    this.getTotalAmount()
-    this.orderService.saveClientCart(this.cart)
+  removeExtra(extra: Extra, product: Product) {
+    let indexProduct = this.cart.indexOf(product);
+    let i = this.cart[indexProduct].extras.indexOf(extra, 0);
+    this.cart[indexProduct].extras.splice(i, 1);
+    this.getTotalAmount();
+    this.orderService.saveClientCart(this.cart);
   }
 
   /**
    * Elimina el producto del canasto
-   * @param product 
+   * @param product
    */
-  removeProduct(product : Product){
+  removeProduct(product: Product) {
     //Descuento todos los extras del total
-    product.extras?.forEach(e => this.cartTotalAmount -= e.price)
+    product.extras?.forEach((e) => (this.cartTotalAmount -= e.price));
     //descuento el precio del producto
-    let indexProduct = this.cart.indexOf(product)
-    this.cart.splice(indexProduct,1)
-    this.getTotalAmount()
-    this.orderService.saveClientCart(this.cart)
+    let indexProduct = this.cart.indexOf(product);
+    this.cart.splice(indexProduct, 1);
+    this.getTotalAmount();
+    this.orderService.saveClientCart(this.cart);
   }
-
-  
 
   /**
    * Busca en el servicio los productos que pertenecen a la categoria
    * @param id id de la categoria
    */
-  categorySelected(category : Category){
+  categorySelected(category: Category) {
     this.categoryName = category.name;
     this.cartProduct = new Product();
     this.menuService.getProductByCategory(category.id).subscribe(
@@ -258,8 +272,7 @@ export class MenuComponent implements OnInit {
   confirm(){
     if(this.cart.length > 0){
       this.orderService.saveClientCart(this.cart);
-      this.router.navigate(['/order'])
-
+      this.router.navigate(['/order']);
     }
   }
 

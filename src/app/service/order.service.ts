@@ -42,8 +42,8 @@ export class OrderService {
     return this.httpClient.get(url, { headers: this.headers })
   }
 
-  getStates(){
-    return this.httpClient.get(`${API_URI}state`)
+  getStates() {
+    return this.httpClient.get(`${API_URI}state`);
   }
 
   getExtras(){
@@ -61,10 +61,10 @@ export class OrderService {
   saveClientCart(cart : Product[]){
     localStorage.setItem(CLIENT_CART, JSON.stringify(cart))
   }
-  
-  loadClientCart() : Product[]{
-    if(localStorage.getItem(CLIENT_CART) != null){
-      return JSON.parse(localStorage.getItem(CLIENT_CART))
+
+  loadClientCart(): Product[] {
+    if (localStorage.getItem(CLIENT_CART) != null) {
+      return JSON.parse(localStorage.getItem(CLIENT_CART));
     }
   }
 
@@ -148,8 +148,8 @@ export interface OrderResponse {
 }
 
 export class OrderRequest {
-  client?:   Client;
-  comment?:  string;
+  client?: Client;
+  comment?: string;
   products?: Product[];
   delivery?: boolean;
   orderId?:   number;
@@ -179,7 +179,7 @@ export class Order {
 }
 
 export class Client {
-  name?:      string;
+  name?: string;
   cellphone?: string;
   lastName?: string;
   mail?: string;
@@ -187,7 +187,7 @@ export class Client {
 }
 
 export class Address {
-  street?:     string;
+  street?: string;
   doorNumber?: string;
   zipCode?:    string;
   state?:      State;
@@ -195,7 +195,6 @@ export class Address {
   door?:      string;
   reference?: string;
 }
-
 
 //////////////////////////////////////////////////////////////
 //    CONVERSORES

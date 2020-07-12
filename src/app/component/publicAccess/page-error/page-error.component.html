@@ -1,1 +1,28 @@
-<p>page-error works!</p>
+<div class="main">
+  <mat-card class="order-error-card">
+    <mat-card-title class="alert-heading vanburga-title"
+      >Error de conexión 😞</mat-card-title
+    >
+    <mat-card-actions class="enviar">
+      <button type="button" class="btn btn-primary" [routerLink]="['/']">
+        HOME
+      </button>
+      <button
+        type="button"
+        class="btn btn-success"
+        href="https://api.whatsapp.com/send?phone=5491123915925&text=Hola%20Vanburga!"
+        target="_blank"
+      >
+        ENVIAR WHATSAPP
+      </button>
+    </mat-card-actions>
+    <mat-card-header class="header">
+      <img mat-card-image src="../assets/img/error.png" alt="vanburga error" />
+    </mat-card-header>
+    <mat-card-content>
+      <p class="texto">
+        Tenemos un problemita, escribinos!
+      </p>
+    </mat-card-content>
+  </mat-card>
+</div>
