@@ -151,10 +151,14 @@
             <div class="row">
               <div class="col">
   
-                  <h2>{{ p.client.name }} </h2>
+                  <!-- <h2>{{ p.client.name }} </h2>
                   <h5>id: {{ p.id }}</h5>
                   <p>Total de hamburguesas: {{ p.totalRawMaterial }}</p>
-                  <h3>Estado: <strong>{{ p.status }} </strong> </h3>
+                  <h3>Estado: <strong>{{ p.status }} </strong> </h3> -->
+                  <h5>id: {{ p.id }}</h5>
+                  <p>{{ p.client.name }} </p>
+                  <p>Hamburguesas: {{ p.totalRawMaterial }}</p>
+                  <p>Estado: <strong>{{ p.status }} </strong> </p>
               </div>
               <div class="col">
 
@@ -213,11 +217,17 @@
         <mat-card *ngFor="let k of kitchenOrders" class="cards">
             <div class="row">
                 <div class="col">
-                    <h2>{{ k.client.name }} </h2>
+                    <!-- <h2>{{ k.client.name }} </h2>
                     <h5>id: {{ k.id }}</h5>
                     <h3>Hamburguesas: {{ k.totalRawMaterial }}</h3>
                     <h3>Entrega: {{k.deliverTime}}</h3>
-                    <h3>Estado: <strong>{{ k.status }} </strong> </h3>
+                    <h3>Estado: <strong>{{ k.status }} </strong> </h3> -->
+
+                    <h5>id: {{ k.id }}</h5>
+                    <p>{{ k.client.name }} </p>
+                    <p>Hamburguesas: {{ k.totalRawMaterial }}</p>
+                    <p>Entrega: {{k.deliverTime }}</p>
+                    <p>Estado: <strong>{{ k.status }} </strong> </p>
                 </div>
                 <div class="col">
                     <table style="height: 80%;">
@@ -246,11 +256,17 @@
       <mat-card *ngFor="let td of toDeliveryOrders" class="cards">
         <div class="row">
             <div class="col">
-                <h2>{{ td.client.name }} </h2>
+                <!-- <h2>{{ td.client.name }} </h2>
                 <h4>id: {{ td.id }}</h4>
                 <h3>Hamburguesas: {{ td.totalRawMaterial }}</h3>
                 <h3>Entrega: {{ td.deliverTime }}</h3>
-                <h3>Estado: <strong>{{ td.status }} </strong> </h3>
+                <h3>Estado: <strong>{{ td.status }} </strong> </h3> -->
+
+                <h5>id: {{ td.id }}</h5>
+                <p>{{ td.client.name }} </p>
+                <p>Hamburguesas: {{ td.totalRawMaterial }}</p>
+                <p>Entrega: {{td.deliverTime }}</p>
+                <p>Estado: <strong>{{ td.status }} </strong> </p>
             </div>
             <div class="col">
                 <table style="height: 80%;">
@@ -269,7 +285,6 @@
                   </table>
             </div>
         </div>
-  
       </mat-card>
     </div>
   </div>

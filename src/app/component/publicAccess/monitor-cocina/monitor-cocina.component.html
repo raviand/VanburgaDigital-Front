@@ -21,7 +21,7 @@
     <mat-card class="col-sm bg-dark">🧀 2 S/QSO</mat-card>
   </div>
   
-  <div class="row">
+  <div class="row" style="height: 5%;">
     <mat-card class="col-6 col-md-2"></mat-card>
     <mat-card class="col-sm-6 col-md-8"><h1>PRODUCTOS</h1></mat-card>
     <mat-card class="col-6 col-md-2"><h1>PEDIDOS</h1></mat-card>
@@ -91,8 +91,8 @@
               <!-- <div *ngFor="let prod of or.products" > -->
 
                 <!-- <h3  *ngIf="prod.category.id != 1"> {{ prod.name }} </h3> -->
-                <p style="font-size: 23px;">{{ or.client.name }}</p>
-                <div class="row no-gutters" style="font-size: 15px; color: white; padding: 0;">
+                <!-- <p style="font-size: 23px;">{{ or.client.name }}</p> -->
+                <div class="row no-gutters mt-5 text-left" style="font-size: 15px; color: white; padding: 0;">
                   <div class="col ">
                     <div  *ngFor="let prod of or.products; let x = index">
                       <p *ngIf="x%2 == 0 && prod.category.id != 1">{{ prod.name }}</p>

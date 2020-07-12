@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Client, OrderService, Address, OrderRequest } from 'src/app/service/order.service';
-import { Product, State, MenuService } from 'src/app/service/menu.service';
+import { Product, State, MenuService, Extra } from 'src/app/service/menu.service';
 import {  FormGroup,FormControl, Validators  } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ElementSchemaRegistry } from '@angular/compiler';
@@ -31,7 +31,7 @@ export class ClientComponent implements OnInit {
   hasError = false;
   errorMessage = '';
   stringCart : string;
-  parameterEncoding :ParameterEncoder
+  whatsappLink : string
   extraError = false;
   extendedErrorMessage : string;
   paymentsTypes = ['Efectivo', 'Mercado Pago']
@@ -151,7 +151,8 @@ export class ClientComponent implements OnInit {
           }
           this.stringCart += `\n-----------------------`
         })
-        this.stringCart = this.parameterEncoding.encodeValue(this.stringCart)
+        this.stringCart = this.orderService.cartClientMessageUrl(orderRequest, false);
+        this.whatsappLink = `https://wa.me/541123915925?text=${this.orderService.cartClientMessageUrl(orderRequest, false)}`
         this.extendedErrorMessage = `Envianos el pedido por Whatsapp haciendo click <a href="https://wa.me/541123915925?text=${this.stringCart}" target="_blank">Aqui!</a>` 
       }
     )
@@ -174,29 +175,35 @@ export class ClientComponent implements OnInit {
     this.totalAmount = 0
     this.cart.forEach(
       prod => {
+        let cheeseSelected : Extra;
         this.totalAmount += prod.price
-        prod.extras?.forEach( ex => this.totalAmount += (ex.price * ex.quantity))
+        prod.extras?.forEach( ex => {
+          //this.totalAmount += (ex.price * ex.quantity)
+
+          if(ex.id != 1 && ex.id != 20){
+            this.totalAmount += (ex.price * ex.quantity)
+            if(ex.id == 6){
+
+            }
+          } else {
+            cheeseSelected = ex
+            this.totalAmount += ex.price * (ex.quantity *  (prod.button.extra + prod.rawMaterial))
+          }
+        })
+        console.log(this.totalAmount);
+        
+        prod.extras?.forEach( extra => {
+          console.log(extra);
+          
+          if( extra.id == 6 &&  cheeseSelected != null){
+            this.totalAmount += cheeseSelected.price * (cheeseSelected.quantity * extra.quantity)
+          }
+        } )
       }
-    )
+    );
     if(this.delivery){
         this.totalAmount += this.selectedState?.amount;
     }
   }
-
-
 }
 
-export class ParameterEncoder extends HttpUrlEncodingCodec{
-  encodeKey(key: string): string {
-    return encodeURIComponent(key);
-  }
-  encodeValue(value: string): string {
-    return encodeURIComponent(value);
-  }
-  decodeKey(key: string): string {
-    return decodeURIComponent(key);
-  }
-  decodeValue(value: string): string {
-    return decodeURIComponent(value);
-  }
-}

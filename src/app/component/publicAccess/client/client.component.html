@@ -25,9 +25,10 @@
             <div class="alert alert-danger" role="alert" *ngIf="hasError">
                 <h4 class="alert-heading vanburga-title">Faltan datos obligatorios!</h4>
                 <p>{{ errorMessage }}</p>
+                haga click <a [href]="whatsappLink"> aqui</a>
                 <div *ngIf="extraError">
-                    <hr>
                     <p>{{ extendedErrorMessage }}</p>
+                    <hr>
                 </div>
             </div>
     

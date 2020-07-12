@@ -27,7 +27,7 @@ export class MenuComponent implements OnInit {
   notSelected = 'secondary'
   selected = 'success'
   canSelected = false;
-
+  btnSelected;
   buttons = [
     { name: 'Simple',     buttonColor:'silver', id:1, extra: 0, selected: false }, 
     { name: 'Doble',      buttonColor:'silver', id:2, extra: 1, selected: false }, 
@@ -70,13 +70,15 @@ export class MenuComponent implements OnInit {
 
   totalProduct(pd : Product){
     let productTotal = 0
-    let haveRaw = false
-    pd.extras?.forEach(e=>{
-      if(e.quantity > 0){
+    let cheeseSelected : Extra;
+    pd.extras?.forEach( e => {
+      if(e.id != 1 && e.id != 20){   
         productTotal += (e.price * e.quantity)
+      } else{
+        cheeseSelected = e
+        productTotal += e.price * (e.quantity * (this.btnSelected?.extra + pd.rawMaterial))
       }
       if(e.rawMaterial > 0){
-        
         this.buttons.forEach(b=>{
           if(b.selected){
             productTotal += ((e.price * b.extra) + pd.price)
@@ -84,6 +86,14 @@ export class MenuComponent implements OnInit {
         })
       }
     })
+    console.log(cheeseSelected);
+    
+    pd.extras?.forEach( extra => {
+      if( extra.id == 6 &&  cheeseSelected != null){
+        productTotal += cheeseSelected.price * (cheeseSelected.quantity * extra.quantity)
+      }
+    } )
+
     if(pd.rawMaterial == 0){
       this.canSelected = true;
       productTotal += pd.price;
@@ -258,7 +268,13 @@ export class MenuComponent implements OnInit {
     this.cart.forEach(
       prod => {
         this.cartTotalAmount += prod.price
-        prod.extras?.forEach( ex => this.cartTotalAmount += (ex.price * ex.quantity))
+        prod.extras?.forEach( ex =>{
+          if(ex.id != 1 && ex.id != 20){
+            this.cartTotalAmount += (ex.price * ex.quantity)
+          } else {
+            this.cartTotalAmount += ex.price * (ex.quantity + this.btnSelected?.extra + prod.rawMaterial)
+          }
+        } )
       }
     )
   }
@@ -268,6 +284,7 @@ export class MenuComponent implements OnInit {
     this.buttons.forEach(  b => {
       if(b.id == id){
         b.selected = true;
+        this.btnSelected = b;
       }else{
         b.selected = false;
       }

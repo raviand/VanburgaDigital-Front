@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Product, Extra, State } from './menu.service';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams, HttpUrlEncodingCodec } from '@angular/common/http';
 import { API_URI , DATE_FORMAT, CLIENT_CART, USER} from '../app.constant';
 import { DatePipe } from '@angular/common';
 import { Socialusers } from './login.service';
@@ -12,6 +12,7 @@ import { interval } from 'rxjs';
 export class OrderService {
   constructor(private httpClient: HttpClient) {}
 
+  parameterEncoding :ParameterEncoder
   clientCart : Product[];
   datePipe: DatePipe = new DatePipe("en-ES");
   headers = new HttpHeaders({
@@ -82,6 +83,48 @@ export class OrderService {
     return this.httpClient.delete(`${API_URI}order`, options)
   }
 
+  cartClientMessageUrl(order:Order, enviado : boolean){
+    this.parameterEncoding = new ParameterEncoder();
+    let msg = `Hola Soy ${order.client.name}! ${enviado ? `Realice un pedido desde vanburga.com con id N°${order.id}:\n` : 'No pude realizar el pedido por la pagina, les envio lo que queria pedir:\n'}`
+    order.products.forEach(p => {
+      if(p.category.id == 1){
+        msg += ':hamburger:'
+      }else{
+        msg += ':beer::fries:'
+      }
+      msg += ` ${p.name}\n`
+      p.extras?.forEach(e=>{
+        msg += `\t*${e.name}* X${e.quantity}\n`
+      })
+    })
+    if(order.delivery){
+      msg += ':red_car:Nos solicitaste el envio a la siguiente direccion:\n'
+      msg += `calle: ${order.client.address.street} ${order.client.address.doorNumber} \n`
+      msg += `entre calles: ${ order.client.address.reference } en ${ order.client.address.state.state }\n`
+      if(order.client.address.floor != null) msg += `Piso: ${ order.client.address.floor }\n`
+      if(order.client.address.door != null) msg += `Depto: ${ order.client.address.door }\n`
+    }
+    if(order.comments != null) msg += `:notepsd_spiral: Comentarios adicionales: ${ order.comments }\n`
+    msg += 'Saludos!'
+
+    return this.parameterEncoding.encodeValue(msg)
+  }
+
+}
+
+export class ParameterEncoder extends HttpUrlEncodingCodec{
+  encodeKey(key: string): string {
+    return encodeURIComponent(key);
+  }
+  encodeValue(value: string): string {
+    return encodeURIComponent(value);
+  }
+  decodeKey(key: string): string {
+    return decodeURIComponent(key);
+  }
+  decodeValue(value: string): string {
+    return decodeURIComponent(value);
+  }
 }
 
 //////////////////////////////////////////////////////////////
@@ -119,7 +162,7 @@ export class OrderRequest {
 //    OBJETOS INTERNOS
 //////////////////////////////////////////////////////////////
 
-export interface Order {
+export class Order {
   id?: number;
   client?: Client;
   comments?: string;
