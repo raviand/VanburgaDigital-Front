@@ -1,24 +1,23 @@
 <div class="mb-5">
 
   <div class="row">
-    <mat-card class="col-sm bg-dark">25 COMBOS</mat-card>
-    <mat-card class="col-sm bg-dark">8 PEDIDOS</mat-card>
+    <mat-card class="col-sm bg-dark">📦 {{ kitchenStats?.productCount }} COMBOS</mat-card>
+    <mat-card class="col-sm bg-dark">🛎️ {{ kitchenStats?.orderCount }} PEDIDOS</mat-card>
   </div>
-  
+  <br>
   <div class="row">
-    <mat-card class="col-sm bg-dark">🍟6250gr</mat-card>
-    <mat-card class="col-sm bg-dark">➕</mat-card>
-    <mat-card class="col-sm bg-dark">🍔35 PATYS</mat-card>
-    <mat-card class="col-sm bg-dark">➕</mat-card>
-    <mat-card class="col-sm bg-dark">🍔25 2xCHDR</mat-card>
+    <mat-card class="col-sm bg-dark">🍟 {{ kitchenStats?.chips }}gr</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 {{ kitchenStats?.simpleEmmenthal }}- 1xDAMBO</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 {{ kitchenStats?.doubleEmmenthal }}- 2xDAMBO</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 {{ kitchenStats?.tripleEmmenthal }}- 3xDAMBO</mat-card>
   </div>
-  
+  <br>
   <div class="row">
-    <mat-card class="col-sm bg-dark">🧀 5 1xCHDR</mat-card>
-    <mat-card class="col-sm bg-dark">➕</mat-card>
-    <mat-card class="col-sm bg-dark">🧀 3 DAMBO</mat-card>
-    <mat-card class="col-sm bg-dark">➕</mat-card>
-    <mat-card class="col-sm bg-dark">🧀 2 S/QSO</mat-card>
+    <mat-card class="col-sm bg-dark">🍔 {{ kitchenStats?.grilledHamburger }} HAMB</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 {{ kitchenStats?.simpleCheddar }}- 1xCHDR</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 {{ kitchenStats?.doubleCheddar }}- 2xCHDR</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 {{ kitchenStats?.tripleCheddar }}- 3xCHDR</mat-card>
+    <mat-card class="col-sm bg-dark">🧀 {{ kitchenStats?.noCheese }} S/QSO</mat-card>
   </div>
   
   <div class="row" style="height: 5%;">

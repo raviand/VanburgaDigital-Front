@@ -72,6 +72,10 @@ export class OrderService {
     return this.httpClient.get(`${API_URI}order?orderId=${orderId}`, { headers: this.headers })
   }
 
+  getKitchenStatus(){
+    return this.httpClient.get(`${API_URI}kitchen`, { headers: this.headers })
+  }
+
   cancelOrder(orderId:number, status : string){
     let request = new OrderRequest();
     request.status = status;
@@ -130,6 +134,21 @@ export class ParameterEncoder extends HttpUrlEncodingCodec{
 //////////////////////////////////////////////////////////////
 //    OBJETOS DE METODOS A LA API
 //////////////////////////////////////////////////////////////
+export interface KitchenStatus{
+  chips: number;   
+  grilledHamburger: number;
+  simpleCheddar: number;
+  doubleCheddar: number;
+  tripleCheddar: number;
+  simpleEmmenthal: number;
+  doubleEmmenthal: number;
+  tripleEmmenthal: number;
+  noCheese: number;
+  orderCount: number;
+  productCount: number;
+  orders ?: Order[];
+}
+
 export interface OrderList {
   message?: string;
   code?: number;

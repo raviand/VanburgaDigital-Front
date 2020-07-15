@@ -42,7 +42,7 @@
           </div>
       </div>
       <div class="modal-footer">
-        <h3 class="mr-auto">Total: {{ totalOrder(orderDetail) | currency : 'ARS' : 'symbol-narrow' }}</h3>
+        <h3 class="mr-auto">Total: {{ totalOrderAmount | currency : 'ARS' : 'symbol-narrow' }}</h3>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn" *ngIf="orderDetail.status != 'Pending'"> <fa-icon [icon]="faPaperPlane"></fa-icon>Enviar Whatsapp</button>
         <button type="button" class="btn btn-primary" (click)="fowardDetailStatus()" data-dismiss="modal" *ngIf="orderDetail.status != 'Pending'">Proximo estado</button>

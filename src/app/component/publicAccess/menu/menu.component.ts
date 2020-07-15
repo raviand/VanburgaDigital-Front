@@ -45,10 +45,10 @@ export class MenuComponent implements OnInit {
   canSelected = false;
   btnSelected;
   buttons = [
-    { name: 'Simple',     buttonColor:'silver', id:1, extra: 0, selected: false }, 
-    { name: 'Doble',      buttonColor:'silver', id:2, extra: 1, selected: false }, 
-    { name: 'Triple',     buttonColor:'silver', id:3, extra: 2, selected: false }, 
-    { name: 'Cuadruple',  buttonColor:'silver', id:4, extra: 3, selected: false }, 
+    { name: 'Simple',     buttonColor:'silver', id:1, extra: 0, selected: false, item: null }, 
+    { name: 'Doble',      buttonColor:'silver', id:2, extra: 1, selected: false, item: null }, 
+    { name: 'Triple',     buttonColor:'silver', id:3, extra: 2, selected: false, item: null }, 
+    { name: 'Cuadruple',  buttonColor:'silver', id:4, extra: 3, selected: false, item: null }, 
   ]
 
   constructor(private menuService : MenuService, private router : Router,
@@ -61,7 +61,11 @@ export class MenuComponent implements OnInit {
 
     if(this.orderService.loadClientCart() != null){
       this.cart = this.orderService.loadClientCart();
+      console.log(this.cart);
+      
       this.getTotalAmount();
+      console.log(this.cartTotalAmount);
+      
     }
 
     await this.menuService.getAllCategories().subscribe(
@@ -78,7 +82,6 @@ export class MenuComponent implements OnInit {
 
   isBurger(prod : Product){
     if(prod.rawMaterial > 0){
-      
       return true;
     }
     return false;
@@ -87,31 +90,42 @@ export class MenuComponent implements OnInit {
   totalProduct(pd : Product){
     let productTotal = 0
     let cheeseSelected : Extra;
-    pd.extras?.forEach( e => {
-      if(e.id != 1 && e.id != 20){   
-        productTotal += (e.price * e.quantity)
-      } else{
-        cheeseSelected = e
-        productTotal += e.price * (e.quantity * (this.btnSelected?.extra + pd.rawMaterial))
-      }
-      if(e.rawMaterial > 0){
-        this.buttons.forEach(b=>{
-          if(b.selected){
-            productTotal += ((e.price * b.extra) + pd.price)
-          }
-        })
+    let hamb = 0;
+    let cheese :boolean = false;
+    console.log(pd);
+    
+    this.buttons.forEach(b=>{
+      if(b.selected){
+        hamb += b.extra 
       }
     })
-    console.log(cheeseSelected);
-    
+
+    pd.extras?.forEach( e => {
+      if(e.id != 1 && e.id != 20){   
+        if(e.rawMaterial > 0){
+          productTotal += (e.price * (e.quantity + hamb) )
+          hamb += e.quantity;
+        }else{
+          productTotal += (e.price * e.quantity)
+        }
+      } 
+    })
+
+    hamb += pd.rawMaterial;
+
     pd.extras?.forEach( extra => {
-      if( extra.id == 6 &&  cheeseSelected != null){
-        productTotal += cheeseSelected.price * (cheeseSelected.quantity * extra.quantity)
+      if( extra.id == 1 ||  extra.id == 20 ){
+        console.log(extra);
+        
+        productTotal += extra.price * hamb * extra.quantity
       }
     } )
+    
 
     if(pd.rawMaterial == 0){
       this.canSelected = true;
+      productTotal += pd.price;
+    }else{
       productTotal += pd.price;
     }
 
@@ -176,24 +190,28 @@ export class MenuComponent implements OnInit {
    */
   addToCart(product: Product, index: number) {
     let extras = [];
-    let productTotal = 0;
-
-    productTotal = product.price;
 
     //hago una copia no relacionada con el objeto original
     let cartProduct : Product = JSON.parse(JSON.stringify(product))
 
+    this.buttons.forEach(b => {
+      if(b.selected) {
+        cartProduct.button = b;
+      }
+    })
+
     //Extraigo los que tienen una cantidad mayo a cero
     cartProduct.extras?.forEach(e =>{
-      if(e.quantity != 0 || e.rawMaterial > 0){
+      if(e.quantity != 0 && e.rawMaterial == 0){
         extras.push(e)
-        productTotal += (e.price * e.quantity)
       }
-      if(e.rawMaterial > 0){
+      if(e.rawMaterial > 0 ){
         this.buttons.forEach(b=>{
           if(b.selected){
-            productTotal += ((e.price * b.extra) + cartProduct.price)
-            cartProduct.price += (e.price * b.extra)
+            cartProduct.rawMaterial += (e.quantity + b.extra)
+            cartProduct.button.item = e;
+            cartProduct.price += e.price * b.extra
+            extras.push(e)
           }
         })
       }
@@ -201,24 +219,14 @@ export class MenuComponent implements OnInit {
     //Elimino todos los extras para agregar la lista de los seleccionados
     cartProduct.extras = null;
     cartProduct.extras = extras;
-    this.buttons.forEach(b => {
-      if(b.selected) {
-        cartProduct.button = b;
-      }
-    })
+    
 
     this.buttons.forEach(b => b.selected = false)
-    console.log(cartProduct.extras)
 
-    if(this.cartProduct.extras?.length > 0){
-      cartProduct.extras = JSON.parse(JSON.stringify(this.cartProduct.extras))
-    }
     this.canSelected = false;
     this.lookExtras(index)
-    console.log(product)
     this.cart.push(cartProduct)
     this.cartProduct.extras = []
-    console.log(this.cart)
     this.getTotalAmount()
     this.snackBar.open('Agregaste un ' + product.name + ' al pedido!', 'Cerrar', {duration : 2000})
   }
@@ -280,16 +288,26 @@ export class MenuComponent implements OnInit {
     this.cartTotalAmount = 0
     this.cart.forEach(
       prod => {
+        console.log(prod);
+        
         this.cartTotalAmount += prod.price
         prod.extras?.forEach( ex =>{
           if(ex.id != 1 && ex.id != 20){
             this.cartTotalAmount += (ex.price * ex.quantity)
           } else {
-            this.cartTotalAmount += ex.price * (ex.quantity + this.btnSelected?.extra + prod.rawMaterial)
+            this.cartTotalAmount += ex.price * prod.rawMaterial
           }
         } )
       }
     )
+  }
+
+  openCart(){
+    console.log(this.cartTotalAmount);
+    
+    this.opened = !this.opened;
+    this.getTotalAmount()
+    console.log(this.cartTotalAmount);
   }
 
   

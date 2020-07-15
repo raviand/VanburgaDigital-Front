@@ -173,37 +173,57 @@ export class ClientComponent implements OnInit {
 
   getTotalAmount(){
     this.totalAmount = 0
+    
     this.cart.forEach(
       prod => {
+        let productTotal = 0
         let cheeseSelected : Extra;
-        this.totalAmount += prod.price
-        prod.extras?.forEach( ex => {
-          //this.totalAmount += (ex.price * ex.quantity)
-
-          if(ex.id != 1 && ex.id != 20){
-            this.totalAmount += (ex.price * ex.quantity)
-            if(ex.id == 6){
-
-            }
-          } else {
-            cheeseSelected = ex
-            this.totalAmount += ex.price * (ex.quantity *  (prod.button.extra + prod.rawMaterial))
-          }
-        })
-        console.log(this.totalAmount);
+        let medallon;
+        console.log(prod);
         
-        prod.extras?.forEach( extra => {
-          console.log(extra);
-          
-          if( extra.id == 6 &&  cheeseSelected != null){
-            this.totalAmount += cheeseSelected.price * (cheeseSelected.quantity * extra.quantity)
-          }
-        } )
+        //Se suman todos los extras que no sean ni medallones ni quesos
+        prod.extras?.forEach( e => {
+          console.log(e);
+          if(e.quantity != 0){
+
+            if(e.id != 1 && e.id != 20 && e.rawMaterial == 0){   
+              //No hay quesos ni medallones
+              productTotal += (e.price * e.quantity)
+            } else if(e.rawMaterial == 0){
+              //Guardo el queso en una variable
+              cheeseSelected = e
+            }            
+            if(e.rawMaterial > 0){
+              //Sumo los extra medallones
+              productTotal += ( e.price * e.quantity )
+              prod.rawMaterial += e.quantity
+              medallon = e
+            }
+          } 
+        })
+        //sumo los quesos
+        if( cheeseSelected != null ){
+          productTotal += cheeseSelected.price * cheeseSelected.quantity * (prod.rawMaterial -1)
+        }
+        
+        //No es un producto con medallones 
+        if(prod.rawMaterial == 0){
+          productTotal += prod.price;
+          prod.extras?.forEach( e => productTotal += e.price * e.quantity )
+        }else{
+          productTotal += prod.price
+        }
+        console.log(`product amount ${productTotal} and total amount ${ this.totalAmount }`);
+        
+        this.totalAmount += productTotal
+
       }
     );
     if(this.delivery){
         this.totalAmount += this.selectedState?.amount;
     }
+    console.log(this.totalAmount);
+    
   }
 }
 

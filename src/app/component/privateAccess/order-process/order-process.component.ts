@@ -6,6 +6,7 @@ import { LoginService, Socialusers } from 'src/app/service/login.service';
 import { NumberUtils } from 'src/app/utils/number.util';
 import { faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { interval } from 'rxjs';
+import { Extra } from 'src/app/service/menu.service';
 
 @Component({
   selector: 'app-order-process',
@@ -37,7 +38,7 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
   finishedNumber : number = 0;
   canceledNumber : number = 0;
   interval = 1000;
-
+  totalOrderAmount = 0;
   deliveryTime : string [] 
   selectedDeliveryTime : string;
   ngOnDestroy() {
@@ -130,11 +131,22 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
     let total = 0;
     order.products.forEach( p => {
       total += p.price
+      console.log(p);
+      let cheese : Extra;
+      let totalRaw = p.rawMaterial
       p.extras?.forEach( e => {
-        if(e.quantity > 0){
+        if(e.quantity > 0 && e.id != 1 && e.id != 20){
           total += ( e.price * e.quantity )
+          if(e.rawMaterial > 0){
+            totalRaw += e.quantity
+          }
+        }else if(e.id == 1 || e.id == 20){
+          cheese = e
         }
       })
+      if(cheese != null){
+        total += totalRaw * cheese.price
+      }
     })
     if(order.delivery){
       total += order.client.address.state.amount;
@@ -145,22 +157,18 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
   setsTotalRawMaterial(orders : Order[]){
     let totalMaterialBystate = 0;
     orders.forEach(o => {
-      let prodRaw = 0;
       o.products.forEach( p => {
+        let prodRaw = 0;
+        let cheese : Extra;
         prodRaw += p.rawMaterial
         p.extras?.forEach(e => {
-          if(e.quantity > 0){
+          if(e.rawMaterial > 0){
             prodRaw += (e.rawMaterial * e.quantity )
           }
-          console.log(e)
-          }
-        )
-        console.log(prodRaw);
-        
+        })
+        o.totalRawMaterial = prodRaw;
       })
-      o.totalRawMaterial = prodRaw;
       totalMaterialBystate += o.totalRawMaterial
-      console.log(o)
     } )
     return totalMaterialBystate;
   }
@@ -238,10 +246,12 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
   }
 
   viewOrderDetail(p : Order){
-    console.log(p)
+    
     this.orderDetail = p
     this.showDetail = true;
     let num = 0
+    this.totalOrderAmount = 0;
+    this.totalOrderAmount =  this.totalOrder(p)
     //this.orderDetail.products.forEach( prod => { num += prod.rawMaterial; this.orderDetail.totalRawMaterial = num } )
     
   }

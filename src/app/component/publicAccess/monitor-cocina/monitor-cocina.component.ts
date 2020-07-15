@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService, Socialusers } from 'src/app/service/login.service';
-import { OrderService, Order, OrderResponse } from 'src/app/service/order.service';
+import { OrderService, Order, OrderResponse, KitchenStatus } from 'src/app/service/order.service';
 import { Router } from '@angular/router';
 import { Status } from 'src/app/app.constant';
 import { Extra } from 'src/app/service/menu.service';
@@ -20,6 +20,7 @@ export class MonitorCocinaComponent implements OnInit {
   orders : Order[];
   extrasList :Extra [];
   dateFrom : Date;
+  kitchenStats : KitchenStatus;
   ngOnInit(): void {
     this.user = this.loginService.loadUserInSession()
     if(this.user == null || this.user?.role == null || this.user.role.id >  2){
@@ -27,10 +28,13 @@ export class MonitorCocinaComponent implements OnInit {
     }
     this.dateFrom  = new Date();
     this.dateFrom.setDate( this.dateFrom.getDate() - 1)
-    this.orderService.searchOrderList(Status.KITCHEN, this.dateFrom, null, null).subscribe((or:OrderResponse) =>{
-      this.orders = or.orders;
-      console.log(this.orders);
-
+    this.orderService.getKitchenStatus().subscribe( (ks:any) =>  {
+      console.log(ks);
+      
+      this.orders = ks.kitchenStatus.orders;
+      this.kitchenStats = ks.kitchenStatus;
+      console.log(this.kitchenStats);
+      
       this.orders?.forEach(or => {
         or.products.forEach( prod => {
   
@@ -45,8 +49,15 @@ export class MonitorCocinaComponent implements OnInit {
           } )
         } )
       })
-      
     })
+
+    // this.orderService.searchOrderList(Status.KITCHEN, this.dateFrom, null, null).subscribe((or:OrderResponse) =>{
+    //   this.orders = or.orders;
+    //   console.log(this.orders);
+
+      
+      
+    // })
     this.orderService.getExtras().subscribe( (e:Extra []) => this.extrasList = e)
 
     

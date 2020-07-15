@@ -17,14 +17,9 @@ const routes: Routes = [
   { path: 'menu', component: MenuComponent },
   { path: 'contacto', component: ContactoComponent },
   { path: 'cocina', component: MonitorCocinaComponent },
-  {
-    path: 'order',
-    component: ClientComponent,
-    children: [
-      { path: 'success', component: OrderSendedComponent },
-      { path: 'error', component: OrderErrorComponent },
-    ],
-  },
+  { path: 'order', component: ClientComponent },
+  { path: 'error', component: OrderErrorComponent },
+  { path: 'success', component: OrderSendedComponent },
   //Pagina de logueo
   { path: 'login', component: LoginComponent, data: { title: 'Login Page' } },
   {
