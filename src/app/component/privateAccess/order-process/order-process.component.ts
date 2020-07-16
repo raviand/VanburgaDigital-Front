@@ -131,22 +131,7 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
     let total = 0;
     order.products.forEach( p => {
       total += p.price
-      console.log(p);
-      let cheese : Extra;
-      let totalRaw = p.rawMaterial
-      p.extras?.forEach( e => {
-        if(e.quantity > 0 && e.id != 1 && e.id != 20){
-          total += ( e.price * e.quantity )
-          if(e.rawMaterial > 0){
-            totalRaw += e.quantity
-          }
-        }else if(e.id == 1 || e.id == 20){
-          cheese = e
-        }
-      })
-      if(cheese != null){
-        total += totalRaw * cheese.price
-      }
+      p.extras?.forEach( e => total += e.price * e.quantity )
     })
     if(order.delivery){
       total += order.client.address.state.amount;
@@ -166,7 +151,7 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
             prodRaw += (e.rawMaterial * e.quantity )
           }
         })
-        o.totalRawMaterial = prodRaw;
+        o.totalRawMaterial += prodRaw;
       })
       totalMaterialBystate += o.totalRawMaterial
     } )

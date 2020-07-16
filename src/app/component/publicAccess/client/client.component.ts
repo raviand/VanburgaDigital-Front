@@ -99,13 +99,21 @@ export class ClientComponent implements OnInit {
     orderRequest.products = this.cart;
     orderRequest.products.forEach(prod =>{
       let addExtra = prod.button?.extra
-      if(addExtra > 0){
-        prod.extras.forEach( ex => {
-          if(ex.rawMaterial > 0){
-            ex.quantity += addExtra
-          }
-        } )
-      }
+      let raw = 0
+
+      prod.extras?.forEach( ex => {
+        if(ex.rawMaterial > 0){
+          ex.quantity += addExtra
+          raw = ex.quantity
+        }
+      } )
+      
+
+      prod.extras?.forEach(e => {
+        if(e.id == 1 || e.id == 20){
+          e.quantity = raw + 1
+        }
+      })
     })
     orderRequest.delivery = this.delivery
     if(this.delivery){

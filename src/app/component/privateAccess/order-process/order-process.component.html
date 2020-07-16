@@ -18,9 +18,11 @@
                 <h3>
                     {{prod.name}} - {{prod.price | currency : 'ARS' : 'symbol-narrow'}}
                 </h3>
-                <h5 *ngFor="let ext of prod.extras">
-                    - {{ ext.name }} - X {{ ext.quantity }} - {{ext.price | currency : 'ARS' : 'symbol-narrow'}} 
-                </h5>
+                <div *ngFor="let ext of prod.extras">
+                  <h5 *ngIf="ext.quantity > 0">
+                      - {{ ext.name }} - X {{ ext.quantity }} - {{ext.price | currency : 'ARS' : 'symbol-narrow'}} 
+                  </h5>
+                </div>
                 <hr>
             </li>
           </ul>
@@ -37,6 +39,7 @@
                 <li> <strong>Piso: </strong>  {{ orderDetail.client.address.floor}}        </li>
                 <li> <strong>Depto: </strong>  {{ orderDetail.client.address.door}}        </li>
                 <li> <strong>Referencia: </strong>  {{ orderDetail.client.address.reference}}        </li>
+                <li> <strong>Costo: </strong>  {{ orderDetail.client.address.state.amount | currency : 'ARS' : 'symbol-narrow'}}        </li>
               </ul>
             </div>
           </div>
