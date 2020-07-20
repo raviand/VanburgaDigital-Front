@@ -21,12 +21,29 @@
   </div>
   
   <div class="row" style="height: 5%;">
-    <mat-card class="col-6 col-md-2"></mat-card>
+    <mat-card class="col-6 col-md-2" style="color: black; padding-top: 22px; margin-bottom: 0px;">{{ time | date: 'hh:mm:ss a' }}</mat-card>
     <mat-card class="col-sm-6 col-md-8"><h1>PRODUCTOS</h1></mat-card>
     <mat-card class="col-6 col-md-2"><h1>PEDIDOS</h1></mat-card>
   </div>
+
+  <!-- Espiral de carga -->
+<div class="d-flex justify-content-center " *ngIf="!loaded">
+  <div class="spinner-border text-light" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
+</div>
+
+<!-- Mensaje de Error -->
+<div class="container"  *ngIf="error">
+  <div class="alert alert-danger" role="alert">
+    <h2 class="alert-heading">Error!</h2>
+    <p>No se pudo conectar con el servicio</p>
+    <hr>
+    <p class="mb-0">Contactese con el administrador del sistema</p>
+  </div>
+</div>
   
-  <div class="row no-gutters">
+  <div class="row no-gutters" *ngIf="loaded">
     <mat-card class="col-6 col-md-2">
       <mat-grid-list cols="1" rowHeight="900px" >
         <div >

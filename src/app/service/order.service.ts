@@ -92,6 +92,11 @@ export class OrderService {
     return this.httpClient.get(`${API_URI}kitchen`, { headers: this.headers });
   }
 
+  getBusinessSchedule() {
+    return this.httpClient.get(`${API_URI}BusinessSchedule`, { headers: this.headers });
+  }
+
+
   cancelOrder(orderId: number, status: string) {
     let request = new OrderRequest();
     request.status = status;
@@ -203,6 +208,14 @@ export class OrderRequest {
 //    OBJETOS INTERNOS
 //////////////////////////////////////////////////////////////
 
+export class BusinessSchedule{
+  id :number;
+  day : string;
+  openTime : string;
+  closeTime : string;
+  available : boolean;
+}
+
 export class Order {
   id?: number;
   client?: Client;
@@ -217,6 +230,7 @@ export class Order {
   confirmed?: boolean;
   paymentType?: string;
   deliverTime?: string;
+  whatsappLink?: string;
 }
 
 export class Client {

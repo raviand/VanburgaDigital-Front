@@ -7,8 +7,9 @@ import {
 } from 'src/app/service/menu.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { OrderService } from 'src/app/service/order.service';
+import { OrderService, BusinessSchedule } from 'src/app/service/order.service';
 import { MatAccordion } from '@angular/material/expansion';
+import { Time } from '@angular/common';
 
 @Component({
   selector: 'app-menu',
@@ -17,19 +18,7 @@ import { MatAccordion } from '@angular/material/expansion';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent implements OnInit {
-  categories = [
-    { description: 'Las mejores del condado', id: 1, name: 'Burgers' },
-    {
-      description: 'Tomate una fresca',
-      id: 2,
-      name: 'Bebidas',
-    },
-    {
-      description: 'No podes pedir la hamburguesa sin unas buenas papas',
-      id: 3,
-      name: 'Acompañamientos',
-    },
-  ];
+  categories : Category [];
   productsData: Product[];
   cartProduct: Product;
   cart: Product[] = [];
@@ -44,12 +33,15 @@ export class MenuComponent implements OnInit {
   selected = 'success'
   canSelected = false;
   btnSelected;
+  isOpen = false;
+  businessSchedules : BusinessSchedule[];
   buttons = [
     { name: 'Simple',     buttonColor:'silver', id:1, extra: 0, selected: false, item: null }, 
     { name: 'Doble',      buttonColor:'silver', id:2, extra: 1, selected: false, item: null }, 
     { name: 'Triple',     buttonColor:'silver', id:3, extra: 2, selected: false, item: null }, 
     { name: 'Cuadruple',  buttonColor:'silver', id:4, extra: 3, selected: false, item: null }, 
   ]
+  weekday = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
 
   constructor(private menuService : MenuService, private router : Router,
     private snackBar:MatSnackBar, private orderService : OrderService) {}
@@ -58,6 +50,39 @@ export class MenuComponent implements OnInit {
  * Metodo que se dispara antes de mostrar la pagina
  */
   async ngOnInit(): Promise<void>{
+
+    this.orderService.getBusinessSchedule().subscribe( (res:BusinessSchedule[]) => {
+      this.businessSchedules = res
+      let now = new Date();
+      let intDay = now.getDay()
+      let hour = now.getHours()
+      if(hour < 6) intDay = (now.getDay() - 1 == -1) ? 6 :  now.getDay() - 1;
+      let day = this.weekday[intDay];
+
+      //Tomo como parametro las 12 del mediodia. Si es menor a las doce es porque es un dia anterior
+      hour = hour < 6 ? hour+24 : hour
+
+      res.forEach(bs =>{
+        
+        if(day == bs.day){
+          let from = parseInt(bs.openTime.substring(0,2), 10) ;
+          let to =parseInt(bs.closeTime.substring(0,2), 10);
+          to = to < 6 ? to + 24 : to
+
+          
+          if(hour > from && hour < to){
+            this.isOpen = bs.available;
+          }
+
+        }
+      })
+    },
+    err => {
+      this.loaded = true;
+      this.router.navigate(['/error']);
+    } )
+
+
 
     if(this.orderService.loadClientCart() != null){
       this.cart = this.orderService.loadClientCart();
@@ -76,6 +101,10 @@ export class MenuComponent implements OnInit {
           this.categorySelected(this.categories[0]);
           this.categorySelected(this.categories[0]);
         }
+      },
+      err =>{
+        this.loaded = true;
+        this.router.navigate(['/error']);
       }
     )
   }
@@ -273,6 +302,10 @@ export class MenuComponent implements OnInit {
           element.extras?.forEach( e => e.quantity = 0 )
         });
         this.loaded = true;
+      },
+      err=>{
+        this.loaded = true;
+        this.router.navigate(['/error']);
       }
     )
   }

@@ -24,7 +24,7 @@
             </ul>
         </div>
         <div *ngIf="cart.length > 0" >
-            <button class="buttonsColor btn btn-lg btn-block" style="margin-bottom: 90px;" (click)="confirm()">Confirmar Pedido {{cartTotalAmount | currency : 'ARS' : 'symbol-narrow'}}</button>
+            <button class="buttonsColor btn btn-lg btn-block" style="margin-bottom: 90px;" (click)="confirm()" [disabled]="!isOpen">Confirmar Pedido {{cartTotalAmount | currency : 'ARS' : 'symbol-narrow'}}</button>
         </div>
     </div>
 </div>
@@ -41,16 +41,29 @@
           <span class="sr-only">Cargando...</span>
         </div>
     </div>
-    <div *ngIf="loaded">
+   
     
-      <!-- Categorias -->
-      <div class="d-flex justify-content-around" >
-          <div *ngFor="let category of categories">
-              <button class="btn btn-secondary mt-2" style="background-color: #666; width: 150px; font-size: 20px;" id="{{ category.name }}" (click)="categorySelected(category)" >{{ category.name }}</button>
-          </div>
-      </div>
+    <!-- Categorias -->
+    <div class="d-flex justify-content-around"  *ngIf="loaded">
+        <div *ngFor="let category of categories">
+            <button class="btn btn-secondary mt-2" style="background-color: #666; width: 150px; font-size: 20px;" id="{{ category.name }}" (click)="categorySelected(category)" >{{ category.name }}</button>
+        </div>
+    </div>
+
+    <div *ngIf="!isOpen" class="mt-2">
+        <div class="alert alert-warning" role="alert" >
+            <h2 class="alert-heading vanburga-title">Estamos Cerrados!</h2>
+            <p>En estos momentos no estamos tomando pedidos, pero puedes ver toda la oferta disponible</p>
+            <hr>
+            <p>nuestros horarios son: </p>
+            <div  *ngFor="let bs of businessSchedules">
+                <p *ngIf="bs.available"> {{ bs.day }} de {{ bs.openTime }} a {{ bs.closeTime }}</p>
+            </div>
+        </div>
+    </div>
+
       <!-- Tarjetas con el resultado de la categoria -->
-      <div class="tab-content" id="v-pills-tabContent">
+      <div class="tab-content" id="v-pills-tabContent"  *ngIf="loaded">
           <div class="tab-pane fade show active" id="{{categoryName}}" role="tabpanel" aria-labelledby="v-pills-home-tab">
               <mat-grid-list cols="2" rowHeight="1:1" gutterSize="4px" [style.height]="'100%'">
                   <div >
@@ -135,7 +148,6 @@
           </mat-grid-list>
           </div>
       </div>
-    </div>
 </div>
 
 

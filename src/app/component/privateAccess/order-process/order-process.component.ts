@@ -13,7 +13,7 @@ import { Extra } from 'src/app/service/menu.service';
   templateUrl: './order-process.component.html',
   styleUrls: ['./order-process.component.css']
 })
-export class OrderProcessComponent implements OnInit,OnDestroy {
+export class OrderProcessComponent implements OnInit {
   
   constructor(private orderServie : OrderService, private router: Router, private loginService : LoginService) { }
   faPaperPlane = faPaperPlane
@@ -23,11 +23,11 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
   toDeliveryOrders : Order[];
   finishedOrders  : Order[];
   cancelledOrders  : Order[];
-
   showDetail = false;
-  orderDetail : Order;
   dateFrom : Date;
   user : Socialusers;
+  orderDetail : Order;
+  toConfirm : Order;
   toCancelOrder : Order;
   toConfirmOrder: Order;
   pendigsNumber : number = 0;
@@ -37,17 +37,11 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
   toDeliverNumber : number = 0;
   finishedNumber : number = 0;
   canceledNumber : number = 0;
-  interval = 1000;
   totalOrderAmount = 0;
   deliveryTime : string [] 
   selectedDeliveryTime : string;
-  ngOnDestroy() {
-    console.log('on destroy')
-    if (this.interval) {
-      console.log('refreshings')
-      clearInterval(this.interval);
-    }
- }
+  loaded = false
+  error = false
 
   ngOnInit(): void {
 
@@ -89,36 +83,41 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
 
         (res : OrderResponse) => {
           console.log(res)
-          let orders = res.orders
-          orders.forEach(element => {
-            if(element.status == Status.PENDING){
-              this.toConfirmOrders.push(element)
-            }if(element.status ==  Status.CONFIRM){
-              this.confirmedOrders.push(element)
-            }if(element.status ==  Status.KITCHEN){
-              this.kitchenOrders.push(element)
-            }if(element.status ==  Status.DELIVER){
-              this.toDeliveryOrders.push(element)
-            }if(element.status ==  Status.CANCELLED){
-              this.cancelledOrders.push(element)
-            }if(element.status ==  Status.FINISHED){
-              this.finishedOrders.push(element)
-            }
-          });
-          this.pendigsNumber = this.toConfirmOrders.length;
-          this.setsTotalRawMaterial(this.toConfirmOrders)
-          this.setsTotalRawMaterial(this.confirmedOrders)
-          this.hamburgersNumber = this.setsTotalRawMaterial(this.kitchenOrders)
-          this.setsTotalRawMaterial(this.toDeliveryOrders)
-          this.setsTotalRawMaterial(this.cancelledOrders)
-    
-          this.confirmedNumber = this.confirmedOrders.length;
-          this.kitchenNumber = this.kitchenOrders.length;
-          this.canceledNumber = this.cancelledOrders.length;
-          this.finishedNumber = this.finishedOrders.length;
-          this.toDeliverNumber = this.toDeliveryOrders.length;
+          if(res.orders != null){
+            let orders = res.orders
+            orders.forEach(element => {
+              if(element.status == Status.PENDING){
+                this.toConfirmOrders.push(element)
+              }if(element.status ==  Status.CONFIRM){
+                this.confirmedOrders.push(element)
+              }if(element.status ==  Status.KITCHEN){
+                this.kitchenOrders.push(element)
+              }if(element.status ==  Status.DELIVER){
+                this.toDeliveryOrders.push(element)
+              }if(element.status ==  Status.CANCELLED){
+                this.cancelledOrders.push(element)
+              }if(element.status ==  Status.FINISHED){
+                this.finishedOrders.push(element)
+              }
+            });
+            this.pendigsNumber = this.toConfirmOrders.length;
+            this.setsTotalRawMaterial(this.toConfirmOrders)
+            this.setsTotalRawMaterial(this.confirmedOrders)
+            this.hamburgersNumber = this.setsTotalRawMaterial(this.kitchenOrders)
+            this.setsTotalRawMaterial(this.toDeliveryOrders)
+            this.setsTotalRawMaterial(this.cancelledOrders)
+      
+            this.confirmedNumber = this.confirmedOrders.length;
+            this.kitchenNumber = this.kitchenOrders.length;
+            this.canceledNumber = this.cancelledOrders.length;
+            this.finishedNumber = this.finishedOrders.length;
+            this.toDeliverNumber = this.toDeliveryOrders.length;
+          }
+          this.loaded = true;
         },
         err=>{
+          this.error = true
+          this.loaded = true;
           console.log(err)
         }
       );
@@ -142,15 +141,17 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
   setsTotalRawMaterial(orders : Order[]){
     let totalMaterialBystate = 0;
     orders.forEach(o => {
+      o.totalRawMaterial = 0  
       o.products.forEach( p => {
         let prodRaw = 0;
-        let cheese : Extra;
-        prodRaw += p.rawMaterial
-        p.extras?.forEach(e => {
-          if(e.rawMaterial > 0){
-            prodRaw += (e.rawMaterial * e.quantity )
-          }
-        })
+        if(p.rawMaterial != 0 ) {
+          prodRaw = 1
+          p.extras?.forEach(e => {
+            if(e.rawMaterial > 0){
+              prodRaw += (e.rawMaterial * e.quantity )
+            }
+          })
+        }
         o.totalRawMaterial += prodRaw;
       })
       totalMaterialBystate += o.totalRawMaterial
@@ -228,6 +229,11 @@ export class OrderProcessComponent implements OnInit,OnDestroy {
       this.orderOrdersByStatus();
       
     } )
+  }
+
+  viewConfirmOrder(or : Order){
+    this.toConfirmOrder = or;
+    console.log(this.toConfirmOrder);
   }
 
   viewOrderDetail(p : Order){

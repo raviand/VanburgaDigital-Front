@@ -47,13 +47,14 @@
       <div class="modal-footer">
         <h3 class="mr-auto">Total: {{ totalOrderAmount | currency : 'ARS' : 'symbol-narrow' }}</h3>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn" *ngIf="orderDetail.status != 'Pending'"> <fa-icon [icon]="faPaperPlane"></fa-icon>Enviar Whatsapp</button>
+        <a type="button" class="btn" *ngIf="orderDetail.status != 'Pending'" [href]="''+orderDetail.whatsappLink"> <fa-icon [icon]="faPaperPlane"  ></fa-icon>Enviar Whatsapp</a>
         <button type="button" class="btn btn-primary" (click)="fowardDetailStatus()" data-dismiss="modal" *ngIf="orderDetail.status != 'Pending'">Proximo estado</button>
         <button type="button" class="btn btn-primary" (click)="backwardStatus()" data-dismiss="modal" *ngIf="orderDetail.status != 'Pending'">Volver estado</button>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <!-- Modal de cancelacion de Orden -->
@@ -79,6 +80,33 @@
     </div>
   </div>
 </div>
+
+
+
+<!-- Modal de Finalizacion de Orden -->
+<div class="modal fade" id="finalizeModal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="color: black !important;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="exampleModalLabel">Finalizar Pedido!</h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center">
+          <mat-icon style="color: red;">warning</mat-icon>
+           Esta seguro que desea finalizar el pedido con id {{ toConfirm?.id }}? 
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="fowardStatus(toConfirm)" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <!-- Modal de confirmacion de orden-->
 <div class="modal fade" id="confirmOrderModal" tabindex="-1" role="dialog" data-backdrop="static" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -107,7 +135,7 @@
       </div>
       <div class="modal-footer">
         <h3 class="mr-auto">Horario: {{ selectedDeliveryTime }}</h3>
-        <button type="button" class="btn" > <fa-icon [icon]="faPaperPlane"></fa-icon>Enviar Whatsapp</button>
+        <a type="button" class="btn"  [href]="''+toConfirmOrder?.whatsappLink">  <fa-icon [icon]="faPaperPlane"></fa-icon>Enviar Whatsapp</a>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="selectedDeliveryTime = null">Close</button>
         <button type="button" class="btn btn-success"  (click)="confirmOrder(toConfirmOrder)" data-dismiss="modal" [disabled]="selectedDeliveryTime == null">Confirmar</button>
         
@@ -143,9 +171,27 @@
   <div class="p-3 mb-2 bg-danger text-white" style="border-radius: 25px;">
       Pedidos Cancelados : {{ canceledNumber }}
   </div>
+</div> 
+
+<!-- Espiral de carga -->
+<div class="d-flex justify-content-center " *ngIf="!loaded">
+  <div class="spinner-border text-light" role="status">
+    <span class="sr-only">Cargando...</span>
+  </div>
 </div>
 
-<div class="container" >
+<!-- Mensaje de Error -->
+<div class="container"  *ngIf="error">
+  <div class="alert alert-danger" role="alert">
+    <h2 class="alert-heading">Error!</h2>
+    <p>No se pudo conectar con el servicio</p>
+    <hr>
+    <p class="mb-0">Contactese con el administrador del sistema</p>
+  </div>
+</div>
+
+<!-- resultado de las ordenes -->
+<div class="container" *ngIf="loaded">
   <div class="row">
     <div class="col" >
         
@@ -153,11 +199,7 @@
         <mat-card *ngFor="let p of toConfirmOrders" class="cards">
             <div class="row">
               <div class="col">
-  
-                  <!-- <h2>{{ p.client.name }} </h2>
-                  <h5>id: {{ p.id }}</h5>
-                  <p>Total de hamburguesas: {{ p.totalRawMaterial }}</p>
-                  <h3>Estado: <strong>{{ p.status }} </strong> </h3> -->
+
                   <h5>id: {{ p.id }}</h5>
                   <p>{{ p.client.name }} </p>
                   <p>Hamburguesas: {{ p.totalRawMaterial }}</p>
@@ -168,7 +210,7 @@
                   <table style="height: 80%;">
                       <tbody>
                         <tr>
-                          <td class="align-top"><button class="ConfirmButton" data-toggle="modal" data-target="#confirmOrderModal"  *ngIf="!p.confirmed" (click)="toConfirmOrder = p" >Confirmar orden</button></td>
+                          <td class="align-top"><button class="ConfirmButton" data-toggle="modal" data-target="#confirmOrderModal"  *ngIf="!p.confirmed" (click)="viewConfirmOrder(p)" >Confirmar orden</button></td>
                           <td class="align-middle"><button class="successButton" data-toggle="modal" data-target="#exampleModal" (click)="viewOrderDetail(p)">ver orden</button></td>
                           <!-- <td class="align-bottom"><button class="dangerButton" (click)="cancelOrder(p)">Cancelar</button></td> -->
                           <td class="align-bottom">
@@ -276,7 +318,7 @@
                     <tbody>
                       <tr>
                         <td class="align-top"><button class="successButton" data-toggle="modal" data-target="#exampleModal" (click)="viewOrderDetail(td)">ver orden</button></td>
-                        <td class="align-middle"><button class="nextButton" data-toggle="modal" data-target="#NAN" (click)="fowardStatus(td)" >Finalizar</button></td>
+                        <td class="align-middle"><button class="nextButton" data-toggle="modal" data-target="#finalizeModal" (click)="toConfirm = td" >Finalizar</button></td>
                         <td class="align-bottom">
   
                           <button type="button" class="dangerButton" data-toggle="modal" data-target="#cancelModal" (click)="toCancelOrder = td">

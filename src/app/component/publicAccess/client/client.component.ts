@@ -137,12 +137,14 @@ export class ClientComponent implements OnInit {
     console.log(orderRequest);
     
     this.orderService.createOrder(orderRequest).subscribe(
-      res => {
+      (res:any) => {
         this.orderService.saveClientCart([]);
         this.cartSended = JSON.stringify(this.cart)
         console.log(this.cart)
+        console.log(res);
+        
         sessionStorage.setItem(CLIENT,JSON.stringify(this.client) )
-        this.router.navigate(['/success'])
+        this.router.navigate(['/success', res.order.whatsappLink])
       },
       err => {
         this.hasError = true;
@@ -160,7 +162,7 @@ export class ClientComponent implements OnInit {
           this.stringCart += `\n-----------------------`
         })
         this.stringCart = this.orderService.cartClientMessageUrl(orderRequest, false);
-        this.whatsappLink = `https://wa.me/541123915925?text=${this.orderService.cartClientMessageUrl(orderRequest, false)}`
+        this.whatsappLink = this.orderService.cartClientMessageUrl(orderRequest, false)
         this.extendedErrorMessage = `Envianos el pedido por Whatsapp haciendo click <a href="https://wa.me/541123915925?text=${this.stringCart}" target="_blank">Aqui!</a>` 
       }
     )
@@ -187,6 +189,7 @@ export class ClientComponent implements OnInit {
         let productTotal = 0
         let cheeseSelected : Extra;
         let medallon;
+        let raw   = 0 
         console.log(prod);
         
         //Se suman todos los extras que no sean ni medallones ni quesos
@@ -204,14 +207,14 @@ export class ClientComponent implements OnInit {
             if(e.rawMaterial > 0){
               //Sumo los extra medallones
               productTotal += ( e.price * e.quantity )
-              prod.rawMaterial += e.quantity
+              raw = e.quantity + prod.rawMaterial
               medallon = e
             }
           } 
         })
         //sumo los quesos
         if( cheeseSelected != null ){
-          productTotal += cheeseSelected.price * cheeseSelected.quantity * (prod.rawMaterial -1)
+          productTotal += cheeseSelected.price * cheeseSelected.quantity * (raw -1)
         }
         
         //No es un producto con medallones 
@@ -228,6 +231,8 @@ export class ClientComponent implements OnInit {
       }
     );
     if(this.delivery){
+      console.log(this.selectedState);
+      
         this.totalAmount += this.selectedState?.amount;
     }
     console.log(this.totalAmount);

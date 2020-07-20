@@ -16,51 +16,64 @@ export class MonitorCocinaComponent implements OnInit {
     private orderService : OrderService,
     private router : Router) { }
 
+    time = new Date();
   user : Socialusers
   orders : Order[];
   extrasList :Extra [];
   dateFrom : Date;
   kitchenStats : KitchenStatus;
+  loaded = false
+  error = false
+
+
   ngOnInit(): void {
+    setInterval(()=>{
+      this.time = new Date()
+    }, 1000);
     this.user = this.loginService.loadUserInSession()
     if(this.user == null || this.user?.role == null || this.user.role.id >  2){
       this.router.navigate(['/menu'])
     }
     this.dateFrom  = new Date();
     this.dateFrom.setDate( this.dateFrom.getDate() - 1)
-    this.orderService.getKitchenStatus().subscribe( (ks:any) =>  {
-      console.log(ks);
-      
-      this.orders = ks.kitchenStatus.orders;
-      this.kitchenStats = ks.kitchenStatus;
-      console.log(this.kitchenStats);
-      
-      this.orders?.forEach(or => {
-        or.products.forEach( prod => {
-  
-          prod.extras?.forEach( ex => {
-            console.log(ex);
-            
-            if(ex.id == 6){
-              prod.rawMaterial += ex.quantity;
-              let index = prod.extras.indexOf(ex,0)
-              prod.extras.splice(index, 1)
-            }
-          } )
-        } )
-      })
-    })
 
-    // this.orderService.searchOrderList(Status.KITCHEN, this.dateFrom, null, null).subscribe((or:OrderResponse) =>{
-    //   this.orders = or.orders;
-    //   console.log(this.orders);
+    //Se va ejecutar cada 1 min va a consultar al servicio los pedidos para la cocina
+    setInterval( () => {
+      this.orderService.getKitchenStatus().subscribe( (ks:any) =>  {
+        console.log(ks);
+        if( ks.kitchenStatus != null){
+          this.orders = ks.kitchenStatus.orders;
+          this.kitchenStats = ks.kitchenStatus;
+          console.log(this.kitchenStats);
+          
+          this.orders?.forEach(or => {
+            or.products.forEach( prod => {
+      
+              prod.extras?.forEach( ex => {
+                console.log(ex);
+                
+                if(ex.id == 6){
+                  prod.rawMaterial += ex.quantity;
+                  let index = prod.extras.indexOf(ex,0)
+                  prod.extras.splice(index, 1)
+                }
+              } )
+            } )
+          })
+        }
+        this.loaded = true;
+      },
+        err => {
+          this.error = true;
+          this.loaded = true;
+          console.log(err);
+          
+        }
+      )
 
-      
-      
-    // })
+    }, 60 * 1000 );
+
     this.orderService.getExtras().subscribe( (e:Extra []) => this.extrasList = e)
-
-    
 
   }
 

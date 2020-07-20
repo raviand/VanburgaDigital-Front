@@ -7,14 +7,14 @@
       <button type="button" class="btn btn-primary" [routerLink]="['/menu']">
         VOLVER AL MENÚ
       </button>
-      <button
+      <a
         type="button"
         class="btn btn-success"
-        href="https://api.whatsapp.com/send?phone=5491123915925&text=Hola%20Vanburga!"
+        [href]="''+whatsappLink"
         target="_blank"
       >
         ENVIAR WHATSAPP
-      </button>
+    </a>
     </mat-card-actions>
     <mat-card-header>
       <img mat-card-image src="../assets/img/exito.png" alt="vanburga éxito" />
