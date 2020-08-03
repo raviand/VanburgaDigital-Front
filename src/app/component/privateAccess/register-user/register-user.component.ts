@@ -43,7 +43,7 @@ export class RegisterUserComponent implements OnInit {
   ngOnInit(): void {
     this.menuService.getStates().subscribe(
       (res:State[] ) => this.states = res,
-      err => console.log(err)
+      err => this.router.navigate(['/error'])
     )
     
   }
@@ -53,19 +53,19 @@ export class RegisterUserComponent implements OnInit {
     if (this.deliverForm.invalid) {
       return;
     }
-    console.log(this.deliverForm.value)
     this.user = new Socialusers;
     this.user.name = this.deliverForm.value.name
     this.user.email = this.deliverForm.value.mail
     this.user.password = btoa(this.deliverForm.value.password)
     this.user.phone = this.deliverForm.value.cellphone
-    console.log(this.user)
+
     this.loginService.Savesresponse(this.user).subscribe(
       res => {
-        console.log(res)
         localStorage.setItem('socialusers', JSON.stringify( this.user));  
-        console.log(localStorage.setItem('socialusers', JSON.stringify(this.user)));  
         this.router.navigate([`/menu`]);  
+      },
+      err => {
+        this.router.navigate(['/error']);
       }
     )
   }

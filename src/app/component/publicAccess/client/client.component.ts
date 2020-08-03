@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Client, OrderService, Address, OrderRequest } from 'src/app/service/order.service';
+import { Client, OrderService, Address, OrderRequest, Order } from 'src/app/service/order.service';
 import { Product, State, MenuService, Extra } from 'src/app/service/menu.service';
 import {  FormGroup,FormControl, Validators  } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ElementSchemaRegistry } from '@angular/compiler';
 import { CLIENT } from 'src/app/app.constant';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
-import { HttpParameterCodec, HttpUrlEncodingCodec } from '@angular/common/http';
 
 @Component({
   selector: 'app-client',
@@ -15,6 +12,7 @@ import { HttpParameterCodec, HttpUrlEncodingCodec } from '@angular/common/http';
   styleUrls: ['./client.component.css']
 })
 export class ClientComponent implements OnInit {
+
 
   client : Client
   constructor( private orderService : OrderService, private menuService : MenuService,
@@ -36,6 +34,9 @@ export class ClientComponent implements OnInit {
   extendedErrorMessage : string;
   paymentsTypes = ['Efectivo', 'Mercado Pago']
   paymentTypeSelected : string;
+  orderDetail :OrderRequest;
+  showDetail = false;
+  productsToShow : Product [];
 
   deliverForm =   new FormGroup({
     name        : new FormControl('', [Validators.minLength(3), Validators.maxLength(20),Validators.required]),
@@ -80,69 +81,49 @@ export class ClientComponent implements OnInit {
         this.errorMessage = "No tenemos comunicacion con el servicio."
       }
     )
-    this.getTotalAmount()
+    //this.getTotalAmount()
   }
 
-  onSubmit(){
-    // stop here if form is invalid
-    if (this.deliverForm.invalid) {
-      return;
-    }
-
-    
+  confirmOrder(){
     this.submitted = true;
-    let orderRequest : OrderRequest;
-    orderRequest = new OrderRequest();
-    orderRequest.paymentType = this.paymentTypeSelected;
-    orderRequest.client = this.client;
-    orderRequest.comment = this.comment;
-    orderRequest.products = this.cart;
-    orderRequest.products.forEach(prod =>{
-      let addExtra = prod.button?.extra
-      let raw = 0
-
-      prod.extras?.forEach( ex => {
-        if(ex.rawMaterial > 0){
-          ex.quantity += addExtra
-          raw = ex.quantity
-        }
-      } )
-      
-
-      prod.extras?.forEach(e => {
-        if(e.id == 1 || e.id == 20){
-          e.quantity = raw + 1
-        }
-      })
-    })
-    orderRequest.delivery = this.delivery
-    if(this.delivery){
-      let hasError
-      console.log(this.client);
-      console.log(this.selectedState);
-      
-      if(this.selectedState == null) hasError = true; 
-      if(this.client.address?.street == null) hasError = true;
-      if(this.client.address?.doorNumber == null) hasError = true;
-      if(this.client.address?.reference == null) hasError = true;
-      if(hasError){
-        this.hasError = true;
-        this.errorMessage = 'Debe completar los datos de la direccion si desea que le enviemos el pedido'
-        return;
-      }
-      this.client.address.state = this.selectedState
-    }else{
-      orderRequest.client.address = null
-    }
-    console.log(orderRequest);
     
-    this.orderService.createOrder(orderRequest).subscribe(
+    //Paso el tipo de hamburguesa (simple, doble, etc) como extra en el pedido
+    this.orderDetail.products.forEach(p=>{
+
+      if(p.button != null){
+        
+        if(p.extras != null){
+          let found = false
+          p.extras.forEach(e=> {
+            if(e.rawMaterial > 0){
+              found = true
+              e.quantity += p.button.extra
+            }
+          })
+          if(!found && p.button.extra > 0){
+            let extra : Extra = p.button.item
+            extra.quantity = p.button.extra
+            p.extras.push(extra);
+          }
+
+        }else if(p.button.extra > 0){
+
+          p.extras = []
+          p.extras.push(p.button.item)
+          p.extras[0].quantity = p.button.extra
+
+        }
+
+
+      }
+
+    })
+    
+
+    this.orderService.createOrder(this.orderDetail).subscribe(
       (res:any) => {
         this.orderService.saveClientCart([]);
         this.cartSended = JSON.stringify(this.cart)
-        console.log(this.cart)
-        console.log(res);
-        
         sessionStorage.setItem(CLIENT,JSON.stringify(this.client) )
         this.router.navigate(['/success', res.order.whatsappLink])
       },
@@ -161,8 +142,8 @@ export class ClientComponent implements OnInit {
           }
           this.stringCart += `\n-----------------------`
         })
-        this.stringCart = this.orderService.cartClientMessageUrl(orderRequest, false);
-        this.whatsappLink = this.orderService.cartClientMessageUrl(orderRequest, false)
+        this.stringCart = this.orderService.cartClientMessageUrl(this.orderDetail, false);
+        this.whatsappLink = this.orderService.cartClientMessageUrl(this.orderDetail, false)
         this.extendedErrorMessage = `Envianos el pedido por Whatsapp haciendo click <a href="https://wa.me/541123915925?text=${this.stringCart}" target="_blank">Aqui!</a>` 
       }
     )
@@ -170,11 +151,11 @@ export class ClientComponent implements OnInit {
 
   clickDelivery(){
     this.delivery = !this.delivery;
-    this.getTotalAmount()
+    //this.getTotalAmount()
   }
 
   changeState(event){
-    this.getTotalAmount()
+   // this.getTotalAmount()
   }
 
   getCurrentModel() { 
@@ -190,11 +171,9 @@ export class ClientComponent implements OnInit {
         let cheeseSelected : Extra;
         let medallon;
         let raw   = 0 
-        console.log(prod);
         
         //Se suman todos los extras que no sean ni medallones ni quesos
         prod.extras?.forEach( e => {
-          console.log(e);
           if(e.quantity != 0){
 
             if(e.id != 1 && e.id != 20 && e.rawMaterial == 0){   
@@ -224,19 +203,87 @@ export class ClientComponent implements OnInit {
         }else{
           productTotal += prod.price
         }
-        console.log(`product amount ${productTotal} and total amount ${ this.totalAmount }`);
         
         this.totalAmount += productTotal
 
       }
     );
     if(this.delivery){
-      console.log(this.selectedState);
       
         this.totalAmount += this.selectedState?.amount;
     }
-    console.log(this.totalAmount);
     
+  }
+
+  viewOrderDetail(){
+    let orderRequest : OrderRequest;
+    orderRequest = new OrderRequest();
+    orderRequest.paymentType = this.paymentTypeSelected;
+    orderRequest.client = this.client;
+    orderRequest.comment = this.comment;
+    orderRequest.products = this.cart;
+    this.productsToShow = []
+    orderRequest.products.forEach(prod =>{
+      this.productsToShow.push(prod);
+      let addExtra = prod.button?.extra
+      let raw = 0
+
+      prod.extras?.forEach( ex => {
+        if(ex.rawMaterial > 0){
+          ex.quantity += addExtra
+          raw = ex.quantity
+        }
+      } )
+      
+
+      prod.extras?.forEach(e => {
+        if(e.id == 1 || e.id == 20){
+          e.quantity = raw + 1
+        }
+      })
+    })
+    this.formatProductsToShow()
+    orderRequest.delivery = this.delivery
+    if(this.delivery){
+      let hasError      
+      if(this.selectedState == null) hasError = true; 
+      if(this.client.address?.street == null) hasError = true;
+      if(this.client.address?.doorNumber == null) hasError = true;
+      if(this.client.address?.reference == null) hasError = true;
+      if(hasError){
+        this.hasError = true;
+        this.errorMessage = 'Debe completar los datos de la direccion si desea que le enviemos el pedido'
+        return;
+      }
+      this.client.address.state = this.selectedState
+    }else{
+      orderRequest.client.address = null
+    }
+    this.getTotalAmount()
+    this.orderDetail = orderRequest
+    this.showDetail = true;
+  }
+
+  formatProductsToShow(){
+    this.productsToShow.forEach(p => {
+
+      let type = p.button;
+      let extras : Extra[] = [];
+      //descuento la cantidad en base a los extra medallones
+      p.extras.forEach(e=>{
+        if(e.rawMaterial > 0){
+          e.quantity = e.quantity - type.extra
+          if(e.quantity == 0){
+            extras.push(e);
+          }
+        }
+      })
+      //Elimino el registro si esta en cero
+      extras?.forEach(ex=>{
+        let index = p.extras.indexOf(ex, 0);
+        p.extras.splice(index, 1);
+      })
+    })
   }
 }
 

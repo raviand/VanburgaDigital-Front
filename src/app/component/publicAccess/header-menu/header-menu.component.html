@@ -26,7 +26,7 @@
   </button>
   <button
     mat-menu-item
-    *ngIf="!isLoggedIn()"
+    *ngIf="!isLogged"
     [routerLink]="['/login']"
     class="btn btn-lg pull-right ml-auto-p2"
   >
@@ -35,7 +35,7 @@
   </button>
   <button
     mat-menu-item
-    *ngIf="isLoggedIn()"
+    *ngIf="isLogged"
     (click)="signOut()"
     class="btn btn-lg pull-right ml-auto-p2"
   >

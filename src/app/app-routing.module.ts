@@ -10,7 +10,7 @@ import { PageErrorComponent } from './component/publicAccess/page-error/page-err
 import { LoginComponent } from './component/privateAccess/login/login.component';
 import { OrderProcessComponent } from './component/privateAccess/order-process/order-process.component';
 import { RegisterUserComponent } from './component/privateAccess/register-user/register-user.component';
-import { MonitorCocinaComponent } from './component/publicAccess/monitor-cocina/monitor-cocina.component';
+import { MonitorCocinaComponent } from './component/privateAccess/monitor-cocina/monitor-cocina.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -37,7 +37,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload', useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

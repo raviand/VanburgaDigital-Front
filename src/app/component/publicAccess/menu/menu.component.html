@@ -33,7 +33,7 @@
     <!-- Boton de acceso al carrito -->
     <div class="mt-4">
       <div *ngIf="opened">
-        <span style="font-size:30px;cursor:pointer" class="text-light" (click)="openCart()" onclick="openNav()">&#9776; Pedido</span>
+        <span style="font-size:30px;cursor:pointer" class="text-light" (click)="openCart()" onclick="openNav()"><fa-icon [icon]="faShoppingCart"></fa-icon> Pedido</span>
       </div>
     </div>
     <div class="d-flex justify-content-center" *ngIf="!loaded">

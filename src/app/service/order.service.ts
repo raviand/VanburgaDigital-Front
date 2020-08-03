@@ -22,10 +22,9 @@ export class OrderService {
   datePipe: DatePipe = new DatePipe('en-ES');
   headers = new HttpHeaders({
     'Content-Type': 'application/json',
-  });
+  })
 
   createOrder(orderRequest: OrderRequest) {
-    console.log(orderRequest);
 
     return this.httpClient.post(`${API_URI}order`, orderRequest, {
       headers: this.headers,
@@ -90,6 +89,10 @@ export class OrderService {
 
   getKitchenStatus() {
     return this.httpClient.get(`${API_URI}kitchen`, { headers: this.headers });
+  }
+
+  getScheduleResume() {
+    return this.httpClient.get(`${API_URI}schedule`, { headers: this.headers });
   }
 
   getBusinessSchedule() {
@@ -202,6 +205,21 @@ export class OrderRequest {
   status?: string;
   paymentType?: string;
   deliverTime?: string;
+}
+
+export class ScheduleResponse{
+  message?: string;
+  code?: number;
+  status?: number;
+  scheduleResume?: Schedule;
+}
+
+export class Schedule{
+  hour?: string;
+  chips?: number;
+  orderCount?: number;
+  grilledHamburguer?: number;
+  productCount?: number;
 }
 
 //////////////////////////////////////////////////////////////

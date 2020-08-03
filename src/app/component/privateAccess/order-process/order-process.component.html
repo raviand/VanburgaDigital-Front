@@ -101,7 +101,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-danger" (click)="fowardStatus(toConfirm)" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="fowardStatus(toConfirm)" data-dismiss="modal">Finalizar</button>
       </div>
     </div>
   </div>
@@ -190,9 +190,24 @@
   </div>
 </div>
 
+
+<div class="row no-gutters" *ngIf="loaded" >
+  <mat-card class="col-6 col-md-2" style="background-color: #121212 !important;">
+    <mat-card class="cards">
+      <p>Resumen por horario</p>        
+    </mat-card>
+    <mat-card *ngFor="let schedule of scheduleResume.scheduleResume" class="cards">
+
+      <p>Hora: {{ schedule.hour }}</p>
+      <p>Papas: {{ schedule.chips }} Gr. </p>
+      <p>Hamburguesas: {{ schedule.grilledHamburguer }}</p>
+      <p>Combos: {{ schedule.productCount }}  </p>
+        
+    </mat-card>
+  </mat-card>
+  <mat-card class="col-sm-6 col-md-10" style="background-color: #121212 !important;">
 <!-- resultado de las ordenes -->
-<div class="container" *ngIf="loaded">
-  <div class="row">
+  <div class="row" *ngIf="loaded">
     <div class="col" >
         
         
@@ -333,7 +348,12 @@
       </mat-card>
     </div>
   </div>
+
+  </mat-card>
+
 </div>
+
+
 
 
 

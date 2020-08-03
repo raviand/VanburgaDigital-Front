@@ -39,11 +39,9 @@ export class LoginComponent implements OnInit {
   get password(){     return this.registerForm.get('password')}
 
   ngOnInit() {  
-    if(!this.SocialloginService.userlogged()){
-      console.log('User logged in')
+    if(this.SocialloginService.userlogged()){
       this.router.navigate(['menu'])
     }
-    console.log('user logged ' + this.SocialloginService.userlogged())
   }  
 
   login(){
@@ -55,7 +53,6 @@ export class LoginComponent implements OnInit {
 
   
   getSocialUser(socialUser:Socialusers){
-    console.log(socialUser);
     socialUser.loginId = socialUser.id;
     socialUser.id = null;
     this.Savesresponse(socialUser)
@@ -67,11 +64,9 @@ export class LoginComponent implements OnInit {
 
   Savesresponse(socialusers: Socialusers) {  
     this.SocialloginService.Savesresponse(socialusers).subscribe((res: any) => {  
-      console.log(res);  
       this.socialusers=res.user;  
       this.response = res.userDetail;  
       this.SocialloginService.saveUserInSession(this.socialusers)
-      console.log(JSON.stringify(this.socialusers));  
       this.router.navigate([`/menu`]);  
       
     })  

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import {
   MenuService,
   Category,
@@ -8,9 +8,7 @@ import {
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { OrderService, BusinessSchedule } from 'src/app/service/order.service';
-import { MatAccordion } from '@angular/material/expansion';
-import { Time } from '@angular/common';
-
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 @Component({
   selector: 'app-menu',
 
@@ -18,6 +16,7 @@ import { Time } from '@angular/common';
   styleUrls: ['./menu.component.css'],
 })
 export class MenuComponent implements OnInit {
+  faShoppingCart = faShoppingCart;
   categories : Category [];
   productsData: Product[];
   cartProduct: Product;
@@ -41,7 +40,15 @@ export class MenuComponent implements OnInit {
     { name: 'Triple',     buttonColor:'silver', id:3, extra: 2, selected: false, item: null }, 
     { name: 'Cuadruple',  buttonColor:'silver', id:4, extra: 3, selected: false, item: null }, 
   ]
-  weekday = ["Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
+  weekday = [
+    {0:"Domingo"},
+    {1:"Lunes"},
+    {2:"Martes"},
+    {3:"Miercoles"},
+    {4:"Jueves"},
+    {5:"Viernes"},
+    {6:"Sabado"}
+  ];
 
   constructor(private menuService : MenuService, private router : Router,
     private snackBar:MatSnackBar, private orderService : OrderService) {}
@@ -56,8 +63,16 @@ export class MenuComponent implements OnInit {
       let now = new Date();
       let intDay = now.getDay()
       let hour = now.getHours()
+      let minutes = now.getMinutes()
       if(hour < 6) intDay = (now.getDay() - 1 == -1) ? 6 :  now.getDay() - 1;
-      let day = this.weekday[intDay];
+      let day;
+      this.weekday.forEach( d => {
+        
+        if(d[intDay] != null){
+          day = d[intDay]
+          
+        }
+      } )
 
       //Tomo como parametro las 12 del mediodia. Si es menor a las doce es porque es un dia anterior
       hour = hour < 6 ? hour+24 : hour
@@ -65,17 +80,36 @@ export class MenuComponent implements OnInit {
       res.forEach(bs =>{
         
         if(day == bs.day){
-          let from = parseInt(bs.openTime.substring(0,2), 10) ;
-          let to =parseInt(bs.closeTime.substring(0,2), 10);
-          to = to < 6 ? to + 24 : to
+          let fromTime = bs.openTime.split(":", 2);
+          let toTime = bs.closeTime.split(":", 2);
+          let hourFrom = parseInt(fromTime[0]) ;
+          let hourTo = parseInt(toTime[0]);
+          let minFrom = parseInt(fromTime[1]) ;
+          let minTo = parseInt(toTime[1]);
+          hourTo = hourTo < 6 ? hourTo + 24 : hourTo
 
           
-          if(hour > from && hour < to){
-            this.isOpen = bs.available;
+          
+          if(hour >= hourFrom && hour <= hourTo){
+
+            if(hour == hourFrom){
+              if(minutes >= minFrom){
+                this.isOpen = bs.available;
+              }
+            }else if(hour == hourTo){
+              if(minutes <= minTo){
+                this.isOpen = bs.available;
+              }
+            }else{
+              this.isOpen = bs.available;
+            }
+
+            
           }
 
         }
       })
+      this.isOpen = true
     },
     err => {
       this.loaded = true;
@@ -86,16 +120,13 @@ export class MenuComponent implements OnInit {
 
     if(this.orderService.loadClientCart() != null){
       this.cart = this.orderService.loadClientCart();
-      console.log(this.cart);
       
       this.getTotalAmount();
-      console.log(this.cartTotalAmount);
       
     }
 
     await this.menuService.getAllCategories().subscribe(
       (data:any) => {
-        console.log(data.categories)
         this.categories = data.categories
         if(this.categories[0] != null){
           this.categorySelected(this.categories[0]);
@@ -121,7 +152,6 @@ export class MenuComponent implements OnInit {
     let cheeseSelected : Extra;
     let hamb = 0;
     let cheese :boolean = false;
-    console.log(pd);
     
     this.buttons.forEach(b=>{
       if(b.selected){
@@ -144,7 +174,6 @@ export class MenuComponent implements OnInit {
 
     pd.extras?.forEach( extra => {
       if( extra.id == 1 ||  extra.id == 20 ){
-        console.log(extra);
         
         productTotal += extra.price * hamb * extra.quantity
       }
@@ -188,22 +217,15 @@ export class MenuComponent implements OnInit {
    * @param idExtra
    */
   selectExtra(product: Product, idExtra: number) {
-    console.log('idExtra : ' + idExtra);
     product = JSON.parse(JSON.stringify(product));
     product.extras.forEach((ex) => {
       if (ex.id === idExtra) {
-        console.log(ex);
         ex.selected = !ex.selected;
         if (ex.selected) {
-          console.log('true');
-          console.log(ex);
           this.cartProduct.extras.push(ex);
         } else {
-          console.log('false');
-          console.log(ex);
           let index = this.cartProduct.extras.indexOf(ex, 0);
           this.cartProduct.extras.splice(index, 1);
-          console.log(this.cartProduct.extras);
         }
       }
     });
@@ -296,7 +318,6 @@ export class MenuComponent implements OnInit {
     this.cartProduct = new Product();
     this.menuService.getProductByCategory(category.id).subscribe(
       (data:any) => {
-        console.log(data)
         this.productsData = data.products
         this.productsData.forEach(element => {
           element.extras?.forEach( e => e.quantity = 0 )
@@ -321,7 +342,6 @@ export class MenuComponent implements OnInit {
     this.cartTotalAmount = 0
     this.cart.forEach(
       prod => {
-        console.log(prod);
         
         this.cartTotalAmount += prod.price
         prod.extras?.forEach( ex =>{
@@ -336,11 +356,9 @@ export class MenuComponent implements OnInit {
   }
 
   openCart(){
-    console.log(this.cartTotalAmount);
     
     this.opened = !this.opened;
     this.getTotalAmount()
-    console.log(this.cartTotalAmount);
   }
 
   

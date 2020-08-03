@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { OrderService, Order, OrderResponse } from 'src/app/service/order.service';
+import { OrderService, Order, OrderResponse, ScheduleResponse } from 'src/app/service/order.service';
 import { Status } from 'src/app/app.constant';
 import { Router } from '@angular/router';
 import { LoginService, Socialusers } from 'src/app/service/login.service';
@@ -42,6 +42,8 @@ export class OrderProcessComponent implements OnInit {
   selectedDeliveryTime : string;
   loaded = false
   error = false
+  scheduleResume : ScheduleResponse;
+
 
   ngOnInit(): void {
 
@@ -54,7 +56,8 @@ export class OrderProcessComponent implements OnInit {
       min += 20
       if (min > 40) {min = 0; index++;}
     }
-    console.log(this.deliveryTime);
+
+    
     
 
     this.user = this.loginService.loadUserInSession()
@@ -82,7 +85,6 @@ export class OrderProcessComponent implements OnInit {
       this.orderServie.searchOrderList(null, this.dateFrom, null, null).subscribe(
 
         (res : OrderResponse) => {
-          console.log(res)
           if(res.orders != null){
             let orders = res.orders
             orders.forEach(element => {
@@ -122,6 +124,15 @@ export class OrderProcessComponent implements OnInit {
         }
       );
       
+
+      this.orderServie.getScheduleResume().subscribe( sch => {
+        this.scheduleResume = sch;
+        
+      },
+      err => {
+        this.loaded = true;
+        this.router.navigate(['/error']);
+      } )
       
     // } ) 
     }
@@ -160,7 +171,6 @@ export class OrderProcessComponent implements OnInit {
   }
 
   fowardStatus(order: Order){
-    console.log('Actualizando estado de orden Id ' + order.id + ' del status '+order.status+ ' al estado ' + this.getNextStatus(order.status))
     this.orderServie.updateStatus(order.id, this.getNextStatus(order.status), null).subscribe( (or: any) =>{
 
       
@@ -169,12 +179,9 @@ export class OrderProcessComponent implements OnInit {
   }
 
   fowardDetailStatus(){
-    console.log('Actualizando estado de orden Id ' + this.orderDetail.id + ' del status '+this.orderDetail.status+ ' al estado ' + this.getNextStatus(this.orderDetail.status))
     this.orderServie.updateStatus(this.orderDetail.id, this.getNextStatus(this.orderDetail.status), null).subscribe( (or: any) =>{
       this.orderDetail.confirmed = true;
-      console.log(or)
       this.orderDetail.status = or.status
-      console.log(this.orderDetail)
       
       this.orderOrdersByStatus();
     } )
@@ -211,12 +218,9 @@ export class OrderProcessComponent implements OnInit {
   }
 
   backwardStatus(){
-    console.log('Actualizando estado de orden Id ' + this.orderDetail.id + ' del status '+this.orderDetail.status+ ' al estado ' + this.getNextStatus(this.orderDetail.status))
     this.orderServie.updateStatus(this.orderDetail.id, this.getLastStatus(this.orderDetail.status), null).subscribe( (or: any) =>{
       this.orderDetail.confirmed = true;
-      console.log(or)
       this.orderDetail.status = or.status
-      console.log(this.orderDetail)
       
       this.orderOrdersByStatus();
     } )
@@ -233,7 +237,6 @@ export class OrderProcessComponent implements OnInit {
 
   viewConfirmOrder(or : Order){
     this.toConfirmOrder = or;
-    console.log(this.toConfirmOrder);
   }
 
   viewOrderDetail(p : Order){
@@ -248,9 +251,7 @@ export class OrderProcessComponent implements OnInit {
   }
 
   cancelOrder(order : Order){
-    console.log(`Cancelando orden ${order.id} ` )
     this.orderServie.cancelOrder(order.id, Status.CANCELLED).subscribe(res =>{
-      console.log(res)
       this.orderOrdersByStatus();
     })
   }

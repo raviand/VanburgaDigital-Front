@@ -1,6 +1,7 @@
 import { Role } from './service/login.service'
 
 export const API_URI = 'http://127.0.0.1:3558/'
+//export const API_URI = 'http://31.220.59.212:3558/'
 export const DATE_FORMAT = 'yyyyMMddHHmmss'
 export const CLIENT_CART = 'CLIENT_CART'
 export const CLIENT = 'CLIENT'

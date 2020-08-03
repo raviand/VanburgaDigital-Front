@@ -27,9 +27,10 @@ export class LoginService {
   logOut(){
     if(this.socialAuthService.isSocialLoggedIn()){
       this.socialAuthService.signOut().catch((err)=>{
-        console.log(err)
       });
-      localStorage.setItem(USER, null)
+      localStorage.removeItem(USER)
+      this.logedIn = false;
+
       this.userLogged = null;
     }
   }

@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { Slide } from './../../../carousel/carousel.interface';
-import { AnimationType } from './../../../carousel/carousel.animations';
-import { CarouselComponent } from './../../../carousel/carousel.component';
+import { Slide } from 'src/app/component/publicAccess/carousel/carousel.interface';
+import { AnimationType } from 'src/app/component/publicAccess/carousel/carousel.animations';
+import { CarouselComponent } from 'src/app/component/publicAccess/carousel/carousel.component';
 
 @Component({
   selector: 'app-home',

@@ -18,7 +18,6 @@ export class OrderSendedComponent implements OnInit {
   ngOnInit(): void  {
     this.cart = this.service.loadClientCart()
     this.whatsappLink  = this.route.snapshot.paramMap.get('msg')
-    console.log(this.whatsappLink );
     
   }
 
